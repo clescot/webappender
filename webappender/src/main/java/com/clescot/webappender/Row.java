@@ -1,5 +1,6 @@
 package com.clescot.webappender;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.google.common.collect.Lists;
 
@@ -168,7 +169,7 @@ public class Row {
 
     private enum Level {
 
-        DEBUG("debug", ch.qos.logback.classic.Level.ALL),
+        DEBUG("debug", ch.qos.logback.classic.Level.DEBUG),
         WARNING("warning", ch.qos.logback.classic.Level.WARN),
         ERROR("error", ch.qos.logback.classic.Level.ERROR),
         INFO("info", ch.qos.logback.classic.Level.INFO);
