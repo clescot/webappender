@@ -1,21 +1,22 @@
-package com.clescot.webappender;
+package com.clescot.webappender.collector;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.sift.SiftingAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AppenderTracker;
+import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class LogGrabber {
+public class LogCollector {
     public static final String SIFTING_APPENDER_KEY = "SIFT";
     private static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
     private SiftingAppender siftingAppender;
     private ch.qos.logback.classic.Logger rootLogger;
 
-    private LogGrabber() {
+    private LogCollector() {
         rootLogger = loggerContext.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         siftingAppender = new SiftingAppender();
         siftingAppender.setName(SIFTING_APPENDER_KEY);
@@ -39,8 +40,8 @@ public class LogGrabber {
      *
      * @return
      */
-    public static LogGrabber newLogGrabber() {
-        return new LogGrabber();
+    public static LogCollector newLogCollector() {
+        return new LogCollector();
     }
 
     /**

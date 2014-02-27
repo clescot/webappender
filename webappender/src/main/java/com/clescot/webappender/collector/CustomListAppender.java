@@ -1,8 +1,9 @@
-package com.clescot.webappender;
+package com.clescot.webappender.collector;
 
 import ch.qos.logback.classic.pattern.*;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 
 import java.util.List;

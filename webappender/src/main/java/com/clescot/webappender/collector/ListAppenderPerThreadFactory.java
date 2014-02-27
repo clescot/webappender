@@ -1,4 +1,4 @@
-package com.clescot.webappender;
+package com.clescot.webappender.collector;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;

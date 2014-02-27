@@ -1,5 +1,6 @@
 package com.clescot.webappender;
 
+import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.FireLoggerFormatter;
 
 import javax.servlet.*;
@@ -11,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 @WebFilter(urlPatterns = "/*")
-public class WebAppender implements Filter {
+public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
-    private LogGrabber logGrabber;
+    private LogCollector logCollector;
 
 
     private boolean active;
@@ -32,8 +33,8 @@ public class WebAppender implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
 
         if (active) {
-            List<Row> logs = logGrabber.getLogs();
-            logGrabber.removeCurrentThreadAppender();
+            List<Row> logs = logCollector.getLogs();
+            logCollector.removeCurrentThreadAppender();
             HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             if (httpServletRequest.getHeader("X-FireLogger") != null) {
@@ -50,12 +51,12 @@ public class WebAppender implements Filter {
 
     @Override
     public void destroy() {
-        logGrabber.shutdown();
+        logCollector.shutdown();
     }
 
     public void setActive(boolean active) {
         this.active = active;
-        logGrabber = LogGrabber.newLogGrabber();
+        logCollector = LogCollector.newLogCollector();
 //        chromeLoggerFormatter = new ChromeLoggerFormatter();
         fireLoggerFormatter = new FireLoggerFormatter();
     }

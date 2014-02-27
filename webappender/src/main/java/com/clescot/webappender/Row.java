@@ -126,8 +126,8 @@ public class Row {
         return methodOfCaller;
     }
 
-    public void setMDC(String MDC) {
-        MDC = MDC;
+    public void setMDC(String mdc) {
+        this.mdc = mdc;
     }
 
     public String getMDC() {
