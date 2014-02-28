@@ -25,9 +25,6 @@ public class FireLoggerFormatter extends AbstractFormatter {
     public static final String FIRELOGGER_RESPONSE_HEADER_PREFIX = "Firelogger-";
 
 
-    public FireLoggerFormatter() {
-    }
-
     @Override
     protected String getJSON(List<Row> rows) throws JsonProcessingException {
         Map<String, Object> globalStructure = Maps.newHashMap();
