@@ -22,7 +22,11 @@ Install the [firebug](https://addons.mozilla.org/fr/firefox/addon/firebug/) and 
 launch your firefox browser, hit the F12 touch to activate firebug, and click on the 'logger' tab.
  Go to [the webapp demo url](http://127.0.0.1:8080/webappender-war-example), and inspect the logger tab.
 
- You will see
+ You will see :
+
+ ![a demo webapp with the firelogger tab open](webappender.png)
+
+ Note the ![additional informations provided on the right](webappender2.png) when you right-click on a row to display the DOM tab.
 
 
 
