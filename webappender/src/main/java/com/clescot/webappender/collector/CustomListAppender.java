@@ -23,9 +23,9 @@ public class CustomListAppender extends ListAppender<ILoggingEvent> {
     private CallerDataConverter callerDataConverter = new CallerDataConverter();
     private MarkerConverter markerConverter = new MarkerConverter();
 
-
-
     private List<Row> rows = Lists.newArrayList();
+
+    private boolean useConverters = true;
 
     @Override
     public void start() {
@@ -47,22 +47,26 @@ public class CustomListAppender extends ListAppender<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent e) {
         Row row = new Row(e);
-        row.setLineNumber(lineOfCallerConverter.convert(e));
-        row.setPathName(fileOfCallerConverter.convert(e));
-        row.setTime(dateConverter.convert(e));
-        row.setRelativeTime(relativeTimeConverter.convert(e));
-        row.setThreadName(threadConverter.convert(e));
-        row.setClassOfCaller(classOfCallerConverter.convert(e));
-        row.setMethodOfCaller(methodOfCallerConverter.convert(e));
-        row.setMDC(mdcConverter.convert(e));
-        row.setThrowableProxy(throwableProxyConverter.convert(e));
-        row.setContextName(contextNameConverter.convert(e));
-        row.setCallerData(callerDataConverter.convert(e));
-        row.setMarker(markerConverter.convert(e));
+        if (useConverters) {
+            row.setLineNumber(lineOfCallerConverter.convert(e));
+            row.setPathName(fileOfCallerConverter.convert(e));
+            row.setTime(dateConverter.convert(e));
+            row.setRelativeTime(relativeTimeConverter.convert(e));
+            row.setThreadName(threadConverter.convert(e));
+            row.setClassOfCaller(classOfCallerConverter.convert(e));
+            row.setMethodOfCaller(methodOfCallerConverter.convert(e));
+            row.setMDC(mdcConverter.convert(e));
+            row.setThrowableProxy(throwableProxyConverter.convert(e));
+            row.setContextName(contextNameConverter.convert(e));
+            row.setCallerData(callerDataConverter.convert(e));
+            row.setMarker(markerConverter.convert(e));
+        }
         rows.add(row);
 
     }
-
+    public void setUseConverters(boolean useConverters) {
+        this.useConverters = useConverters;
+    }
 
     public List<Row> getRows() {
         return Lists.newArrayList(rows);

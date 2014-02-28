@@ -50,7 +50,7 @@ public class LogCollector {
      * @return
      */
     public List<Row> getLogs() {
-        CustomListAppender perThreadIdAppender = getChildAppender(Thread.currentThread().getId() + "");
+        CustomListAppender perThreadIdAppender = getChildAppender();
         return Lists.newArrayList(perThreadIdAppender.getRows());
     }
 
@@ -64,8 +64,8 @@ public class LogCollector {
     }
 
 
-    private CustomListAppender getChildAppender(String appenderKey) {
-        return (CustomListAppender) getAppenderTracker().getOrCreate(appenderKey, System.currentTimeMillis());
+    public CustomListAppender getChildAppender() {
+        return (CustomListAppender) getAppenderTracker().getOrCreate(Thread.currentThread().getId() + "", System.currentTimeMillis());
     }
 
 
