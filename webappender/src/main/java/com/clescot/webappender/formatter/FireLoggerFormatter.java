@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import ch.qos.logback.classic.pattern.DateConverter;
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Function;
@@ -22,13 +21,11 @@ public class FireLoggerFormatter extends AbstractFormatter {
     public static final String LOGS = "logs";
     private static Random random = new Random();
 
-    private DateConverter dateConverter = new DateConverter();
     public static final String REQUEST_HEADER_IDENTIFIER = "X-FireLogger";
     public static final String FIRELOGGER_RESPONSE_HEADER_PREFIX = "Firelogger-";
 
 
     public FireLoggerFormatter() {
-        dateConverter.start();
     }
 
     @Override
