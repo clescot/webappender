@@ -1,10 +1,9 @@
 package com.clescot.webappender.formatter;
 
 import ch.qos.logback.classic.pattern.DateConverter;
-import ch.qos.logback.classic.pattern.FileOfCallerConverter;
-import ch.qos.logback.classic.pattern.LineOfCallerConverter;
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,11 +18,11 @@ import java.util.*;
 public class FireLoggerFormatter extends AbstractFormatter {
     public static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
     public static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
+    public static final String ERRORS = "errors";
+    public static final String LOGS = "logs";
     private static Random random = new Random();
 
     private DateConverter dateConverter = new DateConverter();
-    private FileOfCallerConverter fileOfCallerConverter = new FileOfCallerConverter();
-    private LineOfCallerConverter lineOfCallerConverter = new LineOfCallerConverter();
     public static final String REQUEST_HEADER_IDENTIFIER = "X-FireLogger";
     public static final String FIRELOGGER_RESPONSE_HEADER_PREFIX = "Firelogger-";
 
@@ -38,11 +37,18 @@ public class FireLoggerFormatter extends AbstractFormatter {
 
         ArrayList<Object> errors = Lists.newArrayList();
         if (!errors.isEmpty()) {
-            globalStructure.put("errors", errors);
+            globalStructure.put(ERRORS, errors);
         }
 
         if (!rows.isEmpty()) {
-            globalStructure.put("logs", rows);
+            List<FireLoggerRow> fireloggerRows = Lists.transform(rows, new Function<Row, FireLoggerRow>() {
+
+                @Override
+                public FireLoggerRow apply(Row input) {
+                    return new FireLoggerRow(input);
+                }
+            });
+            globalStructure.put(LOGS, fireloggerRows);
         }
         return objectMapper.writeValueAsString(globalStructure);
 
@@ -55,7 +61,7 @@ public class FireLoggerFormatter extends AbstractFormatter {
     }
 
     @Override
-    public Map<String, String> getHeadersAsMap(List<Row> rows) {
+    public Map<String, String> getHeadersAsMap(List <Row> rows) {
         HashMap<String, String> headers = Maps.newHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
         try {
@@ -78,7 +84,6 @@ public class FireLoggerFormatter extends AbstractFormatter {
     private String getUniqueIdentifier() {
         return new BigInteger(130, random).toString(FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH).substring(0, 9);
     }
-
 
 
 }

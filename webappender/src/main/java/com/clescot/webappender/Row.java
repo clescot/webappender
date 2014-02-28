@@ -13,7 +13,7 @@ public class Row {
 
 
     private List<Object> args;
-    private String level;
+    private Level level;
     private long timestamp;
     private String relativeTime;
     private String threadName;
@@ -33,7 +33,7 @@ public class Row {
     private String time;
     private String name;
     private String pathName;
-    private String lineno;
+    private String lineNumber;
 
 
     public Row(ILoggingEvent event) {
@@ -45,7 +45,7 @@ public class Row {
         }
 
         this.message = event.getFormattedMessage();
-        this.level = Level.getLevel(event.getLevel()).toString();
+        this.level = event.getLevel();
         this.timestamp = event.getTimeStamp();
         this.name = event.getLoggerName();
     }
@@ -63,7 +63,7 @@ public class Row {
         return args;
     }
 
-    public String getLevel() {
+    public Level getLevel() {
         return level;
     }
 
@@ -83,16 +83,16 @@ public class Row {
         return pathName;
     }
 
-    public String getLineno() {
-        return lineno;
+    public String getLineNumber() {
+        return lineNumber;
     }
 
     public void setTime(String time) {
         this.time = time;
     }
 
-    public void setLineno(String lineno) {
-        this.lineno = lineno;
+    public void setLineNumber(String lineNumber) {
+        this.lineNumber = lineNumber;
     }
 
     public void setRelativeTime(String relativeTime) {
@@ -167,39 +167,7 @@ public class Row {
         return marker;
     }
 
-    private enum Level {
 
-        DEBUG("debug", ch.qos.logback.classic.Level.DEBUG),
-        WARNING("warning", ch.qos.logback.classic.Level.WARN),
-        ERROR("error", ch.qos.logback.classic.Level.ERROR),
-        INFO("info", ch.qos.logback.classic.Level.INFO);
-//        CRITICAL("critical", ???? not mapped);
-
-        private String fireLoggerLevel;
-        private ch.qos.logback.classic.Level logbackLevel;
-
-        Level(String fireLoggerLevel, ch.qos.logback.classic.Level logbackLevel) {
-            this.fireLoggerLevel = fireLoggerLevel;
-            this.logbackLevel = logbackLevel;
-        }
-
-        public String getFireLoggerLevel() {
-            return fireLoggerLevel;
-        }
-
-        public ch.qos.logback.classic.Level getLogbackLevel() {
-            return logbackLevel;
-        }
-
-        public static String getLevel(ch.qos.logback.classic.Level logbackLevel) {
-            for (Level level : values()) {
-                if (level.getLogbackLevel().equals(logbackLevel)) {
-                    return level.getFireLoggerLevel();
-                }
-            }
-            return Level.INFO.getFireLoggerLevel();
-        }
-    }
 }
 
 

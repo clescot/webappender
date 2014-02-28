@@ -50,8 +50,8 @@ public class ChromeLoggerFormatter extends AbstractFormatter {
             this.logData.put("___class_name", event.getName());
             this.logData.put("message", event.getMessage());
 
-            this.backtraceData = event.getPathName() + ':' + event.getLineno();
-            this.logType = LogType.getChromeLoggerLevel(Level.toLevel(event.getLevel())).getChromeLoggerLevel();
+            this.backtraceData = event.getPathName() + ':' + event.getLineNumber();
+            this.logType = LogType.getChromeLoggerLevel(event.getLevel()).getChromeLoggerLevel();
         }
 
 

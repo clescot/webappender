@@ -47,7 +47,7 @@ public class CustomListAppender extends ListAppender<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent e) {
         Row row = new Row(e);
-        row.setLineno(lineOfCallerConverter.convert(e));
+        row.setLineNumber(lineOfCallerConverter.convert(e));
         row.setPathName(fileOfCallerConverter.convert(e));
         row.setTime(dateConverter.convert(e));
         row.setRelativeTime(relativeTimeConverter.convert(e));
