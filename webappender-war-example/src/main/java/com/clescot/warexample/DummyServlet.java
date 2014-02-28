@@ -23,7 +23,7 @@ public class DummyServlet extends HttpServlet {
     public DummyServlet() {
         spiels = new Properties();
 
-        try( InputStream inputStream  =Thread.currentThread().getContextClassLoader().getResourceAsStream("spieldesjahres.properties");) {
+        try( InputStream inputStream  =Thread.currentThread().getContextClassLoader().getResourceAsStream("spieldesjahres.properties")) {
 
             spiels.load(inputStream);
         } catch (IOException e) {
@@ -43,5 +43,6 @@ public class DummyServlet extends HttpServlet {
         LOGGER.warn("test warn");
         LOGGER.error("test error");
         LOGGER.trace("test trace");
+        resp.getOutputStream().print("webappender test");
     }
 }
