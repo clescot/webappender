@@ -1,5 +1,6 @@
-package com.clescot.webappender;
+package com.clescot.webappender.jee;
 
+import com.clescot.webappender.Row;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.FireLoggerFormatter;
 

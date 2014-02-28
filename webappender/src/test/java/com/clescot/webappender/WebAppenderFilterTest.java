@@ -1,5 +1,6 @@
 package com.clescot.webappender;
 
+import com.clescot.webappender.jee.WebAppenderFilter;
 import com.google.common.collect.Lists;
 import org.eclipse.jetty.http.HttpTester;
 import org.eclipse.jetty.server.*;
