@@ -15,9 +15,14 @@ higher, [firefox](http://www.mozilla.org/fr/firefox/new/), need to be installed.
 Install the [firebug](https://addons.mozilla.org/fr/firefox/addon/firebug/) and [firelogger firefox](https://addons.mozilla.org/firefox/addon/firelogger) addons.
 
 
+### install the demo
+
     git clone git@github.com:clescot/webappender.git
     cd webappender/webappender-war-example
     mvn org.apache.tomcat.maven:tomcat7-maven-plugin:2.2:run-war -Dwebappender=true
+
+
+### test in your browser
 
 launch your firefox browser, hit the F12 touch to activate firebug, and click on the 'logger' tab.
  Go to [the webapp demo url](http://127.0.0.1:8080/webappender-war-example), and inspect the logger tab.
@@ -26,7 +31,10 @@ launch your firefox browser, hit the F12 touch to activate firebug, and click on
 
  ![a demo webapp with the firelogger tab open](webappender.png)
 
- Note the ![additional informations provided on the right](webappender2.png) when you right-click on a row to display the DOM tab.
+
+### additional informations
+
+ Note the additional informations provided on the right ![additional informations provided on the right](webappender2.png) when you right-click on a row to display the DOM tab.
 
 
 
