@@ -25,7 +25,7 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
 
 
     @Override
-    protected String getJSON(List<Row> rows){
+    protected String getJSON(List<Row> rows) {
         Map<String, Object> globalStructure = Maps.newHashMap();
 
         ArrayList<Object> errors = Lists.newArrayList();
@@ -59,16 +59,12 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
     public Map<String, String> serializeRows(List<Row> rows) {
         HashMap<String, String> headers = Maps.newHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
-        try {
-            String rowsAsJSON = format(rows);
-            List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);
-            for (int i = 0; i < chunks.size(); i++) {
-                String chunk = chunks.get(i);
-                headers.put(prefix + i, chunk);
+        String rowsAsJSON = format(rows);
+        List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);
+        for (int i = 0; i < chunks.size(); i++) {
+            String chunk = chunks.get(i);
+            headers.put(prefix + i, chunk);
 
-            }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException();
         }
 
 

@@ -1,7 +1,6 @@
 package com.clescot.webappender.formatter;
 
 import com.clescot.webappender.Row;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -20,7 +19,7 @@ public abstract class AbstractFormatter<R> implements Formatter {
     protected abstract String getJSON(List<Row> rows);
 
 
-    public String format(List<Row> rows) throws JsonProcessingException {
+    public String format(List<Row> rows){
         return new String(Base64.encodeBase64(getJSON(rows).getBytes(), NO_CR_LF_TRAILING_CHARACTERS), Charset.forName(UTF_8));
     }
 

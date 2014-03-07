@@ -2,9 +2,6 @@ package com.clescot.webappender.formatter;
 
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import java.util.Arrays;
@@ -20,14 +17,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
         Map<String, Object> globalStructure = Maps.newHashMap();
         globalStructure.put("version", "1.0");
         globalStructure.put("columns", Arrays.asList("log", "backtrace", "type"));
-        ImmutableList<ChromeRow> chromeLoggerRows = FluentIterable.from(rows).transform(new Function<Row, ChromeRow>() {
-            @Override
-            public ChromeRow apply(Row input) {
-                return new ChromeRow(input);
-            }
-
-        }).toList();
-        globalStructure.put("rows", chromeLoggerRows);
+        globalStructure.put("rows", getFormatterRows(rows));
         try {
             return objectMapper.writeValueAsString(globalStructure);
         } catch (JsonProcessingException e) {
