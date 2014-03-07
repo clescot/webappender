@@ -36,7 +36,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter {
     }
 
     @Override
-    public Map<String, String> getHeadersAsMap(List<com.clescot.webappender.Row> rows) {
+    public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) {
         return null;
     }
 

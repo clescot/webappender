@@ -55,7 +55,7 @@ public class FireLoggerFormatter extends AbstractFormatter {
     }
 
     @Override
-    public Map<String, String> getHeadersAsMap(List <Row> rows) {
+    public Map<String, String> serializeRows(List<Row> rows) {
         HashMap<String, String> headers = Maps.newHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
         try {
