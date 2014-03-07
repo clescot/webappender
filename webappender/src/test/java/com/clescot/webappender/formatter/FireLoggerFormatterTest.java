@@ -8,7 +8,6 @@ import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 import org.hamcrest.MatcherAssert;
 import org.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -31,19 +30,18 @@ private static Logger LOGGER = (Logger) LoggerFactory.getLogger(FireLoggerFormat
 
         public static final String NO_LOGS = "e30=";
 
-        @Test
-        @Ignore
-        public void testFormat_nominal_case() throws Exception {
-            //given
-            ArrayList<Row> iLoggingEvents = getILoggingEvents();
-            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
-            //when
-            String formattedLogs = fireLoggerFormatter.format(iLoggingEvents);
-            System.out.println(formattedLogs.length());
-            System.out.println(EXPECTED.length());
-            //then
-            assertThat(formattedLogs).isEqualTo(EXPECTED);
-        }
+//        @Test
+//        public void testFormat_nominal_case() throws Exception {
+//            //given
+//            ArrayList<Row> iLoggingEvents = getILoggingEvents();
+//            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
+//            //when
+//            String formattedLogs = fireLoggerFormatter.format(iLoggingEvents);
+//            System.out.println(formattedLogs.length());
+//            System.out.println(EXPECTED.length());
+//            //then
+//            assertThat(formattedLogs).isEqualTo(EXPECTED);
+//        }
         @Test
         public void testFormat_with_no_events() throws Exception {
             //given
