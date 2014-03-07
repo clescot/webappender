@@ -7,7 +7,7 @@ import ch.qos.logback.core.Context;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.sift.AppenderFactory;
 
-public class ListAppenderPerThreadFactory implements AppenderFactory<ILoggingEvent> {
+ class ListAppenderPerThreadFactory implements AppenderFactory<ILoggingEvent> {
 
     private LoggerContext loggerContext;
 

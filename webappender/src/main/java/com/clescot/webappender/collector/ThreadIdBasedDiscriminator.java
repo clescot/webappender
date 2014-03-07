@@ -3,7 +3,7 @@ package com.clescot.webappender.collector;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.Discriminator;
 
-public class ThreadIdBasedDiscriminator implements Discriminator<ILoggingEvent> {
+ class ThreadIdBasedDiscriminator implements Discriminator<ILoggingEvent> {
 
     private static final String KEY = "threadId";
 
