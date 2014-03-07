@@ -1,13 +1,10 @@
 package com.clescot.webappender.formatter;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.LoggingEvent;
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -27,34 +24,38 @@ import static org.mockito.Mockito.when;
 public class ChromeLoggerFormatterTest {
     private static Logger LOGGER = LoggerFactory.getLogger(ChromeLoggerFormatterTest.class);
 
-    @Ignore
-    public static class AbstractTestClass {
 
-        protected ArrayList<Row> getiLoggingEvents() {
-            Row iLoggingEvent = new Row(new LoggingEvent(this.getClass().getName(), (ch.qos.logback.classic.Logger) LOGGER, Level.ERROR, "dummy message", null, null));
-            Row iLoggingEvent2 =  new Row(new LoggingEvent(this.getClass().getName(), (ch.qos.logback.classic.Logger) LOGGER, Level.ERROR, "dummy message", null, null));
-            ArrayList<Row> iLoggingEvents = Lists.newArrayList();
-            iLoggingEvents.add(iLoggingEvent);
-            iLoggingEvents.add(iLoggingEvent2);
-            return iLoggingEvents;
-        }
-    }
 
-    @Ignore
-    public static class TestFormat extends AbstractTestClass {
+    public static class TestFormat extends AbstractFormatterTest {
+
+        public static final String NO_EVENTS_IN_BASE64 = "eyJjb2x1bW5zIjpbImxvZyIsImJhY2t0cmFjZSIsInR5cGUiXSwicm93cyI6W10sInZlcnNpb24iOiIxLjAifQ==";
+        public static final String EVENTS_SERIALIZED = "eyJjb2x1bW5zIjpbImxvZyIsImJhY2t0cmFjZSIsInR5cGUiXSwicm93cyI6W3sibG9nRGF0YSI6eyJtZXNzYWdlIjoiZHVtbXkgbWVzc2FnZSIsIl9fX2NsYXNzX25hbWUiOiJjb20uY2xlc2NvdC53ZWJhcHBlbmRlci5mb3JtYXR0ZXIuQ2hyb21lTG9nZ2VyRm9ybWF0dGVyVGVzdCJ9LCJiYWNrdHJhY2VEYXRhIjoibnVsbDpudWxsIiwibG9nVHlwZSI6ImVycm9yIn0seyJsb2dEYXRhIjp7Im1lc3NhZ2UiOiJkdW1teSBtZXNzYWdlIiwiX19fY2xhc3NfbmFtZSI6ImNvbS5jbGVzY290LndlYmFwcGVuZGVyLmZvcm1hdHRlci5DaHJvbWVMb2dnZXJGb3JtYXR0ZXJUZXN0In0sImJhY2t0cmFjZURhdGEiOiJudWxsOm51bGwiLCJsb2dUeXBlIjoiZXJyb3IifV0sInZlcnNpb24iOiIxLjAifQ==";
+
         @Test
         public void testFormat_nominal_case() throws Exception {
-            ArrayList<Row> iLoggingEvents = getiLoggingEvents();
+            //given
+            ArrayList<Row> iLoggingEvents = getILoggingEvents();
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
+            //when
             String formattedLogs = chromeLoggerFormatter.format(iLoggingEvents);
-            assertThat(formattedLogs).isEqualTo("expected");
-
+            //then
+            assertThat(formattedLogs).isEqualTo(EVENTS_SERIALIZED);
+        }
+        @Test
+        public void testFormat_with_no_events() throws Exception {
+            //given
+            ArrayList<Row> iLoggingEvents = Lists.newArrayList();
+            ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
+            //when
+            String formattedLogs = chromeLoggerFormatter.format(iLoggingEvents);
+            //then
+            assertThat(formattedLogs).isEqualTo(NO_EVENTS_IN_BASE64);
         }
 
 
     }
 
-    public static class TestGetJSON extends AbstractTestClass {
+    public static class TestGetJSON extends AbstractFormatterTest {
         @InjectMocks
         private ChromeLoggerFormatter chromeLoggerFormatterMocked;
 
@@ -69,7 +70,7 @@ public class ChromeLoggerFormatterTest {
         @Test
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
-            String json = chromeLoggerFormatter.getJSON(getiLoggingEvents());
+            String json = chromeLoggerFormatter.getJSON(getILoggingEvents());
             assertThat(json).isEqualTo("{\"columns\":[\"log\",\"backtrace\",\"type\"],\"rows\":[{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"},{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"}],\"version\":\"1.0\"}");
         }
 
@@ -81,7 +82,7 @@ public class ChromeLoggerFormatterTest {
 
 
             //when
-            chromeLoggerFormatterMocked.getJSON(getiLoggingEvents());
+            chromeLoggerFormatterMocked.getJSON(getILoggingEvents());
 
             //then
 

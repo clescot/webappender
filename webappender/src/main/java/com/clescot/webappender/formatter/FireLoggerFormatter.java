@@ -64,7 +64,6 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
         for (int i = 0; i < chunks.size(); i++) {
             String chunk = chunks.get(i);
             headers.put(prefix + i, chunk);
-
         }
 
 
