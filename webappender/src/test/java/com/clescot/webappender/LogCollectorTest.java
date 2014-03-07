@@ -92,7 +92,7 @@ public class LogCollectorTest {
         }
 
         @Test
-        public void test_grab_one_log_in_with_100_sub_thread() throws Exception {
+        public void test_grab_one_log_in_with_10_sub_thread() throws Exception {
 
             for (int i = 0; i < 10; i++) {
                 Runnable myRunnable = new Runnable() {
@@ -126,5 +126,31 @@ public class LogCollectorTest {
             assertThat(logCollector.getLogs()).hasSize(0);
         }
 
+    }
+
+    public static class Test_shutdown{
+
+        @Test
+        public void nominal_case() throws InterruptedException {
+            //given
+            LogCollector logCollector = LogCollector.newLogCollector();
+
+            //when
+            logCollector.shutdown();
+
+            //then
+            ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getILoggerFactory().getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+            assertThat(rootLogger.getAppender(LogCollector.SIFTING_APPENDER_KEY)).isNull();
+        }
+
+        @Test
+        public void test_before_shutdown() throws InterruptedException {
+            //when
+            LogCollector logCollector = LogCollector.newLogCollector();
+
+            //then
+            ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getILoggerFactory().getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+            assertThat(rootLogger.getAppender(LogCollector.SIFTING_APPENDER_KEY)).isNotNull();
+        }
     }
 }
