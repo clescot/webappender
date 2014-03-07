@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class ChromeLoggerFormatter extends AbstractFormatter {
 
+    public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
+    public static final String REQUEST_HEADER_IDENTIFIER = "";
 
     protected String getJSON(List<com.clescot.webappender.Row> rows) throws JsonProcessingException {
         Map<String, Object> globalStructure = Maps.newHashMap();
@@ -32,12 +34,13 @@ public class ChromeLoggerFormatter extends AbstractFormatter {
 
     @Override
     public String getRequestHeaderId() {
-        return "NO_REQUEST_HEADER_ID";
+        return REQUEST_HEADER_IDENTIFIER;
     }
 
     @Override
     public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) {
-        return null;
+        Map<String,String> rowsSerialized = Maps.newHashMap();
+        return rowsSerialized;
     }
 
 
