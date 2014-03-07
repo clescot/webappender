@@ -1,0 +1,61 @@
+package com.clescot.webappender.formatter;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import com.clescot.webappender.Row;
+import com.google.common.collect.Lists;
+import org.hamcrest.MatcherAssert;
+import org.json.JSONObject;
+import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
+import uk.co.datumedge.hamcrest.json.SameJSONAs;
+
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+@RunWith(Enclosed.class)
+public class FireLoggerFormatterTest {
+private static Logger LOGGER = (Logger) LoggerFactory.getLogger(FireLoggerFormatterTest.class);
+    public static class Test_getJSON{
+
+        public static final String EMPTY_JSON_OBJECT = "{}";
+
+        @Test
+        public void test_no_rows() throws Exception {
+            //given
+            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
+            List<Row> rows = Lists.newArrayList();
+            //when
+            String json = fireLoggerFormatter.getJSON(rows);
+
+            //then
+            assertThat(json).isEqualTo(EMPTY_JSON_OBJECT);
+
+        }
+
+        @Test
+        public void test_one_row() throws Exception {
+            //given
+            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
+            List<Row> rows = Lists.newArrayList();
+            ILoggingEvent iLoggingEvent = new LoggingEvent(FireLoggerFormatterTest.class.getName(),LOGGER, Level.INFO,"test message",null,new Object[]{});
+
+            Row row = new Row(iLoggingEvent);
+            rows.add(row);
+            //when
+            String json = fireLoggerFormatter.getJSON(rows);
+            String expected = "{\"logs\":[{\"name\":\"com.clescot.webappender.formatter.FireLoggerFormatterTest\",\"contextName\":null,\"pathName\":null,\"args\":[],\"callerData\":null,\"classOfCaller\":null,\"methodOfCaller\":null,\"lineno\":null,\"marker\":null,\"relativeTime\":null,\"time\":null,\"template\":\"test message\",\"message\":\"test message\",\"threadName\":null,\"throwableProxy\":null,\"level\":\"info\",\"mdc\":null}]}";
+            //then
+            MatcherAssert.assertThat(new JSONObject(json), SameJSONAs.sameJSONObjectAs(new JSONObject(expected)).allowingExtraUnexpectedFields()
+                    .allowingAnyArrayOrdering());
+        }
+
+    }
+
+
+}
