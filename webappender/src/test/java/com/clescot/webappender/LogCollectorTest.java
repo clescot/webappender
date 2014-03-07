@@ -1,6 +1,11 @@
 package com.clescot.webappender;
 
 import com.clescot.webappender.collector.LogCollector;
+import com.google.code.tempusfugit.concurrency.ConcurrentRule;
+import com.google.code.tempusfugit.concurrency.annotations.Concurrent;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -11,71 +16,54 @@ import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
 public class LogCollectorTest {
+    @Rule
+    public ConcurrentRule concurrentRule = new ConcurrentRule();
 
 
     private static Logger LOGGER = LoggerFactory.getLogger(LogCollectorTest.class);
 
 
     public static class TestGetLogs {
+        private LogCollector logCollector;
+        @Before
+        public void before(){
+             logCollector = LogCollector.newLogCollector();
+        }
+
+        @After
+        public void after(){
+            logCollector.shutdown();
+        }
+
         @Test
         public void test_grab_one_log() throws Exception {
-            Runnable myRunnable = new Runnable() {
-
-                public void run() {
-                    LogCollector logCollector = LogCollector.newLogCollector();
                     LOGGER.error("test");
                     assertThat(logCollector.getLogs()).hasSize(1);
-                }
-            };
 
 
-            Thread thread = new Thread(myRunnable);
-            thread.start();
         }
 
         @Test
         public void test_grab_two_logs_() throws Exception {
-            Runnable myRunnable = new Runnable() {
-
-                public void run() {
-                    LogCollector logCollector = LogCollector.newLogCollector();
                     LOGGER.error("test");
                     LOGGER.error("test2");
                     assertThat(logCollector.getLogs()).hasSize(2);
-                }
-            };
-
-
-            Thread thread = new Thread(myRunnable);
-            thread.start();
         }
 
         @Test
         public void test_grab_logs_3_times() throws Exception {
-            Runnable myRunnable = new Runnable() {
-
-                public void run() {
-                    LogCollector logCollector = LogCollector.newLogCollector();
                     LOGGER.error("test");
                     LOGGER.error("test2");
                     assertThat(logCollector.getLogs()).hasSize(2);
                     assertThat(logCollector.getLogs()).hasSize(2);
                     assertThat(logCollector.getLogs()).hasSize(2);
-                }
-            };
 
-
-            Thread thread = new Thread(myRunnable);
-            thread.start();
         }
 
 
         @Test
         public void test_grab_3_logs_with_multiple_get_logs() throws Exception {
-            Runnable myRunnable = new Runnable() {
 
-                public void run() {
-                    LogCollector logCollector = LogCollector.newLogCollector();
                     LOGGER.error("test");
                     LOGGER.error("test2");
                     assertThat(logCollector.getLogs()).hasSize(2);
@@ -83,31 +71,23 @@ public class LogCollectorTest {
                     assertThat(logCollector.getLogs()).hasSize(3);
                     LOGGER.error("test4");
                     assertThat(logCollector.getLogs()).hasSize(4);
-                }
-            };
-
-
-            Thread thread = new Thread(myRunnable);
-            thread.start();
         }
 
         @Test
+        @Concurrent(count = 10)
         public void test_grab_one_log_in_with_10_sub_thread() throws Exception {
-
-            for (int i = 0; i < 10; i++) {
-                Runnable myRunnable = new Runnable() {
-
-                    public void run() {
-                        LogCollector logCollector = LogCollector.newLogCollector();
                         LOGGER.error("test");
                         assertThat(logCollector.getLogs()).hasSize(1);
-                    }
-                };
+        }
 
 
-                Thread thread = new Thread(myRunnable);
-                thread.start();
-            }
+        @Test
+        @Concurrent(count = 100)
+        public void test_grab_3_logs_in_with_10_sub_thread() throws Exception {
+            LOGGER.error("test");
+            LOGGER.error("test");
+            LOGGER.error("test");
+            assertThat(logCollector.getLogs()).hasSize(3);
         }
     }
 
