@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
- class CustomListAppender extends ListAppender<ILoggingEvent> {
+ public class CustomListAppender extends ListAppender<ILoggingEvent> {
 
     private LineOfCallerConverter lineOfCallerConverter = new LineOfCallerConverter();
     private FileOfCallerConverter fileOfCallerConverter = new FileOfCallerConverter();
