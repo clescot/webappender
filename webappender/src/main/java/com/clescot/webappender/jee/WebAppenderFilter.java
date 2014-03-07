@@ -16,6 +16,8 @@ import java.util.Map;
 @WebFilter(urlPatterns = "/*")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
+    public static final String X_FIRE_LOGGER = "X-FireLogger";
+    public static final String X_VERBOSE_LOGS = "X-verbose-logs";
     private LogCollector logCollector;
 
 
@@ -28,7 +30,7 @@ public class WebAppenderFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         if (Boolean.parseBoolean(System.getProperty(SYSTEM_PROPERTY_KEY))) {
             setActive(true);
-            String initParameter = filterConfig.getInitParameter("X-verbose-logs");
+            String initParameter = filterConfig.getInitParameter(X_VERBOSE_LOGS);
             if(initParameter!=null && "false".equalsIgnoreCase(initParameter)){
                 globalUseConverters = false;
             }
@@ -40,14 +42,14 @@ public class WebAppenderFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         if(active){
-            Enumeration<String> headers = httpServletRequest.getHeaders("X-Verbose-Logs");
+            Enumeration<String> headers = httpServletRequest.getHeaders(X_VERBOSE_LOGS);
             //by default, useCollectors is true. init parameter can override it, and request too
             //request is stronger than init-param, than default configuration
             boolean useConvertersHeader = true;
             if(headers.hasMoreElements()){
                 useConvertersHeader = Boolean.parseBoolean(headers.nextElement());
             }
-            if(!useConvertersHeader||(useConvertersHeader&&!globalUseConverters)){
+            if(!useConvertersHeader || (!globalUseConverters)){
                 logCollector.getChildAppender().setUseConverters(false);
             }
         }
@@ -57,8 +59,8 @@ public class WebAppenderFilter implements Filter {
             List<Row> logs = logCollector.getLogs();
             logCollector.removeCurrentThreadAppender();
 
-            if (httpServletRequest.getHeader("X-FireLogger") != null) {
-                for (Map.Entry<String, String> entry : fireLoggerFormatter.getHeadersAsMap(logs).entrySet()) {
+            if (httpServletRequest.getHeader(X_FIRE_LOGGER) != null) {
+                for (Map.Entry<String, String> entry : fireLoggerFormatter.serializeRows(logs).entrySet()) {
                     httpServletResponse.addHeader(entry.getKey(), entry.getValue());
                 }
             }
