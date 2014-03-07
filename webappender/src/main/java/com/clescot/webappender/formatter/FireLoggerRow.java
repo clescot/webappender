@@ -4,7 +4,7 @@ import com.clescot.webappender.Row;
 
 import java.util.List;
 
-public class FireLoggerRow {
+ class FireLoggerRow {
 
     private final String name;
     private final String contextName;

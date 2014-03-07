@@ -52,7 +52,7 @@ public class ChromeLoggerFormatterTest {
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             String json = chromeLoggerFormatter.getJSON(getiLoggingEvents());
-            assertThat(json).isEqualTo("{\"columns\":[\"log\",\"backtrace\",\"type\"],\"rows\":[{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"},{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"}],\"version\":\"0.1\"}");
+            assertThat(json).isEqualTo("{\"columns\":[\"log\",\"backtrace\",\"type\"],\"rows\":[{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"},{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.ChromeLoggerFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"}],\"version\":\"1.0\"}");
         }
     }
 

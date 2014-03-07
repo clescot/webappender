@@ -2,7 +2,6 @@ package com.clescot.webappender.formatter;
 
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -14,7 +13,7 @@ import java.util.*;
  * @see <a href="https://github.com/binaryage/firelogger/wiki">fireLogger wiki</a>
  * @see <a href="http://firelogger-php-tests.binaryage.com/basic.php">fireLogger test page</a>
  */
-public class FireLoggerFormatter extends AbstractFormatter {
+public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
     public static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
     public static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
     public static final String ERRORS = "errors";
@@ -26,7 +25,7 @@ public class FireLoggerFormatter extends AbstractFormatter {
 
 
     @Override
-    protected String getJSON(List<Row> rows) throws JsonProcessingException {
+    protected String getJSON(List<Row> rows){
         Map<String, Object> globalStructure = Maps.newHashMap();
 
         ArrayList<Object> errors = Lists.newArrayList();
@@ -35,17 +34,19 @@ public class FireLoggerFormatter extends AbstractFormatter {
         }
 
         if (!rows.isEmpty()) {
-            List<FireLoggerRow> fireloggerRows = Lists.transform(rows, new Function<Row, FireLoggerRow>() {
-
-                @Override
-                public FireLoggerRow apply(Row input) {
-                    return new FireLoggerRow(input);
-                }
-            });
-            globalStructure.put(LOGS, fireloggerRows);
+            globalStructure.put(LOGS, getFormatterRows(rows));
         }
-        return objectMapper.writeValueAsString(globalStructure);
+        try {
+            return objectMapper.writeValueAsString(globalStructure);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
+
+    @Override
+    protected FireLoggerRow newFormatterRow(Row row) {
+        return new FireLoggerRow(row);
     }
 
 

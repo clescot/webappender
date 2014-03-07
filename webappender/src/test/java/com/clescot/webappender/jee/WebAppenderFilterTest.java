@@ -77,7 +77,7 @@ public class WebAppenderFilterTest {
         }
 
         @Test
-        public void test_without_headers_with_firelogger_header() throws Exception {
+        public void test_with_system_flag_with_firelogger_header() throws Exception {
             //given
             System.setProperty(WebAppenderFilter.SYSTEM_PROPERTY_KEY, "true");
             MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
@@ -101,7 +101,7 @@ public class WebAppenderFilterTest {
         }
 
         @Test
-        public void test_without_headers_with_chromelogger_header() throws Exception {
+        public void test_with_system_flag_with_chromelogger_header() throws Exception {
             //given
             System.setProperty(WebAppenderFilter.SYSTEM_PROPERTY_KEY, "true");
             MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();

@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import ch.qos.logback.classic.Level;
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Function;
@@ -12,14 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ChromeLoggerFormatter extends AbstractFormatter {
+public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
     public static final String REQUEST_HEADER_IDENTIFIER = "";
 
-    protected String getJSON(List<com.clescot.webappender.Row> rows) throws JsonProcessingException {
+    protected String getJSON(List<Row> rows) {
         Map<String, Object> globalStructure = Maps.newHashMap();
-        globalStructure.put("version", "0.1");
+        globalStructure.put("version", "1.0");
         globalStructure.put("columns", Arrays.asList("log", "backtrace", "type"));
         ImmutableList<ChromeRow> chromeLoggerRows = FluentIterable.from(rows).transform(new Function<Row, ChromeRow>() {
             @Override
@@ -29,7 +28,16 @@ public class ChromeLoggerFormatter extends AbstractFormatter {
 
         }).toList();
         globalStructure.put("rows", chromeLoggerRows);
-        return objectMapper.writeValueAsString(globalStructure);
+        try {
+            return objectMapper.writeValueAsString(globalStructure);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    protected ChromeRow newFormatterRow(Row row) {
+        return new ChromeRow(row);
     }
 
     @Override
@@ -40,71 +48,11 @@ public class ChromeLoggerFormatter extends AbstractFormatter {
     @Override
     public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) {
         Map<String,String> rowsSerialized = Maps.newHashMap();
+        rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, getJSON(rows));
         return rowsSerialized;
     }
 
 
-    private class ChromeRow {
-        private Map<String, String> logData = Maps.newHashMap();// an array of all arguments converted to the proper data structure
-        private String backtraceData;//he filename and line number where this call originated from
-        private String logType;//log, warn, error, info, group, groupEnd, groupCollapsed, and table
-
-        private ChromeRow(Row event) {
-            this.logData.put("___class_name", event.getName());
-            this.logData.put("message", event.getMessage());
-
-            this.backtraceData = event.getPathName() + ':' + event.getLineNumber();
-            this.logType = LogType.getChromeLoggerLevel(event.getLevel()).getChromeLoggerLevel();
-        }
 
 
-        public Map<String, String> getLogData() {
-            return logData;
-        }
-
-        public String getBacktraceData() {
-            return backtraceData;
-        }
-
-        public String getLogType() {
-            return logType;
-        }
-    }
-
-    private enum LogType {
-
-        LOG("log", Level.ALL),
-        WARN("warn", Level.WARN),
-        ERROR("error", Level.ERROR),
-        INFO("info", Level.INFO),
-        GROUP("group", Level.DEBUG),
-        GROUP_END("groupEnd", Level.DEBUG),
-        GROUP_COLLAPSED("groupCollapsed", Level.DEBUG),
-        TABLE("table", Level.DEBUG);
-
-        private String chromeLoggerLevel;
-        private Level logbackLevel;
-
-        LogType(String chromeLoggerLevel, Level logbackLevel) {
-            this.chromeLoggerLevel = chromeLoggerLevel;
-            this.logbackLevel = logbackLevel;
-        }
-
-        public String getChromeLoggerLevel() {
-            return chromeLoggerLevel;
-        }
-
-        public Level getLogbackLevel() {
-            return logbackLevel;
-        }
-
-        public static LogType getChromeLoggerLevel(Level logbackLevel) {
-            for (LogType logType : values()) {
-                if (logType.getLogbackLevel().equals(logbackLevel)) {
-                    return logType;
-                }
-            }
-            return LogType.INFO;
-        }
-    }
 }
