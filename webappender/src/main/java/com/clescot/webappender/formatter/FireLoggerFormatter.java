@@ -51,8 +51,8 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
 
 
     @Override
-    public String getRequestHeaderId() {
-        return REQUEST_HEADER_IDENTIFIER;
+    public boolean isActive(Map<String, List<String>> headers) {
+        return headers.containsKey(REQUEST_HEADER_IDENTIFIER);
     }
 
     @Override

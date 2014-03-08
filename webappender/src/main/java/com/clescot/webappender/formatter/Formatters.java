@@ -12,11 +12,11 @@ public class Formatters {
 
     private final static List<? extends Formatter> FORMATTERS = Arrays.asList(new FireLoggerFormatter(), new ChromeLoggerFormatter());
 
-    public static Optional<? extends Formatter> findFormatter(final Map<String, String> headers) {
+    public static Optional<? extends Formatter> findFormatter(final Map<String, List<String>> headers) {
         return Iterables.tryFind(FORMATTERS, new Predicate<Formatter>() {
             @Override
-            public boolean apply(Formatter input) {
-                return headers.containsKey(input.getRequestHeaderId());
+            public boolean apply(Formatter formatter) {
+                return formatter.isActive(headers);
             }
         });
     }

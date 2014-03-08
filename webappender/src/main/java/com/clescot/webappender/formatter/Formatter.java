@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface Formatter {
 
-    String getRequestHeaderId();
+    boolean isActive(Map<String, List<String>> headers);
 
     Map<String, String> serializeRows(List<Row> rows);
 }

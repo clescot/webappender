@@ -108,7 +108,7 @@ public class WebAppenderFilterTest {
             httpServletRequest.setMethod("GET");
             HttpServletResponse httpServletResponse = new MockHttpServletResponse();
             MockFilterChain filterChain = getFilterChain();
-            httpServletRequest.addHeader(ChromeLoggerFormatter.REQUEST_HEADER_IDENTIFIER, "dummy value");
+            httpServletRequest.addHeader(ChromeLoggerFormatter.HTTP_USER_AGENT, "dummy value");
             //when
             filterChain.doFilter(httpServletRequest, httpServletResponse);
 

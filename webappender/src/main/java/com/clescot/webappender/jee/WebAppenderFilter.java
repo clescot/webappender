@@ -12,9 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebFilter(urlPatterns = "/*")
 public class WebAppenderFilter implements Filter {
@@ -69,14 +67,14 @@ public class WebAppenderFilter implements Filter {
         }
     }
 
-    private static Map<String, String> getHeadersAsMap(HttpServletRequest httpServletRequest) {
+    private static Map<String, List<String>> getHeadersAsMap(HttpServletRequest httpServletRequest) {
 
-        Map<String, String> map = Maps.newHashMap();
+        Map<String, List<String>> map = Maps.newHashMap();
 
         Enumeration headerNames = httpServletRequest.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
-            String value = httpServletRequest.getHeader(key);
+            ArrayList<String> value = Collections.list(httpServletRequest.getHeaders(key));
             map.put(key, value);
         }
         return map;
