@@ -16,8 +16,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
 public class LogCollectorTest {
-    @Rule
-    public ConcurrentRule concurrentRule = new ConcurrentRule();
 
 
     private static Logger LOGGER = LoggerFactory.getLogger(LogCollectorTest.class);
@@ -25,6 +23,10 @@ public class LogCollectorTest {
 
     public static class TestGetLogs {
         private LogCollector logCollector;
+
+        @Rule
+        public ConcurrentRule concurrentRule = new ConcurrentRule();
+
         @Before
         public void before(){
              logCollector = LogCollector.newLogCollector();
@@ -36,6 +38,7 @@ public class LogCollectorTest {
         }
 
         @Test
+        @Concurrent(count = 10)
         public void test_grab_one_log() throws Exception {
                     LOGGER.error("test");
                     assertThat(logCollector.getLogs()).hasSize(1);
@@ -44,6 +47,7 @@ public class LogCollectorTest {
         }
 
         @Test
+        @Concurrent(count = 10)
         public void test_grab_two_logs_() throws Exception {
                     LOGGER.error("test");
                     LOGGER.error("test2");
@@ -51,6 +55,7 @@ public class LogCollectorTest {
         }
 
         @Test
+        @Concurrent(count = 10)
         public void test_grab_logs_3_times() throws Exception {
                     LOGGER.error("test");
                     LOGGER.error("test2");
@@ -62,6 +67,7 @@ public class LogCollectorTest {
 
 
         @Test
+        @Concurrent(count = 10)
         public void test_grab_3_logs_with_multiple_get_logs() throws Exception {
 
                     LOGGER.error("test");
