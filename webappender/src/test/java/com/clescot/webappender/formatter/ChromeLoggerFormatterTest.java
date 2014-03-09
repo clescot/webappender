@@ -29,18 +29,7 @@ public class ChromeLoggerFormatterTest {
     public static class TestFormat extends AbstractFormatterTest {
 
         public static final String NO_EVENTS_IN_BASE64 = "eyJjb2x1bW5zIjpbImxvZyIsImJhY2t0cmFjZSIsInR5cGUiXSwicm93cyI6W10sInZlcnNpb24iOiIxLjAifQ==";
-        public static final String EVENTS_SERIALIZED = "eyJjb2x1bW5zIjpbImxvZyIsImJhY2t0cmFjZSIsInR5cGUiXSwicm93cyI6W3sibG9nRGF0YSI6eyJtZXNzYWdlIjoiZHVtbXkgbWVzc2FnZSIsIl9fX2NsYXNzX25hbWUiOiJjb20uY2xlc2NvdC53ZWJhcHBlbmRlci5mb3JtYXR0ZXIuQ2hyb21lTG9nZ2VyRm9ybWF0dGVyVGVzdCJ9LCJiYWNrdHJhY2VEYXRhIjoibnVsbDpudWxsIiwibG9nVHlwZSI6ImVycm9yIn0seyJsb2dEYXRhIjp7Im1lc3NhZ2UiOiJkdW1teSBtZXNzYWdlIiwiX19fY2xhc3NfbmFtZSI6ImNvbS5jbGVzY290LndlYmFwcGVuZGVyLmZvcm1hdHRlci5DaHJvbWVMb2dnZXJGb3JtYXR0ZXJUZXN0In0sImJhY2t0cmFjZURhdGEiOiJudWxsOm51bGwiLCJsb2dUeXBlIjoiZXJyb3IifV0sInZlcnNpb24iOiIxLjAifQ==";
 
-//        @Test
-//        public void testFormat_nominal_case() throws Exception {
-//            //given
-//            ArrayList<Row> iLoggingEvents = getILoggingEvents();
-//            ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
-//            //when
-//            String formattedLogs = chromeLoggerFormatter.format(iLoggingEvents);
-//            //then
-//            assertThat(formattedLogs).isEqualTo(EVENTS_SERIALIZED);
-//        }
         @Test
         public void testFormat_with_no_events() throws Exception {
             //given
