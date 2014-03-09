@@ -15,16 +15,12 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     public static final String HTTP_USER_AGENT = "HTTP_USER_AGENT";
     private static Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) Chrome/");
 
-    protected String getJSON(List<Row> rows) {
+    protected String getJSON(List<Row> rows) throws JsonProcessingException {
         Map<String, Object> globalStructure = Maps.newHashMap();
         globalStructure.put("version", "1.0");
         globalStructure.put("columns", Arrays.asList("log", "backtrace", "type"));
         globalStructure.put("rows", getFormatterRows(rows));
-        try {
             return objectMapper.writeValueAsString(globalStructure);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -44,7 +40,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     }
 
     @Override
-    public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) {
+    public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, getJSON(rows));
         return rowsSerialized;

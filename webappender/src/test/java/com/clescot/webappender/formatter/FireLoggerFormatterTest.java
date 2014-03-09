@@ -37,8 +37,7 @@ private static Logger LOGGER = (Logger) LoggerFactory.getLogger(FireLoggerFormat
 //            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
 //            //when
 //            String formattedLogs = fireLoggerFormatter.format(iLoggingEvents);
-//            System.out.println(formattedLogs.length());
-//            System.out.println(EXPECTED.length());
+//
 //            //then
 //            assertThat(formattedLogs).isEqualTo(EXPECTED);
 //        }

@@ -74,7 +74,7 @@ public class ChromeLoggerFormatterTest {
             assertThat(json).isEqualTo("{\"columns\":[\"log\",\"backtrace\",\"type\"],\"rows\":[{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.AbstractFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"},{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.AbstractFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"}],\"version\":\"1.0\"}");
         }
 
-        @Test(expected = RuntimeException.class)
+        @Test(expected = JsonGenerationException.class)
         public void test_get_json_when_object_mapper_throw_a_json_processing_exception() throws Exception {
 
             //given

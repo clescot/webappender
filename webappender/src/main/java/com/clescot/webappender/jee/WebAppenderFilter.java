@@ -4,8 +4,11 @@ import com.clescot.webappender.Row;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.Formatter;
 import com.clescot.webappender.formatter.Formatters;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -18,12 +21,11 @@ import java.util.*;
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
     public static final String X_VERBOSE_LOGS = "X-verbose-logs";
+    private static Logger LOGGER = LoggerFactory.getLogger(WebAppenderFilter.class);
+
     private LogCollector logCollector;
-
-
     private boolean active;
     private boolean globalUseConverters = true;
-
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -59,8 +61,13 @@ public class WebAppenderFilter implements Filter {
             logCollector.removeCurrentThreadAppender();
             Optional<? extends Formatter> optional = Formatters.findFormatter(getHeadersAsMap(httpServletRequest));
             if (optional.isPresent()) {
-                for (Map.Entry<String, String> entry : optional.get().serializeRows(logs).entrySet()) {
+                try{
+                Map<String, String> serializedRows = optional.get().serializeRows(logs);
+                for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                     httpServletResponse.addHeader(entry.getKey(), entry.getValue());
+                }
+                }catch(JsonProcessingException e){
+                    LOGGER.warn("webAppender serialization error",e);
                 }
             }
 
