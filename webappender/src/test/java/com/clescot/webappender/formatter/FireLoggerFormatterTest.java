@@ -6,6 +6,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.hamcrest.MatcherAssert;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -75,6 +78,38 @@ private static Logger LOGGER = (Logger) LoggerFactory.getLogger(FireLoggerFormat
             MatcherAssert.assertThat(new JSONObject(json), SameJSONAs.sameJSONObjectAs(new JSONObject(expected)).allowingExtraUnexpectedFields()
                     .allowingAnyArrayOrdering());
         }
+
+    }
+
+    public static class TestIsActive{
+        @Test
+        public void test_is_active_nominal_case() throws Exception {
+            //given
+            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
+            Map<String, List<String>> headers = Maps.newHashMap();
+            headers.put(FireLoggerFormatter.REQUEST_HEADER_IDENTIFIER, Arrays.asList(""));
+
+            //when
+            boolean active = fireLoggerFormatter.isActive(headers);
+            //then
+            assertThat(active).isTrue();
+
+        }
+
+        @Test
+        public void test_is_active_with_bad_case() throws Exception {
+            //given
+            FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
+            Map<String, List<String>> headers = Maps.newHashMap();
+            headers.put("X-fiReLoGger", Arrays.asList(""));
+
+            //when
+            boolean active = fireLoggerFormatter.isActive(headers);
+            //then
+            assertThat(active).isTrue();
+
+        }
+
 
     }
 

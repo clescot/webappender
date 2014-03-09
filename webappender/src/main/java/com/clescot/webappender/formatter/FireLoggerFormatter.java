@@ -2,7 +2,9 @@ package com.clescot.webappender.formatter;
 
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -52,7 +54,13 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
 
     @Override
     public boolean isActive(Map<String, List<String>> headers) {
-        return headers.containsKey(REQUEST_HEADER_IDENTIFIER);
+        return Iterables.tryFind(headers.keySet(), new Predicate<String>() {
+            @Override
+            public boolean apply(java.lang.String headerKey) {
+                return REQUEST_HEADER_IDENTIFIER.equalsIgnoreCase(headerKey);
+            }
+        }).isPresent();
+
     }
 
     @Override
