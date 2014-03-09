@@ -4,6 +4,7 @@ import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -11,10 +12,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
@@ -22,7 +24,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(Enclosed.class)
 public class ChromeLoggerFormatterTest {
-    private static Logger LOGGER = LoggerFactory.getLogger(ChromeLoggerFormatterTest.class);
 
 
 
@@ -76,6 +77,38 @@ public class ChromeLoggerFormatterTest {
             //then
 
         }
+    }
+
+    public static class TestIsActive{
+        @Test
+        public void test_chromium_browser() throws Exception {
+            //given
+            ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
+            String chromiumUserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/32.0.1700.107 Chrome/32.0.1700.107 Safari/537.36";
+            Map<String,List<String>> headers = Maps.newHashMap();
+            headers.put("user-agent", Arrays.asList(chromiumUserAgent));
+            //when
+            boolean active = chromeLoggerFormatter.isActive(headers);
+            //then
+            assertThat(active).isTrue();
+
+
+        }
+
+        @Test
+        public void test_firefox_browser() throws Exception {
+            ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
+            String firefoxUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:27.0) Gecko/20100101 Firefox/27.0";
+            Map<String,List<String>> headers = Maps.newHashMap();
+            headers.put("user-agent", Arrays.asList(firefoxUserAgent));
+            //when
+            boolean active = chromeLoggerFormatter.isActive(headers);
+            //then
+            assertThat(active).isFalse();
+
+
+        }
+
     }
 
 

@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
-    public static final String HTTP_USER_AGENT = "HTTP_USER_AGENT";
-    private static Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) Chrome/");
+    public static final String HTTP_USER_AGENT = "user-agent";
+    private static Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) (.)*Chrome/");
 
     protected String getJSON(List<Row> rows) throws JsonProcessingException {
         Map<String, Object> globalStructure = Maps.newHashMap();
