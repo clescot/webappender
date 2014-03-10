@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class AbstractFormatter<R> implements Formatter {
 
-    public static final boolean NO_CR_LF_TRAILING_CHARACTERS = false;
+    public static final boolean IS_NOT_CHUNKED = false;
     public static final String UTF_8 = "UTF-8";
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -21,7 +21,7 @@ public abstract class AbstractFormatter<R> implements Formatter {
 
 
     public String format(List<Row> rows) throws JsonProcessingException {
-        return new String(Base64.encodeBase64(getJSON(rows).getBytes(), NO_CR_LF_TRAILING_CHARACTERS), Charset.forName(UTF_8));
+        return new String(Base64.encodeBase64(getJSON(rows).getBytes(), IS_NOT_CHUNKED), Charset.forName(UTF_8));
     }
 
 
