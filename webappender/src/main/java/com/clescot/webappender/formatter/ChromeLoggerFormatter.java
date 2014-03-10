@@ -42,7 +42,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     @Override
     public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
-        rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, getJSON(rows));
+        rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, format(rows));
         return rowsSerialized;
     }
 
