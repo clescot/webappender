@@ -4,7 +4,6 @@ import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -16,11 +15,41 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     private static Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) (.)*Chrome/");
 
     protected String getJSON(List<Row> rows) throws JsonProcessingException {
-        Map<String, Object> globalStructure = Maps.newHashMap();
-        globalStructure.put("version", "1.0");
-        globalStructure.put("columns", Arrays.asList("log", "backtrace", "type"));
-        globalStructure.put("rows", getFormatterRows(rows));
-            return objectMapper.writeValueAsString(globalStructure);
+       StringBuilder json = new StringBuilder("{\"version\": \"0.2\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [");
+        int i=0;
+        for (Row row : rows) {
+            if(i>0){
+                json.append(",");
+            }
+            json.append("[");
+
+
+            //args
+            json.append("[");
+            json.append("\'___class_name\': \'"+row.getName()+"\'");
+
+            json.append("]");
+            json.append(",\'");
+            if(row.getPathName()!=null){
+                json.append(row.getPathName());
+            }
+            json.append(":");
+            if(row.getLineNumber()!=null){
+                json.append(row.getLineNumber());
+                json.append("\'");
+            }
+            json.append(",\'");
+            if(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel())!=null){
+                json.append(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel()));
+            }
+            json.append("\'");
+            json.append("");
+            json.append("]");
+            i++;
+        }
+
+        json.append("]}");
+        return json.toString();
     }
 
     @Override
@@ -29,7 +58,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     }
 
     @Override
-    public boolean isActive(Map<String, List<String>> headers) {
+    public boolean isActive(Map <String, List<String>> headers) {
         //active on chrome browsers and derivated one
         List<String> userAgentHeaders = headers.get(HTTP_USER_AGENT);
         if(userAgentHeaders!=null&&!userAgentHeaders.isEmpty()){
