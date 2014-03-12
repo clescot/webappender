@@ -61,7 +61,7 @@ public class ChromeLoggerFormatterTest {
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             String json = chromeLoggerFormatter.getJSON(getILoggingEvents());
-            assertThat(json).isEqualTo("{\"columns\":[\"log\",\"backtrace\",\"type\"],\"rows\":[{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.AbstractFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"},{\"logData\":{\"message\":\"dummy message\",\"___class_name\":\"com.clescot.webappender.formatter.AbstractFormatterTest\"},\"backtraceData\":\"null:null\",\"logType\":\"error\"}],\"version\":\"1.0\"}");
+            assertThat(json).isEqualTo("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"], \"rows\":[[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\"}],\"/path/to/file.py : 25\",\"\"]]}");
         }
 
         @Test(expected = JsonGenerationException.class)

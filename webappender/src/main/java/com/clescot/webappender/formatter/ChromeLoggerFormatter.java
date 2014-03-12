@@ -15,7 +15,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     private static Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) (.)*Chrome/");
 
     protected String getJSON(List<Row> rows) throws JsonProcessingException {
-       StringBuilder json = new StringBuilder("{\"version\": \"0.2\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [");
+       StringBuilder json = new StringBuilder("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [");
         int i=0;
         for (Row row : rows) {
             if(i>0){
@@ -25,24 +25,25 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
 
             //args
-            json.append("[");
-            json.append("\'___class_name\': \'"+row.getName()+"\'");
-
-            json.append("]");
-            json.append(",\'");
+            json.append("[{");
+            json.append("\"___class_name\": \""+row.getName()+"\"");
+            json.append(",");
+            json.append("\"message\":\""+row.getMessage());
+            json.append("\"}]");
+            json.append(",\"");
             if(row.getPathName()!=null){
                 json.append(row.getPathName());
             }
             json.append(":");
             if(row.getLineNumber()!=null){
                 json.append(row.getLineNumber());
-                json.append("\'");
+                json.append("\"");
             }
-            json.append(",\'");
+            json.append(",\"");
             if(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel())!=null){
                 json.append(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel()));
             }
-            json.append("\'");
+            json.append("\"");
             json.append("");
             json.append("]");
             i++;
