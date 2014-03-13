@@ -25,11 +25,15 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
 
             //args
-            json.append("[{");
-            json.append("\"___class_name\": \""+row.getName()+"\"");
-            json.append(",");
-            json.append("\"message\":\""+row.getMessage());
-            json.append("\"}]");
+            json.append("[");
+
+            json.append("\""+row.getMessage()+"\"");
+//            for (int j = 0; j < row.getArgs().size(); j++) {
+//                    json.append(",");
+//                Object arg = row.getArgs().get(j);
+//                json.append("\""+arg+"\"");
+//            }
+            json.append("]");
             json.append(",\"");
             if(row.getPathName()!=null){
                 json.append(row.getPathName());
