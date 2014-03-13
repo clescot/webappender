@@ -1,7 +1,6 @@
 package com.clescot.webappender.formatter;
 
 import com.clescot.webappender.Row;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.when;
 
 @RunWith(Enclosed.class)
 public class ChromeLoggerFormatterTest {
@@ -29,7 +26,7 @@ public class ChromeLoggerFormatterTest {
 
     public static class TestFormat extends AbstractFormatterTest {
 
-        public static final String NO_EVENTS_IN_BASE64 = "eyJjb2x1bW5zIjpbImxvZyIsImJhY2t0cmFjZSIsInR5cGUiXSwicm93cyI6W10sInZlcnNpb24iOiIxLjAifQ==";
+        public static final String NO_EVENTS_IN_BASE64 = "eyJ2ZXJzaW9uIjogIjEuMCIsImNvbHVtbnMiOiBbImxvZyIsICJiYWNrdHJhY2UiLCAidHlwZSJdLCJyb3dzIjogW119";
 
         @Test
         public void testFormat_with_no_events() throws Exception {
@@ -61,22 +58,10 @@ public class ChromeLoggerFormatterTest {
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             String json = chromeLoggerFormatter.getJSON(getILoggingEvents());
-            assertThat(json).isEqualTo("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"], \"rows\":[[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\"}],\"/path/to/file.py : 25\",\"\"]]}");
+            assertThat(json).isEqualTo("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [[[\"dummy message\"],\":,\"ERROR\"],[[\"dummy message\"],\":,\"ERROR\"]]}");
         }
 
-        @Test(expected = JsonGenerationException.class)
-        public void test_get_json_when_object_mapper_throw_a_json_processing_exception() throws Exception {
 
-            //given
-            when(objectMapper.writeValueAsString(anyObject())).thenThrow(new JsonGenerationException(""));
-
-
-            //when
-            chromeLoggerFormatterMocked.getJSON(getILoggingEvents());
-
-            //then
-
-        }
     }
 
     public static class TestIsActive{
