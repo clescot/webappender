@@ -3,6 +3,7 @@ package com.clescot.webappender.formatter;
 import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
+import org.codehaus.jettison.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -25,11 +26,35 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
 
             //args
-            json.append("[");
-
-            json.append("\""+row.getMessage()+"\"");
-
-            json.append("]");
+            json.append("[{");
+            json.append("\"___class_name\": ").append(JSONObject.quote(row.getName())).append("");
+            json.append(",");
+            json.append("\"message\":").append(JSONObject.quote(row.getMessage())).append("");
+            json.append(",");
+            json.append("\"callerData\":").append(JSONObject.quote(row.getCallerData())).append("");
+            json.append(",");
+            json.append("\"classOfCaller\":").append(JSONObject.quote(row.getClassOfCaller())).append("");
+            json.append(",");
+            json.append("\"contextName\":").append(JSONObject.quote(row.getContextName())).append("");
+            json.append(",");
+            json.append("\"marker\":").append(JSONObject.quote(row.getMarker())).append("");
+            json.append(",");
+            json.append("\"mdc\":").append(JSONObject.quote(row.getMDC())).append("");
+            json.append(",");
+            json.append("\"methodOfCaller\":").append(JSONObject.quote(row.getMethodOfCaller())).append("");
+            json.append(",");
+            json.append("\"relativeTime\":").append(JSONObject.quote(row.getRelativeTime())).append("");
+            json.append(",");
+            json.append("\"template\":").append(JSONObject.quote(row.getTemplate())).append("");
+            json.append(",");
+            json.append("\"threadName\":").append(JSONObject.quote(row.getThreadName())).append("");
+            json.append(",");
+            json.append("\"throwableProxy\":").append(JSONObject.quote(row.getThrowableProxy())).append("");
+            json.append(",");
+            json.append("\"time\":").append(JSONObject.quote(row.getTime())).append("");
+            json.append(",");
+            json.append("\"timeStamp\":").append(JSONObject.quote("" + row.getTimestamp())).append("");
+            json.append("}]");
             json.append(",\"");
             if(row.getPathName()!=null){
                 json.append(row.getPathName());
