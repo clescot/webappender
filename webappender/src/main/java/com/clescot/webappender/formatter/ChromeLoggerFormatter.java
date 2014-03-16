@@ -27,49 +27,48 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
             //args
             json.append("[{");
-            json.append("\"___class_name\": ").append(JSONObject.quote(row.getName())).append("");
+            json.append("\"___class_name\": ").append(JSONObject.quote(row.getName()));
             json.append(",");
-            json.append("\"message\":").append(JSONObject.quote(row.getMessage())).append("");
+            json.append("\"message\":").append(JSONObject.quote(row.getMessage()));
             json.append(",");
-            json.append("\"callerData\":").append(JSONObject.quote(row.getCallerData())).append("");
+            json.append("\"callerData\":").append(JSONObject.quote(row.getCallerData()));
             json.append(",");
-            json.append("\"classOfCaller\":").append(JSONObject.quote(row.getClassOfCaller())).append("");
+            json.append("\"classOfCaller\":").append(JSONObject.quote(row.getClassOfCaller()));
             json.append(",");
-            json.append("\"contextName\":").append(JSONObject.quote(row.getContextName())).append("");
+            json.append("\"contextName\":").append(JSONObject.quote(row.getContextName()));
             json.append(",");
-            json.append("\"marker\":").append(JSONObject.quote(row.getMarker())).append("");
+            json.append("\"marker\":").append(JSONObject.quote(row.getMarker()));
             json.append(",");
-            json.append("\"mdc\":").append(JSONObject.quote(row.getMDC())).append("");
+            json.append("\"mdc\":").append(JSONObject.quote(row.getMDC()));
             json.append(",");
-            json.append("\"methodOfCaller\":").append(JSONObject.quote(row.getMethodOfCaller())).append("");
+            json.append("\"methodOfCaller\":").append(JSONObject.quote(row.getMethodOfCaller()));
             json.append(",");
-            json.append("\"relativeTime\":").append(JSONObject.quote(row.getRelativeTime())).append("");
+            json.append("\"relativeTime\":").append(JSONObject.quote(row.getRelativeTime()));
             json.append(",");
-            json.append("\"template\":").append(JSONObject.quote(row.getTemplate())).append("");
+            json.append("\"template\":").append(JSONObject.quote(row.getTemplate()));
             json.append(",");
-            json.append("\"threadName\":").append(JSONObject.quote(row.getThreadName())).append("");
+            json.append("\"threadName\":").append(JSONObject.quote(row.getThreadName()));
             json.append(",");
-            json.append("\"throwableProxy\":").append(JSONObject.quote(row.getThrowableProxy())).append("");
+            json.append("\"throwableProxy\":").append(JSONObject.quote(row.getThrowableProxy()));
             json.append(",");
-            json.append("\"time\":").append(JSONObject.quote(row.getTime())).append("");
+            json.append("\"time\":").append(JSONObject.quote(row.getTime()));
             json.append(",");
-            json.append("\"timeStamp\":").append(JSONObject.quote("" + row.getTimestamp())).append("");
+            json.append("\"timeStamp\":").append(JSONObject.quote("" + row.getTimestamp()));
             json.append("}]");
-            json.append(",\"");
+            json.append(",");
+            StringBuilder pathNameAndLineNumber = new StringBuilder();
             if(row.getPathName()!=null){
-                json.append(row.getPathName());
+                pathNameAndLineNumber.append(row.getPathName());
             }
-            json.append(":");
+            pathNameAndLineNumber.append(":");
             if(row.getLineNumber()!=null){
-                json.append(row.getLineNumber());
-                json.append("\"");
+                pathNameAndLineNumber.append(row.getLineNumber());
             }
-            json.append(",\"");
+            json.append(JSONObject.quote(pathNameAndLineNumber.toString()));
+            json.append(",");
             if(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel())!=null){
-                json.append(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel()));
+                json.append(JSONObject.quote(ChromeRow.LogType.getChromeLoggerLevel(row.getLevel()).toString()));
             }
-            json.append("\"");
-            json.append("");
             json.append("]");
             i++;
         }

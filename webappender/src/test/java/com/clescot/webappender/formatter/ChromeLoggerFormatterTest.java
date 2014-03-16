@@ -4,6 +4,8 @@ import com.clescot.webappender.Row;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.hamcrest.MatcherAssert;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -11,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +61,10 @@ public class ChromeLoggerFormatterTest {
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             String json = chromeLoggerFormatter.getJSON(getILoggingEvents());
-            assertThat(json).isEqualTo("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [[[\"dummy message\"],\":,\"ERROR\"],[[\"dummy message\"],\":,\"ERROR\"]]}");
+            String expected ="{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\",\"message\":\"dummy message\",\"callerData\":\"\",\"classOfCaller\":\"\",\"contextName\":\"\",\"marker\":\"\",\"mdc\":\"\",\"methodOfCaller\":\"\",\"relativeTime\":\"\",\"template\":\"dummy message\",\"threadName\":\"\",\"throwableProxy\":\"\",\"time\":\"\"}],\":\",\"ERROR\"],[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\",\"message\":\"dummy message\",\"callerData\":\"\",\"classOfCaller\":\"\",\"contextName\":\"\",\"marker\":\"\",\"mdc\":\"\",\"methodOfCaller\":\"\",\"relativeTime\":\"\",\"template\":\"dummy message\",\"threadName\":\"\",\"throwableProxy\":\"\",\"time\":\"\"}],\":\",\"ERROR\"]]}";
+            JSONObject jsonObject = new JSONObject(json);
+            MatcherAssert.assertThat(jsonObject, SameJSONAs.sameJSONObjectAs(new JSONObject(expected)).allowingExtraUnexpectedFields()
+                    .allowingAnyArrayOrdering());
         }
 
 

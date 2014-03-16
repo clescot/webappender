@@ -26,9 +26,9 @@ import java.util.*;
 @WebFilter(urlPatterns = "/*")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
-    public static final String X_VERBOSE_LOGS = "X-verbose-logs";
-    public static final String X_THRESHOLD_FILTER = "X-threshold-filter";
-    public static final String X_LEVEL_FILTER = "X-level-filter";
+    public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
+    public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
+    public static final String X_LEVEL_FILTER = "X-wa-level-filter";
     public static final String LEVEL_FILTER_SEPARATOR = ",";
     public static final String LEVEL_FILTER_PROPERTY_SEPARATOR = ";";
     public static final String FITLER_LEVEL_MATCH_PROPERTY = "MATCH";
@@ -54,11 +54,21 @@ public class WebAppenderFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        Map<String, List<String>> headers = getHeadersAsMap(httpServletRequest);
+
         if (active) {
-            checkUseConverters(httpServletRequest);
-            checkUseFilters(httpServletRequest);
+            List<String> useConverters = headers.get(X_VERBOSE_LOGS);
+            checkUseConverters(useConverters);
+            Optional<ThresholdFilter> thresholdFilter = checkThresholdFilter(headers.get(X_THRESHOLD_FILTER));
+            if (thresholdFilter.isPresent()) {
+                logCollector.getChildAppender().addFilter(thresholdFilter.get());
+            }
+            Collection<LevelFilter> levelFilters = checkLevelFilter(headers.get(X_LEVEL_FILTER));
+            for (LevelFilter filter : levelFilters) {
+                logCollector.getChildAppender().addFilter(filter);
+            }
 
         }
         filterChain.doFilter(servletRequest, servletResponse);
@@ -66,7 +76,8 @@ public class WebAppenderFilter implements Filter {
         if (active) {
             List<Row> logs = logCollector.getLogs();
             logCollector.removeCurrentThreadAppender();
-            Optional<? extends Formatter> optional = Formatters.findFormatter(getHeadersAsMap(httpServletRequest));
+
+            Optional<? extends Formatter> optional = Formatters.findFormatter(headers);
             if (optional.isPresent()) {
                 try {
                     Map<String, String> serializedRows = optional.get().serializeRows(logs);
@@ -81,23 +92,13 @@ public class WebAppenderFilter implements Filter {
         }
     }
 
-    private void checkUseFilters(HttpServletRequest httpServletRequest) {
-        Optional<ThresholdFilter> thresholdFilter = checkThresholdFilter(httpServletRequest);
-        if (thresholdFilter.isPresent()) {
-            logCollector.getChildAppender().addFilter(thresholdFilter.get());
-        }
-        Collection<LevelFilter> levelFilters = checkLevelFilter(httpServletRequest);
-        for (LevelFilter filter : levelFilters) {
-            logCollector.getChildAppender().addFilter(filter);
-        }
 
-    }
 
-    private Optional<ThresholdFilter> checkThresholdFilter(HttpServletRequest httpServletRequest) {
+    private Optional<ThresholdFilter> checkThresholdFilter(List<String> headers) {
         Optional<ThresholdFilter> optional = Optional.absent();
-        Enumeration<String> headers = httpServletRequest.getHeaders(X_THRESHOLD_FILTER);
-        if (headers.hasMoreElements()) {
-            Level threshold = Level.toLevel(headers.nextElement());
+
+        if (headers!=null&&!headers.isEmpty()) {
+            Level threshold = Level.toLevel(headers.get(0));
             ThresholdFilter thresholdFilter = new ThresholdFilter();
             thresholdFilter.setLevel(threshold.toString());
             thresholdFilter.start();
@@ -106,11 +107,10 @@ public class WebAppenderFilter implements Filter {
         return optional;
     }
 
-    private Collection<LevelFilter> checkLevelFilter(HttpServletRequest httpServletRequest) {
+    private Collection<LevelFilter> checkLevelFilter(List<String> headers) {
         List<LevelFilter> levelFilters = Lists.newArrayList();
-        Enumeration<String> headers = httpServletRequest.getHeaders(X_LEVEL_FILTER);
-        while (headers.hasMoreElements()) {
-            String valueElement = headers.nextElement();
+        while (headers!=null&&!headers.isEmpty()) {
+            String valueElement = headers.get(0);
             List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_SEPARATOR));
             for (String value : values) {
                 LevelFilter levelFilter = getLevelFilter(value);
@@ -151,13 +151,13 @@ public class WebAppenderFilter implements Filter {
         return matchValues.get(1).trim();
     }
 
-    private void checkUseConverters(HttpServletRequest httpServletRequest) {
-        Enumeration<String> headers = httpServletRequest.getHeaders(X_VERBOSE_LOGS);
+    private void checkUseConverters(List<String> headers) {
+
         //by default, useCollectors is true. init parameter can override it, and request too
         //request is stronger than init-param, than default configuration
         boolean useConvertersHeader = true;
-        if (headers.hasMoreElements()) {
-            useConvertersHeader = Boolean.parseBoolean(headers.nextElement());
+        if (headers!=null&&!headers.isEmpty()) {
+            useConvertersHeader = Boolean.parseBoolean(headers.get(0));
         }
         if (!useConvertersHeader || (!globalUseConverters)) {
             logCollector.getChildAppender().setUseConverters(false);
