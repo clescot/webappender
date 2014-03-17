@@ -52,19 +52,29 @@ when the webappender is shipped in your webapp, and your application server is u
 
 When it's done, hit the F12 key, to visualise the **console** panel. It will highlight your logs, when you navigate on your webapp.
 
+### Tune log output
 
-### Reduce log verbosity
+Webappender permits to tune the log output, via some specific request headers.
+All of them start with the `X-wa` prefix, to explain that this option is non standard (*X*), and specific to the webappender (*wa*). 
+
+#### Reduce log verbosity
 
 webappender, permits to reduce the verbosity level, to :
 
 1. lower the response header overhead 
 2. inactivate time consuming logback display options
 
-### Filtering logs
+To reduce the log verbosity across all browsers, you have to put in your request these header key and value : 
 
-#### Reduce logs by a threshold filter
+`X-wa-verbose-logs=false`.
 
-#### Reduce logs by a level filter
+If you use firefox, we recommend the [modify headers plugin](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/)
+
+#### Filtering logs
+
+##### Reduce logs by a threshold filter
+
+##### Reduce logs by a level filter
 
 ## Test quickly the demo webapp
 
