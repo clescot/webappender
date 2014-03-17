@@ -105,9 +105,26 @@ This option will **not output** these *expensive* log parts (which comes from co
 
 #### Filtering logs
 
+webappender, which actually support logback, support some [logback filters](http://logback.qos.ch/manual/filters.html), to reduce logs output.
+Note that these filters are applied only to the output of the HTTP response, and maps only to logs tied to the request.
+Logs are not filtered at start (there are not [turboFilters](http://logback.qos.ch/apidocs/ch/qos/logback/classic/turbo/class-use/TurboFilter.html), and appenders configured via the classic way (`logback.xml`), view all logs. 
+
 ##### Reduce logs by a threshold filter
 
+Logback permits to add a [threshold filter](http://logback.qos.ch/manual/filters.html#thresholdFilter), to avoid too many noise in logs.
+All logs from a too detailed level will not be output in the webappender.
+This filter can be put in place with this kind of header : 
+`X-wa-threshold-filter=INFO` 
+
 ##### Reduce logs by a level filter
+Logback permits to add some [level filter](http://logback.qos.ch/manual/filters.html#levelFilter).
+
+one filter configuration: 
+`X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL` 
+
+two filters configuration :
+`X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL,X-wa-level-filter=LEVEL:DEBUG;MATCH:ACCEPT;MISMATCH:DENY` 
+
 
 ## Test quickly the demo webapp
 
