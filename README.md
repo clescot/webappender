@@ -45,7 +45,7 @@ Launch your firefox browser, hit the F12 touch to activate firebug, and click on
 
  Note the additional informations provided on the right panel! when you right-click on a row to display the DOM tab : 
 
-[additional informations provided on the right](webappender2.png) 
+![additional informations provided on the right](webappender2.png) 
 
 
 
