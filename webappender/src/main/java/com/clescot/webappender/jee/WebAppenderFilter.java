@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebFilter(urlPatterns = "/*")
+@WebFilter(filterName="webAppender",urlPatterns = "/*",description = "output your logback logs in your favorite browser")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
     public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
