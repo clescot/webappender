@@ -8,6 +8,7 @@
     <scm>
         <connection>scm:git:git@github.com:clescot/webappender.git</connection>
         <developerConnection>scm:git:git@github.com:clescot/webappender.git</developerConnection>
+        <url>https://github.com/clescot/webappender</url>
     </scm>
     <properties>
         <logback.version>1.1.1</logback.version>
