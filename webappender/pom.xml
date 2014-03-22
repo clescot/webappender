@@ -10,6 +10,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <parent>
+        <groupId>com.clescot</groupId>
+        <artifactId>webappender-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -91,7 +96,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
     </dependencies>
 <build>
     <plugins>
