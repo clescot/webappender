@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.clescot</groupId>
             <artifactId>webappender</artifactId>
-            <version>${parent.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
