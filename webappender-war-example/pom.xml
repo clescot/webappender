@@ -6,7 +6,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.clescot</groupId>
     <artifactId>webappender-war-example</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <parent>
         <groupId>com.clescot</groupId>
