@@ -7,6 +7,10 @@
     <artifactId>webappender-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <scm>
+        <connection>scm:git:git@github.com:clescot/webappender.git</connection>
+        <developerConnection>scm:git:git@github.com:clescot/webappender.git</developerConnection>
+    </scm>
     <properties>
         <logback.version>1.1.1</logback.version>
         <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
