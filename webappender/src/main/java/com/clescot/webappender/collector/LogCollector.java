@@ -9,7 +9,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AppenderTracker;
 import ch.qos.logback.core.spi.FilterReply;
 import com.clescot.webappender.Row;
-import com.clescot.webappender.jee.WebAppenderFilter;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -23,6 +22,8 @@ import java.util.Map;
 public class LogCollector {
     public static final String SIFTING_APPENDER_KEY = "WEB_APPENDER_SIFT";
     public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
+    public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
+    public static final String X_LEVEL_FILTER = "X-wa-level-filter";
     private static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
     private SiftingAppender siftingAppender;
     private ch.qos.logback.classic.Logger rootLogger;
@@ -92,11 +93,11 @@ public class LogCollector {
     public void addFilters(Map<String, List<String>> headers) {
         List<String> useConverters = headers.get(X_VERBOSE_LOGS);
         checkUseConverters(useConverters);
-        Optional<ThresholdFilter> thresholdFilter = checkThresholdFilter(headers.get(WebAppenderFilter.X_THRESHOLD_FILTER));
+        Optional<ThresholdFilter> thresholdFilter = checkThresholdFilter(headers.get(X_THRESHOLD_FILTER));
         if (thresholdFilter.isPresent()) {
             getChildAppender().addFilter(thresholdFilter.get());
         }
-        Collection<LevelFilter> levelFilters = checkLevelFilter(headers.get(WebAppenderFilter.X_LEVEL_FILTER));
+        Collection<LevelFilter> levelFilters = checkLevelFilter(headers.get(X_LEVEL_FILTER));
         for (LevelFilter filter : levelFilters) {
             getChildAppender().addFilter(filter);
         }

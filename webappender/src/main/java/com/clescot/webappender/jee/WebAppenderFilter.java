@@ -20,8 +20,7 @@ import java.util.*;
 @WebFilter(filterName="webAppender",urlPatterns = "/*",description = "output your logback logs in your favorite browser")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
-    public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
-    public static final String X_LEVEL_FILTER = "X-wa-level-filter";
+
 
     private static Logger LOGGER = LoggerFactory.getLogger(WebAppenderFilter.class);
 
