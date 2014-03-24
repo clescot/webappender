@@ -7,14 +7,12 @@ import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.sift.SiftingAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AppenderTracker;
-import ch.qos.logback.core.spi.FilterReply;
 import com.clescot.webappender.Row;
+import com.clescot.webappender.filter.LevelFilterBuilder;
 import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +27,9 @@ public class LogCollector {
     private ch.qos.logback.classic.Logger rootLogger;
     private boolean globalUseConverters = true;
 
-    public static final String LEVEL_FILTER_SEPARATOR = ",";
-    public static final String LEVEL_FILTER_PROPERTY_SEPARATOR = ";";
-    public static final String FITLER_LEVEL_MATCH_PROPERTY = "MATCH";
-    public static final String FILTER_LEVEL_MISMATCH_PROPERTY = "MISMATCH";
-    public static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
 
-    public static final String KEY_VALUE_SEPARATOR = ":";
+
+
 
     private LogCollector() {
         rootLogger = loggerContext.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
@@ -97,7 +91,7 @@ public class LogCollector {
         if (thresholdFilter.isPresent()) {
             getChildAppender().addFilter(thresholdFilter.get());
         }
-        Collection<LevelFilter> levelFilters = checkLevelFilter(headers.get(X_LEVEL_FILTER));
+        Collection<LevelFilter> levelFilters = LevelFilterBuilder.checkLevelFilter(headers.get(X_LEVEL_FILTER));
         for (LevelFilter filter : levelFilters) {
             getChildAppender().addFilter(filter);
         }
@@ -129,48 +123,8 @@ public class LogCollector {
         return optional;
     }
 
-    private Collection<LevelFilter> checkLevelFilter(List<String> headers) {
-        List<LevelFilter> levelFilters = Lists.newArrayList();
-        while (headers!=null&&!headers.isEmpty()) {
-            String valueElement = headers.get(0);
-            List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_SEPARATOR));
-            for (String value : values) {
-                LevelFilter levelFilter = getLevelFilter(value);
-                levelFilter.start();
-                levelFilters.add(levelFilter);
-            }
 
-        }
-        return levelFilters;
-    }
-    private LevelFilter getLevelFilter(String valueElement) {
-        LevelFilter levelFilter = new LevelFilter();
-        List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_PROPERTY_SEPARATOR));
-        List<String> filterReplyValues = Arrays.asList(FilterReply.NEUTRAL.toString(), FilterReply.ACCEPT.toString(), FilterReply.DENY.toString());
-        for (String value : values) {
-            if (value.trim().startsWith(FITLER_LEVEL_MATCH_PROPERTY)) {
-                String firstValueTrimmed = getFirstValueTrimmed(value);
 
-                if (Iterables.contains(filterReplyValues, firstValueTrimmed)){
-                    levelFilter.setOnMatch(FilterReply.valueOf(firstValueTrimmed));
-                }
-            } else if (value.trim().startsWith(FILTER_LEVEL_MISMATCH_PROPERTY)) {
-                String firstValueTrimmed = getFirstValueTrimmed(value);
-                if (Iterables.contains(filterReplyValues,firstValueTrimmed)){
-                    levelFilter.setOnMismatch(FilterReply.valueOf(firstValueTrimmed));
-                }
-            } else if (value.trim().startsWith(FILTER_LEVEL_LEVEL_PROPERTY)) {
-                String firstValueTrimmed = getFirstValueTrimmed(value);
-                levelFilter.setLevel(Level.toLevel(firstValueTrimmed));
-            }
-        }
-        return levelFilter;
-    }
-
-    private String getFirstValueTrimmed(String value) {
-        List<String> matchValues = Arrays.asList(value.split(KEY_VALUE_SEPARATOR));
-        return matchValues.get(1).trim();
-    }
 
     public void setVerboseLogs(String initParameter) {
         if (initParameter != null && "false".equalsIgnoreCase(initParameter)) {
