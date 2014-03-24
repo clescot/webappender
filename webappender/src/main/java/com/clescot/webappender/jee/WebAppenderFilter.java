@@ -41,6 +41,7 @@ public class WebAppenderFilter implements Filter {
         Map<String, List<String>> headers = httpBridge.getHeadersAsMap();
 
         if (active) {
+            logCollector.checkUseConverters(headers);
             logCollector.addFilters(headers);
         }
         filterChain.doFilter(servletRequest, servletResponse);

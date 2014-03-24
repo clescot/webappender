@@ -2,26 +2,29 @@ package com.clescot.webappender.filter;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.filter.LevelFilter;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-public class LevelFilterBuilder {
+public class LevelFilterBuilder implements FilterBuilder{
     public static final String LEVEL_FILTER_SEPARATOR = ",";
     public static final String LEVEL_FILTER_PROPERTY_SEPARATOR = ";";
     public static final String FITLER_LEVEL_MATCH_PROPERTY = "MATCH";
     public static final String FILTER_LEVEL_MISMATCH_PROPERTY = "MISMATCH";
     public static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
     public static final String KEY_VALUE_SEPARATOR = ":";
-
-    public static Collection<LevelFilter> checkLevelFilter(List<String> headers) {
-        List<LevelFilter> levelFilters = Lists.newArrayList();
-        while (headers!=null&&!headers.isEmpty()) {
-            String valueElement = headers.get(0);
+    public static final String X_LEVEL_FILTER = "X-wa-level-filter";
+    public static List<? extends Filter<ILoggingEvent>> buildFilters(Map<String, List<String>> headers) {
+        List<String> found = headers.get(X_LEVEL_FILTER);
+                List < LevelFilter > levelFilters = Lists.newArrayList();
+        while (!headers.isEmpty()&& found!=null && !found.isEmpty()) {
+            String valueElement = found.get(0);
             List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_SEPARATOR));
             for (String value : values) {
                 LevelFilter levelFilter = getLevelFilter(value);

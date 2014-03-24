@@ -1,17 +1,15 @@
 package com.clescot.webappender.collector;
 
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.filter.LevelFilter;
-import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.sift.SiftingAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
-import com.clescot.webappender.formatter.Row;
-import com.clescot.webappender.filter.LevelFilterBuilder;
-import com.clescot.webappender.filter.ThresholdFilterBuilder;
+import com.clescot.webappender.filter.Filters;
 import com.clescot.webappender.formatter.Formatter;
 import com.clescot.webappender.formatter.Formatters;
+import com.clescot.webappender.formatter.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -25,8 +23,8 @@ import java.util.Map;
 public class LogCollector {
     public static final String SIFTING_APPENDER_KEY = "WEB_APPENDER_SIFT";
     public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
-    public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
-    public static final String X_LEVEL_FILTER = "X-wa-level-filter";
+
+
     private static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
     private SiftingAppender siftingAppender;
     private ch.qos.logback.classic.Logger rootLogger;
@@ -90,18 +88,18 @@ public class LogCollector {
 
 
     public void addFilters(Map<String, List<String>> headers) {
-        List<String> useConverters = headers.get(X_VERBOSE_LOGS);
-        checkUseConverters(useConverters);
-        Optional<ThresholdFilter> thresholdFilter = ThresholdFilterBuilder.checkThresholdFilter(headers.get(X_THRESHOLD_FILTER));
-        if (thresholdFilter.isPresent()) {
-            getChildAppender().addFilter(thresholdFilter.get());
-        }
-        Collection<LevelFilter> levelFilters = LevelFilterBuilder.checkLevelFilter(headers.get(X_LEVEL_FILTER));
-        for (LevelFilter filter : levelFilters) {
+
+        Collection<? extends Filter<ILoggingEvent>> thresholdFilters = Filters.getFilters(headers);
+        for (Filter<ILoggingEvent> filter : thresholdFilters) {
             getChildAppender().addFilter(filter);
         }
+
     }
 
+    public void checkUseConverters(Map<String, List<String>> headers){
+        List<String> useConverters = headers.get(X_VERBOSE_LOGS);
+        checkUseConverters(useConverters);
+    }
     private void checkUseConverters(List<String> headers) {
 
         //by default, useCollectors is true. init parameter can override it, and request too
