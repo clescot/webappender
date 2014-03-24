@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ThresholdFilterBuilder implements FilterBuilder{
     public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
-    public static List<? extends Filter<ILoggingEvent>> buildFilters(Map<String, List<String>> headers) {
+    public List<? extends Filter<ILoggingEvent>> buildFilters(Map<String, List<String>> headers) {
         List<String> values = headers.get(X_THRESHOLD_FILTER);
         List<ThresholdFilter> filters = Lists.newArrayList();
 
