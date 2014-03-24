@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-public class JEEHttpBridge implements HttpBridge<HttpServletRequest, HttpServletResponse> {
+public class JEEHttpBridge implements HttpBridge {
     private HttpServletRequest httpServletRequest;
     private HttpServletResponse httpServletResponse;
 
