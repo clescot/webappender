@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 import org.codehaus.jettison.json.JSONObject;
@@ -94,7 +93,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     }
 
     @Override
-    public Map<String, String> serializeRows(List<com.clescot.webappender.Row> rows) throws JsonProcessingException {
+    public Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, format(rows));
         return rowsSerialized;

@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import com.clescot.webappender.Row;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

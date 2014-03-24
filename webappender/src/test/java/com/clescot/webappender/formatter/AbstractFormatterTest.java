@@ -2,7 +2,6 @@ package com.clescot.webappender.formatter;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 import org.junit.Ignore;
 import org.slf4j.Logger;

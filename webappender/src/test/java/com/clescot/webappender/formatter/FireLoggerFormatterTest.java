@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.hamcrest.MatcherAssert;

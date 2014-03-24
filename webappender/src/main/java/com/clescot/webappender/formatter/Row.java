@@ -1,4 +1,4 @@
-package com.clescot.webappender;
+package com.clescot.webappender.formatter;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

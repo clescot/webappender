@@ -1,7 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import com.clescot.webappender.Row;
-
 import java.util.List;
 
  class FireLoggerRow {

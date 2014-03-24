@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import com.clescot.webappender.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;

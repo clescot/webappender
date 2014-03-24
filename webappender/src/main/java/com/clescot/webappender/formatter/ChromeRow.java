@@ -1,7 +1,6 @@
 package com.clescot.webappender.formatter;
 
 import ch.qos.logback.classic.Level;
-import com.clescot.webappender.Row;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 

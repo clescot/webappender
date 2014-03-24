@@ -1,6 +1,5 @@
 package com.clescot.webappender.collector;
 
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.filter.LevelFilter;
 import ch.qos.logback.classic.filter.ThresholdFilter;
@@ -8,8 +7,9 @@ import ch.qos.logback.classic.sift.SiftingAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
-import com.clescot.webappender.Row;
+import com.clescot.webappender.formatter.Row;
 import com.clescot.webappender.filter.LevelFilterBuilder;
+import com.clescot.webappender.filter.ThresholdFilterBuilder;
 import com.clescot.webappender.formatter.Formatter;
 import com.clescot.webappender.formatter.Formatters;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -92,7 +92,7 @@ public class LogCollector {
     public void addFilters(Map<String, List<String>> headers) {
         List<String> useConverters = headers.get(X_VERBOSE_LOGS);
         checkUseConverters(useConverters);
-        Optional<ThresholdFilter> thresholdFilter = checkThresholdFilter(headers.get(X_THRESHOLD_FILTER));
+        Optional<ThresholdFilter> thresholdFilter = ThresholdFilterBuilder.checkThresholdFilter(headers.get(X_THRESHOLD_FILTER));
         if (thresholdFilter.isPresent()) {
             getChildAppender().addFilter(thresholdFilter.get());
         }
@@ -115,18 +115,7 @@ public class LogCollector {
         }
     }
 
-    private Optional<ThresholdFilter> checkThresholdFilter(List<String> headers) {
-        Optional<ThresholdFilter> optional = Optional.absent();
 
-        if (headers!=null&&!headers.isEmpty()) {
-            Level threshold = Level.toLevel(headers.get(0));
-            ThresholdFilter thresholdFilter = new ThresholdFilter();
-            thresholdFilter.setLevel(threshold.toString());
-            thresholdFilter.start();
-            optional = Optional.of(thresholdFilter);
-        }
-        return optional;
-    }
 
     public void serializeLogs(HttpBridge httpBridge, Map<String, List<String>> headers) {
         List<Row> logs = getLogs();
