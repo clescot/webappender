@@ -78,6 +78,62 @@ public class LevelFilterBuilderTest {
             assertThat(levelFilter.decide(event)).isEqualTo(FilterReply.ACCEPT);
 
         }
+
+        @Test
+        public void test_deny_case() throws Exception {
+            //given
+            LevelFilterBuilder levelFilterBuilder = new LevelFilterBuilder();
+            HashMap<String, List<String>> headers = Maps.newHashMap();
+            List<String> values = Lists.newArrayList();
+            values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO");
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            //when
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+
+            //then
+            assertThat(filters).isNotEmpty();
+            assertThat(filters).hasSize(1);
+            Filter<ILoggingEvent> filter = filters.get(0);
+            assertThat(filter).isInstanceOf(LevelFilter.class);
+            LevelFilter levelFilter = (LevelFilter) filter;
+            assertThat(levelFilter.getOnMatch()).isEqualTo(FilterReply.NEUTRAL);
+            assertThat(levelFilter.getOnMismatch()).isEqualTo(FilterReply.DENY);
+            ILoggingEvent event = new LoggingEvent("",LOGGER, Level.DEBUG,"message",null,null);
+
+            assertThat(levelFilter.decide(event)).isEqualTo(FilterReply.DENY);
+
+        }
+
+
+        @Test
+        public void test_with_multiple_level_filters() throws Exception {
+            //given
+            LevelFilterBuilder levelFilterBuilder = new LevelFilterBuilder();
+            HashMap<String, List<String>> headers = Maps.newHashMap();
+            List<String> values = Lists.newArrayList();
+            values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO,MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:WARN");
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            //when
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+
+            //then
+            assertThat(filters).isNotEmpty();
+            assertThat(filters).hasSize(2);
+            Filter<ILoggingEvent> filter = filters.get(0);
+            assertThat(filter).isInstanceOf(LevelFilter.class);
+            LevelFilter levelFilter = (LevelFilter) filter;
+            assertThat(levelFilter.getOnMatch()).isEqualTo(FilterReply.NEUTRAL);
+            assertThat(levelFilter.getOnMismatch()).isEqualTo(FilterReply.DENY);
+            Filter<ILoggingEvent> filter2 = filters.get(1);
+            assertThat(filter2).isInstanceOf(LevelFilter.class);
+            LevelFilter levelFilter2 = (LevelFilter) filter2;
+            assertThat(levelFilter2.getOnMatch()).isEqualTo(FilterReply.ACCEPT);
+            assertThat(levelFilter2.getOnMismatch()).isEqualTo(FilterReply.NEUTRAL);
+            ILoggingEvent event = new LoggingEvent("",LOGGER, Level.DEBUG,"message",null,null);
+
+            assertThat(levelFilter.decide(event)).isEqualTo(FilterReply.DENY);
+
+        }
     }
 
 
