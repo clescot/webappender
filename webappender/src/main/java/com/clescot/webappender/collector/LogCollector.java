@@ -7,10 +7,15 @@ import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.sift.SiftingAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AppenderTracker;
+import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.Row;
 import com.clescot.webappender.filter.LevelFilterBuilder;
+import com.clescot.webappender.formatter.Formatter;
+import com.clescot.webappender.formatter.Formatters;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
@@ -27,7 +32,7 @@ public class LogCollector {
     private ch.qos.logback.classic.Logger rootLogger;
     private boolean globalUseConverters = true;
 
-
+    private static Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
 
 
 
@@ -123,7 +128,22 @@ public class LogCollector {
         return optional;
     }
 
+    public void serializeLogs(HttpBridge httpBridge, Map<String, List<String>> headers) {
+        List<Row> logs = getLogs();
+        removeCurrentThreadAppender();
 
+        Optional<? extends Formatter> optional = Formatters.findFormatter(headers);
+        if (optional.isPresent()) {
+            try {
+                Map<String, String> serializedRows = optional.get().serializeRows(logs);
+                for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
+                    httpBridge.addHeader(entry.getKey(), entry.getValue());
+                }
+            } catch (JsonProcessingException e) {
+                LOGGER.warn("webAppender serialization error", e);
+            }
+        }
+    }
 
 
     public void setVerboseLogs(String initParameter) {

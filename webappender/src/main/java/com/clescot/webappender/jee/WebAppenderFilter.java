@@ -1,12 +1,6 @@
 package com.clescot.webappender.jee;
 
-import com.clescot.webappender.HttpBridge;
-import com.clescot.webappender.Row;
 import com.clescot.webappender.collector.LogCollector;
-import com.clescot.webappender.formatter.Formatter;
-import com.clescot.webappender.formatter.Formatters;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,26 +46,11 @@ public class WebAppenderFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
 
         if (active) {
-            serializeLogs(httpBridge, headers);
+            logCollector.serializeLogs(httpBridge, headers);
         }
     }
 
-    private void serializeLogs(HttpBridge httpBridge, Map<String, List<String>> headers) {
-        List<Row> logs = logCollector.getLogs();
-        logCollector.removeCurrentThreadAppender();
 
-        Optional<? extends Formatter> optional = Formatters.findFormatter(headers);
-        if (optional.isPresent()) {
-            try {
-                Map<String, String> serializedRows = optional.get().serializeRows(logs);
-                for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
-                    httpBridge.addHeader(entry.getKey(), entry.getValue());
-                }
-            } catch (JsonProcessingException e) {
-                LOGGER.warn("webAppender serialization error", e);
-            }
-        }
-    }
 
 
 
