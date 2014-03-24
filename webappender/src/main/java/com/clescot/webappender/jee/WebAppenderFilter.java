@@ -1,5 +1,6 @@
 package com.clescot.webappender.jee;
 
+import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class WebAppenderFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        JEEHttpBridge httpBridge = new JEEHttpBridge(httpServletRequest, httpServletResponse);
+        HttpBridge httpBridge = new JEEHttpBridge(httpServletRequest, httpServletResponse);
         Map<String, List<String>> headers = httpBridge.getHeadersAsMap();
 
         if (active) {
