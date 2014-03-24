@@ -20,10 +20,13 @@ public class LevelFilterBuilder implements FilterBuilder{
     public static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
     public static final String KEY_VALUE_SEPARATOR = ":";
     public static final String X_LEVEL_FILTER = "X-wa-level-filter";
+
+
+
     public  List<? extends Filter<ILoggingEvent>> buildFilters(Map<String, List<String>> headers) {
         List<String> found = headers.get(X_LEVEL_FILTER);
                 List < LevelFilter > levelFilters = Lists.newArrayList();
-        while (!headers.isEmpty()&& found!=null && !found.isEmpty()) {
+       if((!headers.isEmpty()&& found!=null && !found.isEmpty()) ){
             String valueElement = found.get(0);
             List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_SEPARATOR));
             for (String value : values) {
