@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Filters {
 
-    public static final  List<FilterBuilder> FILTER_BUILDERS = Arrays.asList(new ThresholdFilterBuilder(), new LevelFilterBuilder());
+    public static final  List<FilterBuilder> FILTER_BUILDERS = Arrays.asList(new ThresholdFilterBuilder(), new LevelFilterBuilder(),new JaninoEventEvaluatorBuilder());
     public static Collection<? extends Filter<ILoggingEvent>> getFilters(final Map<String, List<String>> headers){
         final List<Filter<ILoggingEvent>> filters = Lists.newArrayList();
 
