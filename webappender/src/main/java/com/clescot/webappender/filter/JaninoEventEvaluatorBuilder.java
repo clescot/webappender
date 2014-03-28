@@ -6,7 +6,7 @@ import ch.qos.logback.core.filter.EvaluatorFilter;
 public class JaninoEventEvaluatorBuilder extends AbstractMatcherFilterBuilder<EvaluatorFilter> {
 
     public static final String X_JANINO_FILTER = "X-wa-janino-filter";
-    public static final String FILTER_JANINO_EXPRESSION_PROPERTY = "EXPRESSION";
+    public static final String FILTER_JANINO_EXPRESSION_PROPERTY = "expression";
 
 
     @Override
