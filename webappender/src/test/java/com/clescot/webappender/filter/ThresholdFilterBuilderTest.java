@@ -8,6 +8,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ThresholdFilterBuilderTest {
             List<String> values = Lists.newArrayList();
             headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isEmpty();
@@ -46,9 +47,9 @@ public class ThresholdFilterBuilderTest {
         public void test_empty_headers() throws Exception {
             //given
             ThresholdFilterBuilder thresholdFilterBuilder = new ThresholdFilterBuilder();
-
+            HashMap<String, List<String>> headers = Maps.newHashMap();
             //when
-            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Maps.<String, List<String>>newHashMap());
+            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isEmpty();
@@ -64,7 +65,7 @@ public class ThresholdFilterBuilderTest {
             values.add("INFO");
             headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isNotEmpty();
@@ -87,7 +88,7 @@ public class ThresholdFilterBuilderTest {
             values.add("WARN");
             headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isNotEmpty();

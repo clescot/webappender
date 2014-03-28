@@ -7,6 +7,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class LevelFilterBuilderTest {
             List<String> values = Lists.newArrayList();
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isEmpty();
@@ -47,7 +48,8 @@ public class LevelFilterBuilderTest {
             LevelFilterBuilder levelFilterBuilder = new LevelFilterBuilder();
 
             //when
-            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Maps.<String, List<String>>newHashMap());
+            HashMap<String, List<String>> headers = Maps.<String, List<String>>newHashMap();
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isEmpty();
@@ -63,7 +65,7 @@ public class LevelFilterBuilderTest {
             values.add("MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:INFO");
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isNotEmpty();
@@ -88,7 +90,7 @@ public class LevelFilterBuilderTest {
             values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO");
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isNotEmpty();
@@ -114,7 +116,7 @@ public class LevelFilterBuilderTest {
             values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO,MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:WARN");
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
             //when
-            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(headers);
+            List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then
             assertThat(filters).isNotEmpty();

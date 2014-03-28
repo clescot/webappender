@@ -20,14 +20,13 @@ public class JaninoEventEvaluatorBuilder extends AbstractMatcherFilterBuilder<Ev
     }
 
     @Override
-    protected void handleCustomValue(EvaluatorFilter filter, String key,String value) {
+    protected void handleCustomValue(EvaluatorFilter filter, String key, String value) {
         if (key.startsWith(FILTER_JANINO_EXPRESSION_PROPERTY)) {
             JaninoEventEvaluator evaluator = new JaninoEventEvaluator();
             filter.setEvaluator(evaluator);
             evaluator.setExpression(value);
         }
     }
-
 
 
 }
