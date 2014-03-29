@@ -41,7 +41,7 @@ import java.util.List;
         this.message = row.getMessage();
         this.threadName = row.getThreadName();
         this.throwableProxy = row.getThrowableProxy();
-        this.level = Level.getLevel(row.getLevel()).toString();
+        this.level = Level.getLevel(row.getLevel());
         this.timestamp = row.getTimestamp();
     }
 

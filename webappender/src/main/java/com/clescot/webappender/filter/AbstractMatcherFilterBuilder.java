@@ -13,14 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractMatcherFilterBuilder<T extends AbstractMatcherFilter> implements FilterBuilder {
+public abstract class AbstractMatcherFilterBuilder<T extends AbstractMatcherFilter<ILoggingEvent>> implements FilterBuilder {
 
     private static final String LEVEL_FILTER_SEPARATOR = ",";
-    public static final String FITLER_MATCH_PROPERTY = "MATCH";
-    public static final String FILTER_MISMATCH_PROPERTY = "MISMATCH";
-    public static final String FILTER_PROPERTY_SEPARATOR = ";";
-    public static final String KEY_VALUE_SEPARATOR = ":";
-    private static Logger LOGGER = LoggerFactory.getLogger(AbstractMatcherFilterBuilder.class);
+    private static final String FITLER_MATCH_PROPERTY = "MATCH";
+    private static final String FILTER_MISMATCH_PROPERTY = "MISMATCH";
+    private static final String FILTER_PROPERTY_SEPARATOR = ";";
+    private static final String KEY_VALUE_SEPARATOR = ":";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMatcherFilterBuilder.class);
 
     protected abstract T newFilter();
 

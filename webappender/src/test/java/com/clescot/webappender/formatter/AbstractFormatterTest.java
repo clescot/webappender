@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 @Ignore
 public abstract class AbstractFormatterTest {
-    private static Logger LOGGER = LoggerFactory.getLogger(AbstractFormatterTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFormatterTest.class);
 
-    protected ArrayList<Row> getILoggingEvents() {
+     ArrayList<Row> getILoggingEvents() {
         Row iLoggingEvent = new Row(new LoggingEvent(this.getClass().getName(), (ch.qos.logback.classic.Logger) LOGGER, Level.ERROR, "dummy message", null, null));
         Row iLoggingEvent2 = new Row(new LoggingEvent(this.getClass().getName(), (ch.qos.logback.classic.Logger) LOGGER, Level.ERROR, "dummy message", null, null));
         ArrayList<Row> iLoggingEvents = Lists.newArrayList();

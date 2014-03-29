@@ -7,7 +7,7 @@ import com.google.common.base.Optional;
 import java.util.List;
 import java.util.Map;
 
-public interface FilterBuilder {
+ interface FilterBuilder {
 
      List<? extends Filter<ILoggingEvent>> buildFilters(Optional<Map<String, List<String>>> headers);
 }

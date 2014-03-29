@@ -48,7 +48,7 @@ public class LevelFilterBuilderTest {
             LevelFilterBuilder levelFilterBuilder = new LevelFilterBuilder();
 
             //when
-            HashMap<String, List<String>> headers = Maps.<String, List<String>>newHashMap();
+            HashMap<String, List<String>> headers = Maps.newHashMap();
             List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
             //then

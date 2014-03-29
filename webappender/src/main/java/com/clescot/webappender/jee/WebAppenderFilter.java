@@ -63,7 +63,7 @@ public class WebAppenderFilter implements Filter {
         logCollector.shutdown();
     }
 
-    public void setActive(boolean active) {
+     void setActive(boolean active) {
         this.active = active;
         logCollector = LogCollector.newLogCollector();
     }

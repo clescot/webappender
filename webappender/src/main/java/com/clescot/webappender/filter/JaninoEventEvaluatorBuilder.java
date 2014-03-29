@@ -1,17 +1,18 @@
 package com.clescot.webappender.filter;
 
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.EvaluatorFilter;
 
-public class JaninoEventEvaluatorBuilder extends AbstractMatcherFilterBuilder<EvaluatorFilter> {
+public class JaninoEventEvaluatorBuilder extends AbstractMatcherFilterBuilder<EvaluatorFilter<ILoggingEvent>> {
 
     public static final String X_JANINO_FILTER = "X-wa-janino-filter";
-    public static final String FILTER_JANINO_EXPRESSION_PROPERTY = "expression";
+    private static final String FILTER_JANINO_EXPRESSION_PROPERTY = "expression";
 
 
     @Override
-    protected EvaluatorFilter newFilter() {
-        return new EvaluatorFilter();
+    protected EvaluatorFilter<ILoggingEvent> newFilter() {
+        return new EvaluatorFilter<>();
     }
 
     @Override

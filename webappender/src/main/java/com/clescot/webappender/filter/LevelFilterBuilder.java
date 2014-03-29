@@ -5,7 +5,7 @@ import ch.qos.logback.classic.filter.LevelFilter;
 
 public class LevelFilterBuilder extends AbstractMatcherFilterBuilder<LevelFilter>{
 
-    public static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
+    private static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
 
     public static final String X_LEVEL_FILTER = "X-wa-level-filter";
 

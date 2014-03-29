@@ -15,10 +15,10 @@ import java.util.*;
  * @see <a href="http://firelogger-php-tests.binaryage.com/basic.php">fireLogger test page</a>
  */
 public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
-    public static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
-    public static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
-    public static final String ERRORS = "errors";
-    public static final String LOGS = "logs";
+    private static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
+    private static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
+    private static final String ERRORS = "errors";
+    private static final String LOGS = "logs";
     private static Random random = new Random();
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-FireLogger";
