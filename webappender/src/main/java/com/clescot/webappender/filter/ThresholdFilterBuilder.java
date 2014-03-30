@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
 
-public class ThresholdFilterBuilder implements FilterBuilder{
+ class ThresholdFilterBuilder implements FilterBuilder{
     public static final String X_THRESHOLD_FILTER = "X-wa-threshold-filter";
     public List<? extends Filter<ILoggingEvent>> buildFilters(Optional<Map<String, List<String>>> headers) {
         List<ThresholdFilter> filters = Lists.newArrayList();

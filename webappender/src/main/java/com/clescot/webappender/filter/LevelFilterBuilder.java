@@ -3,7 +3,7 @@ package com.clescot.webappender.filter;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.filter.LevelFilter;
 
-public class LevelFilterBuilder extends AbstractMatcherFilterBuilder<LevelFilter>{
+ class LevelFilterBuilder extends AbstractMatcherFilterBuilder<LevelFilter>{
 
     private static final String FILTER_LEVEL_LEVEL_PROPERTY = "LEVEL";
 
