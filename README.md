@@ -18,7 +18,7 @@ webappender support actually, [JEE](http://en.wikipedia.org/wiki/Java_Platform,_
 	<dependency>
 	  <groupId>com.clescot</groupId>
 	    <artifactId>webappender</artifactId>
-	    <version>1.1</version>
+	    <version>1.2</version>
 	</dependency>
 	```
 
