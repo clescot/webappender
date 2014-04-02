@@ -1,18 +1,19 @@
 package com.clescot.webappender.formatter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.codehaus.jettison.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
     public static final String HTTP_USER_AGENT = "user-agent";
-    private static final Pattern chromeUserAgentPattern = Pattern.compile("like Gecko\\) (.)*Chrome/");
+    public static final String REQUEST_HEADER_IDENTIFIER = "X-ChromeLogger";
 
     protected String getJSON(List<Row> rows)  {
        StringBuilder json = new StringBuilder("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [");
@@ -83,13 +84,12 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
 
     @Override
     public boolean isActive(Map <String, List<String>> headers) {
-        //active on chrome browsers and derivated one
-        List<String> userAgentHeaders = headers.get(HTTP_USER_AGENT);
-        if(userAgentHeaders!=null&&!userAgentHeaders.isEmpty()){
-            String userAgent = userAgentHeaders.get(0);
-            return chromeUserAgentPattern.matcher(userAgent).find();
-        }
-        return false;
+        return Iterables.tryFind(headers.keySet(), new Predicate<String>() {
+            @Override
+            public boolean apply(java.lang.String headerKey) {
+                return REQUEST_HEADER_IDENTIFIER.equalsIgnoreCase(headerKey);
+            }
+        }).isPresent();
     }
 
     @Override
