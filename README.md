@@ -62,12 +62,16 @@ Based on logback, webappender output these informations :
 when the webappender is shipped in your webapp, and your application server is up, you have to install [the fireLogger plugin](https://addons.mozilla.org/en-us/firefox/addon/firelogger/).
 
 When it's done, hit the F12 key, to visualise the firebug panel ;  you should see a new logger panel. It will highlight your logs, according to the level.
+Logs are transmitted to your browser, when requests contains a special header forged by the FireLogger plugin  : `X-FireLogger`.
 
 ### Visualize your logback logs into your chrome browser
 
 when the webappender is shipped in your webapp, and your application server is up, you have to [install](https://chrome.google.com/webstore/detail/chrome-logger/noaneddfkdjfnfdakjjmocngnfkfehhd) [the chrome logger plugin](http://craig.is/writing/chrome-logger).
 
 When it's done, hit the F12 key, to visualise the **console** panel. It will highlight your logs, when you navigate on your webapp.
+Logs are transmitted to your browser, when requests contains a special header  : `X-ChromeLogger`.
+Unfortunately, Chrome logger does not transmit any custom header.
+To fix it, you can install another extension like [`Modify Headers`](https://chrome.google.com/webstore/detail/modify-headers-for-google/innpjfdalfhpcoinfnehdnbkglpmogdi).
 
 ### Tune log output
 
@@ -109,22 +113,32 @@ webappender, which actually support logback, support some [logback filters](http
 Note that these filters are applied only to the output of the HTTP response, and maps only to logs tied to the request.
 Logs are not filtered at start (there are not [turboFilters](http://logback.qos.ch/apidocs/ch/qos/logback/classic/turbo/class-use/TurboFilter.html), and appenders configured via the classic way (`logback.xml`), view all logs. 
 
-##### Reduce logs by a threshold filter
+##### Reduce logs with a threshold filter
 
 Logback permits to add a [threshold filter](http://logback.qos.ch/manual/filters.html#thresholdFilter), to avoid too many noise in logs.
 All logs from a too detailed level will not be output in the webappender.
 This filter can be put in place with this kind of header : 
 `X-wa-threshold-filter=INFO` 
 
-##### Reduce logs by a level filter
+##### Reduce logs with a level filter
 Logback permits to add some [level filter](http://logback.qos.ch/manual/filters.html#levelFilter).
 
 one filter configuration: 
 `X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL` 
 
 two filters configuration :
-`X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL,X-wa-level-filter=LEVEL:DEBUG;MATCH:ACCEPT;MISMATCH:DENY` 
+`X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL,X-wa-level-filter=LEVEL:DEBUG;MATCH:ACCEPT;MISMATCH:DENY`
 
+##### Customize logs with an EvaluatorFilter and aJaninoEventEvaluator
+Logback permits to add some [EvaluatorFilter](http://logback.qos.ch/manual/filters.html#evalutatorFilter).
+webappender support an EvaluatorFilter bounded with a [JaninoEventEvaluator] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator).
+To use it, add this custom header :
+`X-wa-janino-filter=expression:your custom expression`
+
+For example, you can add these custom header with this expresion to display only message containing the billing word :
+`X-wa-janino-filter=expression:return message.contains("billing")`
+
+More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
 
 ## Test quickly the demo webapp
 
