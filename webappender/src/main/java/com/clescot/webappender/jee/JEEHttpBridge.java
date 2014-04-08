@@ -27,7 +27,7 @@ public class JEEHttpBridge implements HttpBridge {
 
         Enumeration headerNames = httpServletRequest.getHeaderNames();
         while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
+            String key = ((String) headerNames.nextElement()).toLowerCase();
             ArrayList<String> value = Collections.list(httpServletRequest.getHeaders(key));
             map.put(key, value);
         }

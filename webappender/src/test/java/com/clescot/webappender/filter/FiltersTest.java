@@ -50,6 +50,23 @@ public class FiltersTest {
             EvaluatorFilter evaluatorFilter = (EvaluatorFilter)filter;
             assertThat(evaluatorFilter.getEvaluator()).isInstanceOf(JaninoEventEvaluator.class);
         }
+
+        @Test
+        public void testGetFilters_with_janinoEventEvaluator_header_lower_case() throws Exception {
+            //given
+            HashMap<String, List<String>> headers = Maps.newHashMap();
+            headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), Arrays.asList("expression:return message.contains(\"199\""));
+
+            //when
+            Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+
+            //then
+            assertThat(filters).hasSize(1);
+            Filter<ILoggingEvent> filter = filters.iterator().next();
+            assertThat(filter).isInstanceOf(EvaluatorFilter.class);
+            EvaluatorFilter evaluatorFilter = (EvaluatorFilter)filter;
+            assertThat(evaluatorFilter.getEvaluator()).isInstanceOf(JaninoEventEvaluator.class);
+        }
     }
 
     public static class LevelFilterTest{

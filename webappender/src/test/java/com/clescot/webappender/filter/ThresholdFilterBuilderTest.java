@@ -63,7 +63,7 @@ public class ThresholdFilterBuilderTest {
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
             values.add("INFO");
-            headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, values);
+            headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
@@ -86,7 +86,7 @@ public class ThresholdFilterBuilderTest {
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
             values.add("WARN");
-            headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, values);
+            headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = thresholdFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 

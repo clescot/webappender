@@ -15,7 +15,7 @@ import java.util.Map;
     public List<? extends Filter<ILoggingEvent>> buildFilters(Optional<Map<String, List<String>>> headers) {
         List<ThresholdFilter> filters = Lists.newArrayList();
         if(headers.isPresent()&& !headers.get().isEmpty()) {
-            Optional<List<String>> values = Optional.fromNullable(headers.get().get(X_THRESHOLD_FILTER));
+            Optional<List<String>> values = Optional.fromNullable(headers.get().get(X_THRESHOLD_FILTER.toLowerCase()));
             if (values.isPresent() && !values.get().isEmpty()){
                 Level threshold = Level.toLevel(values.get().get(0));
                 ThresholdFilter thresholdFilter = new ThresholdFilter();

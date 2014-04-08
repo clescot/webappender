@@ -32,7 +32,7 @@ public class LevelFilterBuilderTest {
             LevelFilterBuilder levelFilterBuilder = new LevelFilterBuilder();
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
-            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
@@ -63,7 +63,7 @@ public class LevelFilterBuilderTest {
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
             values.add("MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:INFO");
-            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
@@ -88,7 +88,7 @@ public class LevelFilterBuilderTest {
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
             values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO");
-            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 
@@ -114,7 +114,7 @@ public class LevelFilterBuilderTest {
             HashMap<String, List<String>> headers = Maps.newHashMap();
             List<String> values = Lists.newArrayList();
             values.add("MATCH:NEUTRAL;MISMATCH:DENY;LEVEL:INFO,MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:WARN");
-            headers.put(LevelFilterBuilder.X_LEVEL_FILTER, values);
+            headers.put(LevelFilterBuilder.X_LEVEL_FILTER.toLowerCase(), values);
             //when
             List<? extends Filter<ILoggingEvent>> filters = levelFilterBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
 

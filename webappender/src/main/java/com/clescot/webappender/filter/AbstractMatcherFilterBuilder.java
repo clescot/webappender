@@ -31,7 +31,7 @@ public abstract class AbstractMatcherFilterBuilder<T extends AbstractMatcherFilt
     public List<AbstractMatcherFilter<ILoggingEvent>> buildFilters(Optional<Map<String, List<String>>> headers) {
         List<AbstractMatcherFilter<ILoggingEvent>> filters = Lists.newArrayList();
         if (headers.isPresent() && !headers.get().isEmpty()) {
-            Optional<List<String>> found = Optional.fromNullable(headers.get().get(getFilterHeader()));
+            Optional<List<String>> found = Optional.fromNullable(headers.get().get(getFilterHeader().toLowerCase()));
             if (found.isPresent() && !found.get().isEmpty()) {
                 String valueElement = found.get().get(0);
                 List<String> values = Arrays.asList(valueElement.split(LEVEL_FILTER_SEPARATOR));
@@ -56,7 +56,7 @@ public abstract class AbstractMatcherFilterBuilder<T extends AbstractMatcherFilt
         for (String val : values) {
             List<String> strings = Arrays.asList(val.split(KEY_VALUE_SEPARATOR));
             if(strings.size()!=2){
-                LOGGER.warn("header \"{}\" does not contains 2 elements separated by a "+KEY_VALUE_SEPARATOR+" in its value=\"{}\"",getFilterHeader(),val);
+                LOGGER.warn("header \"{}\" does not contains 2 elements separated by a "+KEY_VALUE_SEPARATOR+" in its value=\"{}\"",getFilterHeader().toLowerCase(),val);
                 filter = Optional.absent();
                 break;
             }else {
