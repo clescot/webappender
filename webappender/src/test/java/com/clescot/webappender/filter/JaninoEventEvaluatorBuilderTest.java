@@ -61,7 +61,7 @@ public class JaninoEventEvaluatorBuilderTest {
             JaninoEventEvaluatorBuilder evaluatorBuilder = new JaninoEventEvaluatorBuilder();
             HashMap<String, List<String>> headers = Maps.newHashMap();
             ArrayList<String> values = Lists.newArrayList();
-            values.add("expression:return message.contains(\"billing\")");
+            values.add("expression:return message.contains(\"billing\");");
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), values);
             List<AbstractMatcherFilter<ILoggingEvent>> filters = evaluatorBuilder.buildFilters(Optional.<java.util.Map<String, List<String>>>of(headers));
             assertThat(filters).hasSize(1);
@@ -70,7 +70,8 @@ public class JaninoEventEvaluatorBuilderTest {
             EvaluatorFilter evaluatorFilter = (EvaluatorFilter)filter;
             assertThat(evaluatorFilter.getEvaluator()).isInstanceOf(JaninoEventEvaluator.class);
             JaninoEventEvaluator evaluator = (JaninoEventEvaluator)evaluatorFilter.getEvaluator();
-            assertThat(evaluator.getExpression()).isEqualTo("return message.contains(\"billing\")");
+            assertThat(evaluator.getExpression()).isEqualTo("return message.contains(\"billing\");");
+            assertThat(evaluator.isStarted()).isTrue();
         }
 
     }
