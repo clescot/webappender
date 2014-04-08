@@ -12,7 +12,9 @@ import ch.qos.logback.classic.filter.LevelFilter;
 
     @Override
     protected LevelFilter newFilter() {
-        return new LevelFilter();
+        LevelFilter levelFilter = new LevelFilter();
+        levelFilter.start();
+        return levelFilter;
     }
 
     @Override

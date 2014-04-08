@@ -12,7 +12,9 @@ import ch.qos.logback.core.filter.EvaluatorFilter;
 
     @Override
     protected EvaluatorFilter<ILoggingEvent> newFilter() {
-        return new EvaluatorFilter<>();
+        EvaluatorFilter<ILoggingEvent> evaluatorFilter = new EvaluatorFilter<>();
+        evaluatorFilter.start();
+        return evaluatorFilter;
     }
 
     @Override
@@ -25,6 +27,7 @@ import ch.qos.logback.core.filter.EvaluatorFilter;
         if (key.startsWith(FILTER_JANINO_EXPRESSION_PROPERTY)) {
             JaninoEventEvaluator evaluator = new JaninoEventEvaluator();
             filter.setEvaluator(evaluator);
+            evaluator.start();
             evaluator.setExpression(value);
         }
     }
