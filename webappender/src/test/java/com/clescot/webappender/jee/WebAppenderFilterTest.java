@@ -3,7 +3,6 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.formatter.ChromeLoggerFormatter;
 import com.clescot.webappender.formatter.FireLoggerFormatter;
-import com.clescot.webappender.formatter.FormattersTest;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -109,7 +108,7 @@ public class WebAppenderFilterTest {
             httpServletRequest.setMethod("GET");
             HttpServletResponse httpServletResponse = new MockHttpServletResponse();
             MockFilterChain filterChain = getFilterChain();
-            httpServletRequest.addHeader(ChromeLoggerFormatter.HTTP_USER_AGENT, FormattersTest.TestFindFormatter.CHROME_BROWSER_32_USER_AGENT);
+            httpServletRequest.addHeader(ChromeLoggerFormatter.REQUEST_HEADER_IDENTIFIER, "dummy value");
             //when
             filterChain.doFilter(httpServletRequest, httpServletResponse);
 

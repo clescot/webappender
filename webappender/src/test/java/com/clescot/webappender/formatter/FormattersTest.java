@@ -16,7 +16,6 @@ import static org.fest.assertions.Assertions.assertThat;
 public class FormattersTest {
     public static class TestFindFormatter{
 
-        public static final String CHROME_BROWSER_32_USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
 
         @Test
         public void test_with_firelogger_header() throws Exception {
@@ -37,7 +36,7 @@ public class FormattersTest {
         public void test_wit_chrome_in_user_agent_header() throws Exception {
             //given
             Map<String,List<String>> headers = Maps.newHashMap();
-            headers.put(ChromeLoggerFormatter.HTTP_USER_AGENT,Arrays.asList(CHROME_BROWSER_32_USER_AGENT) );
+            headers.put(ChromeLoggerFormatter.REQUEST_HEADER_IDENTIFIER,Arrays.asList("dummy value") );
             //when
             Optional<? extends Formatter> optionalFound = Formatters.findFormatter(headers);
 
@@ -65,7 +64,6 @@ public class FormattersTest {
         public void test_with_user_agent_and_firelogger_headers() throws Exception {
             //given
             Map<String,List<String>> headers = Maps.newTreeMap();
-            headers.put(ChromeLoggerFormatter.HTTP_USER_AGENT,Arrays.asList(CHROME_BROWSER_32_USER_AGENT));
             headers.put(FireLoggerFormatter.REQUEST_HEADER_IDENTIFIER,Arrays.asList(""));
             //when
             Optional<? extends Formatter> optionalFound = Formatters.findFormatter(headers);
