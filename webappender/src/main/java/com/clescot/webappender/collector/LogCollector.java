@@ -89,8 +89,8 @@ public class LogCollector {
 
     public void addFilters(Map<String, List<String>> headers) {
 
-        Collection<? extends Filter<ILoggingEvent>> thresholdFilters = Filters.getFilters(headers);
-        for (Filter<ILoggingEvent> filter : thresholdFilters) {
+        Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+        for (Filter<ILoggingEvent> filter : filters) {
             getChildAppender().addFilter(filter);
         }
 
