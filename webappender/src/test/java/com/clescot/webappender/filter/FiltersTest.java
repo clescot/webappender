@@ -26,7 +26,8 @@ public class FiltersTest {
     @Test
     public void testGetFilters_without_any_headers() throws Exception {
         //when
-        Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(Maps.<String, List<String>>newHashMap());
+        Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(
+                Maps.<String, List<String>>newHashMap());
 
         //then
         assertThat(filters).isEmpty();
@@ -41,7 +42,7 @@ public class FiltersTest {
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER, Arrays.asList("expression:return message.contains(\"199\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -58,7 +59,7 @@ public class FiltersTest {
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), Arrays.asList("expression:return message.contains(\"199\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -77,7 +78,7 @@ public class FiltersTest {
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, Arrays.asList("\"MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:INFO\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -93,7 +94,7 @@ public class FiltersTest {
             headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, Arrays.asList("WARN"));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.getFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);

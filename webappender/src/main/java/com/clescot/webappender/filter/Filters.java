@@ -18,7 +18,7 @@ public class Filters {
 
     private static final  List<FilterBuilder> FILTER_BUILDERS = Arrays.asList(new ThresholdFilterBuilder(), new LevelFilterBuilder(),new JaninoEventEvaluatorBuilder());
 
-    public static Collection<? extends Filter<ILoggingEvent>> getFilters(final Map<String, List<String>> headers){
+    public static Collection<? extends Filter<ILoggingEvent>> buildFilters(final Map<String, List<String>> headers){
         Optional<Map<String, List<String>>> optionalHeaders = Optional.fromNullable(headers);
         List<Filter<ILoggingEvent>> filters = Lists.newArrayList();
         if(optionalHeaders.isPresent()){
