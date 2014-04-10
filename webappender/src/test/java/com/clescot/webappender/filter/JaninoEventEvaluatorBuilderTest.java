@@ -101,7 +101,7 @@ public class JaninoEventEvaluatorBuilderTest {
             values.add("MATCH:ACCEPT;MISMATCH:DENY;expression:return message.contains(\"billing\");");
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), values);
             List<Filter<ILoggingEvent>> filters = Lists.newArrayList(Filters.buildFilters(headers));
-            ILoggingEvent event = new LoggingEvent("com.clescot.webappender.filter",LOGGER, Level.INFO,"message containing token",null,null);
+            ILoggingEvent event = new LoggingEvent("com.clescot.webappender.filter",LOGGER, Level.INFO,"message containing billing",null,null);
             final Filter<ILoggingEvent> filter = filters.get(0);
             FilterAttachableImpl filterAttachable = new FilterAttachableImpl();
             filterAttachable.addFilter(filter);
@@ -113,6 +113,30 @@ public class JaninoEventEvaluatorBuilderTest {
             assertThat(filterChainDecision).isEqualTo(FilterReply.ACCEPT);
 
         }
+
+
+        @Test
+               public void test_filtering_false() throws Exception {
+
+                   //given
+                   JaninoEventEvaluatorBuilder evaluatorBuilder = new JaninoEventEvaluatorBuilder();
+                   HashMap<String, List<String>> headers = Maps.newHashMap();
+                   ArrayList<String> values = Lists.newArrayList();
+                   values.add("MATCH:ACCEPT;MISMATCH:DENY;expression:return message.contains(\"billing\");");
+                   headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), values);
+                   List<Filter<ILoggingEvent>> filters = Lists.newArrayList(Filters.buildFilters(headers));
+                   ILoggingEvent event = new LoggingEvent("com.clescot.webappender.filter",LOGGER, Level.INFO,"message containing nothing",null,null);
+                   final Filter<ILoggingEvent> filter = filters.get(0);
+                   FilterAttachableImpl filterAttachable = new FilterAttachableImpl();
+                   filterAttachable.addFilter(filter);
+
+                   //when
+                   final FilterReply filterChainDecision = filterAttachable.getFilterChainDecision(event);
+
+                   //then
+                   assertThat(filterChainDecision).isEqualTo(FilterReply.DENY);
+
+               }
 
 
 
