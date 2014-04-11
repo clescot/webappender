@@ -133,10 +133,10 @@ two filters configuration :
 Logback permits to add some [EvaluatorFilter](http://logback.qos.ch/manual/filters.html#evalutatorFilter).
 webappender support an EvaluatorFilter bounded with a [JaninoEventEvaluator] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator).
 To use it, add this custom header :
-`X-wa-janino-filter=expression:your custom expression`
+`X-wa-janino-filter=<MATCH/MISMATCH>:<ACCEPT/NEUTRAL/DENY>;expression:your custom expression`
 
 For example, you can add these custom header with this expresion to display only message containing the billing word :
-`X-wa-janino-filter=expression:return message.contains("billing")`
+`MATCH:ACCEPT;MISMATCH:DENY;expression:return formattedMessage.contains("3")`
 
 More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
 
