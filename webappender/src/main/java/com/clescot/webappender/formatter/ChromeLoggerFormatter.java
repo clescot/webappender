@@ -1,8 +1,6 @@
 package com.clescot.webappender.formatter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -77,25 +75,27 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     }
 
     @Override
+    protected String getRequestHeaderIdentifier() {
+        return REQUEST_HEADER_IDENTIFIER;
+    }
+
+    @Override
     protected ChromeRow newFormatterRow(Row row) {
         return new ChromeRow(row);
     }
 
-    @Override
-    public boolean isActive(Map <String, List<String>> headers) {
-        return Iterables.tryFind(headers.keySet(), new Predicate<String>() {
-            @Override
-            public boolean apply(java.lang.String headerKey) {
-                return REQUEST_HEADER_IDENTIFIER.equalsIgnoreCase(headerKey);
-            }
-        }).isPresent();
-    }
+
 
     @Override
     public Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, format(rows));
         return rowsSerialized;
+    }
+
+    @Override
+    public Location getLocation() {
+        return Location.HEADER;
     }
 
 

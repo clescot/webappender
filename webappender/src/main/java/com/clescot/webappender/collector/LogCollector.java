@@ -122,10 +122,19 @@ public class LogCollector {
         Optional<? extends Formatter> optional = Formatters.findFormatter(headers);
         if (optional.isPresent()) {
             try {
-                Map<String, String> serializedRows = optional.get().serializeRows(logs);
-                for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
-                    httpBridge.addHeader(entry.getKey(), entry.getValue());
+                Formatter formatter = optional.get();
+                Map<String, String> serializedRows = formatter.serializeRows(logs);
+                if(Formatter.Location.HEADER.equals(formatter.getLocation())){
+                    for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
+                        httpBridge.addHeader(entry.getKey(), entry.getValue());
+                    }
+                //append to BODY
+                }else{
+                    for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
+                        httpBridge.appendToBody(entry.getValue());
+                    }
                 }
+
             } catch (JsonProcessingException e) {
                 LOGGER.warn("webAppender serialization error", e);
             }
