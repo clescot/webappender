@@ -135,8 +135,8 @@ webappender support an EvaluatorFilter bounded with a [JaninoEventEvaluator] (ht
 To use it, add this custom header :
 `X-wa-janino-filter=<MATCH/MISMATCH>:<ACCEPT/NEUTRAL/DENY>;expression:your custom expression`
 
-For example, you can add these custom header with this expresion to display only message containing the billing word :
-`MATCH:ACCEPT;MISMATCH:DENY;expression:return formattedMessage.contains("3")`
+For example, you can add this custom header with this related expresion to display only message containing the "3" character :
+`X-wa-janino-filter=MATCH:ACCEPT;MISMATCH:DENY;expression:return formattedMessage.contains("3")`
 
 More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
 
