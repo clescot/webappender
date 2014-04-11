@@ -181,5 +181,41 @@ Launch your firefox browser, hit the F12 touch to activate firebug, and click on
 ![additional informations provided on the right](webappender2.png) 
 
 
+## Potential issues
 
+If serialized logs are important, you can be faced to two limitations :
+  * server-side headers limitation
+  * client-side headers limitation
 
+### server-side headers limitation
+
+If logs from your request are huge, your server can throw an exception.
+To avoid this limit, you can configure your server.
+
+#### Tomcat
+
+For Tomcat, you can configure your container [your HTTP connector](http://tomcat.apache.org/tomcat-7.0-doc/config/http.html) with these parameters :
+
+* **maxHeaderCount** *"The maximum number of headers in a request that are allowed by the container. A request that contains more headers than the specified limit will be rejected.
+  A value of less than 0 means no limit. If not specified, a default of 100 is used."*
+* **maxHttpHeaderSize** *"The maximum size of the request and response HTTP header, specified in bytes. If not specified, this attribute is set to 8192 (8 KB)."*
+
+#### Jetty
+
+For Jetty, you can configure your container [your HTTP connector](http://wiki.eclipse.org/Jetty/Howto/Configure_Connectors) with these parameters :
+
+* **responseHeaderSize** *"Sets the size of the buffer for response headers. Default is 6K."*
+
+### client-side headers limitation
+
+Browsers has got some limitations on HTTP headers.
+
+[According to a StackOverflowTopic](http://stackoverflow.com/questions/3326210/can-http-headers-be-too-big-for-browsers) :
+
+ * Chrome browser header limit is 250 kb, and 256 kb for all headers.
+ Chrome Logger extension reading logs in only one header, we are limited to 256 Kb.
+
+ * firefox browser header limit is 10 kb, and 100 Mb or more for all headers.
+ Firelogger extension reading logs in multiple headers, we have no limitations from it.
+
+To overcome these limitations, you can configure some filters to serialize only useful logs from your requests.
