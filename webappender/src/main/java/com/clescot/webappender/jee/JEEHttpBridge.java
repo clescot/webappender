@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
 public class JEEHttpBridge implements HttpBridge {
+    public static final String REQUEST_SCOPE_IDENTIFIER = "wa-logs";
     private HttpServletRequest httpServletRequest;
     private HttpServletResponse httpServletResponse;
     private static Logger LOGGER = LoggerFactory.getLogger(JEEHttpBridge.class);
@@ -38,12 +38,4 @@ public class JEEHttpBridge implements HttpBridge {
         return map;
     }
 
-    @Override
-    public void appendToBody(String value) {
-        try {
-            httpServletResponse.getWriter().append(value);
-        }catch (IOException e){
-            LOGGER.error(e.getMessage(),e);
-        }
-    }
 }

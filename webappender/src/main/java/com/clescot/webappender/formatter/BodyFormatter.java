@@ -10,14 +10,26 @@ public class BodyFormatter extends AbstractFormatter<Row> {
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
     public static final String RESPONSE_BODY_LOGGER_HEADER = "Bodylogger-";
+    private static final String SCRIPT_TYPE_TEXT_JAVASCRIPT_START = "<script type=\"text/javascript\">";
+    private static final String SCRIPT_END = "</script>";
 
     @Override
-    protected String getJSON(List<Row> rows) {
+    public String getJSON(List<Row> rows) {
+        List<Row> formattedRows = getFormatterRows(rows);
+        StringBuilder result = new StringBuilder();
         try {
-            return objectMapper.writeValueAsString(getFormatterRows(rows));
+            result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
+            for (Row row : formattedRows) {
+                String rowInJSON = objectMapper.writeValueAsString(row);
+                result.append("console.dir(");
+                result.append(rowInJSON);
+                result.append(");");
+            }
+            result.append(SCRIPT_END);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        return result.toString();
     }
 
     @Override

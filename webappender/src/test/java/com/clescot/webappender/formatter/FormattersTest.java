@@ -33,7 +33,7 @@ public class FormattersTest {
         }
 
         @Test
-        public void test_wit_chrome_in_user_agent_header() throws Exception {
+        public void test_wit_chrome_logger_header() throws Exception {
             //given
             Map<String,List<String>> headers = Maps.newHashMap();
             headers.put(ChromeLoggerFormatter.REQUEST_HEADER_IDENTIFIER,Arrays.asList("dummy value") );
@@ -61,7 +61,7 @@ public class FormattersTest {
         }
 
         @Test
-        public void test_with_user_agent_and_firelogger_headers() throws Exception {
+        public void test_with_firelogger_headers() throws Exception {
             //given
             Map<String,List<String>> headers = Maps.newTreeMap();
             headers.put(FireLoggerFormatter.REQUEST_HEADER_IDENTIFIER,Arrays.asList(""));

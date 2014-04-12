@@ -9,11 +9,13 @@ public interface Formatter {
 
     boolean isActive(Map<String, List<String>> headers);
 
+     String getJSON(List<Row> rows);
+
     Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException;
 
-    public abstract Location getLocation();
+     abstract Location getLocation();
 
-    public enum Location{
+     enum Location{
         HEADER,
         BODY
     }

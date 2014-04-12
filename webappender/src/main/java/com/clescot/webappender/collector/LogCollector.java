@@ -115,30 +115,31 @@ public class LogCollector {
 
 
 
-    public void serializeLogs(HttpBridge httpBridge, Map<String, List<String>> headers) {
+    public Object serializeLogs(HttpBridge httpBridge) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
+        Object result = null;
 
-        Optional<? extends Formatter> optional = Formatters.findFormatter(headers);
+        Optional<? extends Formatter> optional = Formatters.findFormatter(httpBridge.getHeadersAsMap());
         if (optional.isPresent()) {
             try {
                 Formatter formatter = optional.get();
-                Map<String, String> serializedRows = formatter.serializeRows(logs);
                 if(Formatter.Location.HEADER.equals(formatter.getLocation())){
+                    Map<String, String> serializedRows = formatter.serializeRows(logs);
                     for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                         httpBridge.addHeader(entry.getKey(), entry.getValue());
                     }
-                //append to BODY
+                    result = serializedRows;
                 }else{
-                    for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
-                        httpBridge.appendToBody(entry.getValue());
-                    }
+                    result= formatter.getJSON(logs);
+
                 }
 
             } catch (JsonProcessingException e) {
                 LOGGER.warn("webAppender serialization error", e);
             }
         }
+        return result;
     }
 
 

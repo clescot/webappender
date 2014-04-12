@@ -19,7 +19,7 @@ abstract class AbstractFormatter<R> implements Formatter {
      final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    protected abstract String getJSON(List<Row> rows);
+    public abstract String getJSON(List<Row> rows);
 
 
     public String format(List<Row> rows) throws JsonProcessingException {

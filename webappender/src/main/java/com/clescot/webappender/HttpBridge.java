@@ -6,6 +6,5 @@ import java.util.Map;
 public interface HttpBridge {
     void addHeader(String key,String value);
     Map<String, List<String>> getHeadersAsMap();
-    void appendToBody(String value);
 
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 @WebFilter(filterName="webAppender",urlPatterns = "/*",description = "output your logback logs in your favorite browser")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
+    public static final String WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY = "webappender.logcollector";
 
 
     private static Logger LOGGER = LoggerFactory.getLogger(WebAppenderFilter.class);
@@ -27,11 +28,12 @@ public class WebAppenderFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         if (Boolean.parseBoolean(System.getProperty(SYSTEM_PROPERTY_KEY))) {
-            setActive(true);
+            logCollector = setActive(true);
             String initParameter = filterConfig.getInitParameter(LogCollector.X_VERBOSE_LOGS);
             logCollector.setVerboseLogs(initParameter);
+            filterConfig.getServletContext().setAttribute(WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY,logCollector);
         }
-    }
+   }
 
 
     @Override
@@ -63,9 +65,9 @@ public class WebAppenderFilter implements Filter {
         logCollector.shutdown();
     }
 
-     void setActive(boolean active) {
+    LogCollector setActive(boolean active) {
         this.active = active;
-        logCollector = LogCollector.newLogCollector();
+        return  LogCollector.newLogCollector();
     }
 
 }
