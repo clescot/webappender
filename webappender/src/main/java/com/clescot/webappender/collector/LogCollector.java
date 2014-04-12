@@ -132,7 +132,6 @@ public class LogCollector {
                     result = serializedRows;
                 }else{
                     result= formatter.getJSON(logs);
-
                 }
 
             } catch (JsonProcessingException e) {

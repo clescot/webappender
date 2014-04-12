@@ -12,7 +12,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
     public static final String REQUEST_HEADER_IDENTIFIER = "X-ChromeLogger";
 
-    protected String getJSON(List<Row> rows)  {
+    public String getJSON(List<Row> rows)  {
        StringBuilder json = new StringBuilder("{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [");
         int i=0;
         for (Row row : rows) {

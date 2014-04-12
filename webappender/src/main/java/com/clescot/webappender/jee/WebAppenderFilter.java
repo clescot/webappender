@@ -50,7 +50,7 @@ public class WebAppenderFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
 
         if (active) {
-            logCollector.serializeLogs(httpBridge, headers);
+            logCollector.serializeLogs(httpBridge);
         }
     }
 

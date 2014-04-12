@@ -24,7 +24,7 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
 
 
     @Override
-    protected String getJSON(List<Row> rows) {
+    public String getJSON(List<Row> rows) {
         Map<String, Object> globalStructure = Maps.newHashMap();
 
         ArrayList<Object> errors = Lists.newArrayList();
