@@ -68,7 +68,7 @@ public class LogCollector {
      * @return
      */
     public List<Row> getLogs() {
-        CustomListAppender perThreadIdAppender = getChildAppender();
+        CustomListAppender perThreadIdAppender = getOrCreateChildAppender();
         return Lists.newArrayList(perThreadIdAppender.getRows());
     }
 
@@ -82,16 +82,16 @@ public class LogCollector {
     }
 
 
-    public CustomListAppender getChildAppender() {
+    public CustomListAppender getOrCreateChildAppender() {
         return (CustomListAppender) ((FilterableSiftingAppender) rootLogger.getAppender(SIFTING_APPENDER_KEY)).getChildAppender();
     }
 
 
-    public void addFilters(Map<String, List<String>> headers) {
+    public void addFiltersToChildAppender(Map<String, List<String>> headers) {
 
         Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
         for (Filter<ILoggingEvent> filter : filters) {
-            getChildAppender().addFilter(filter);
+            getOrCreateChildAppender().addFilter(filter);
         }
 
     }
@@ -109,7 +109,7 @@ public class LogCollector {
             useConvertersHeader = Boolean.parseBoolean(headers.get(0));
         }
         if (!useConvertersHeader || (!globalUseConverters)) {
-            getChildAppender().setUseConverters(false);
+            getOrCreateChildAppender().setUseConverters(false);
         }
     }
 
