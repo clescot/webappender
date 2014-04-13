@@ -38,7 +38,7 @@ private static Logger LOGGER = (Logger) LoggerFactory.getLogger(FireLoggerFormat
             ArrayList<Row> iLoggingEvents = Lists.newArrayList();
             FireLoggerFormatter fireLoggerFormatter = new FireLoggerFormatter();
             //when
-            String formattedLogs = fireLoggerFormatter.format(iLoggingEvents);
+            String formattedLogs = fireLoggerFormatter.encodeBase64(iLoggingEvents);
             //then
             assertThat(formattedLogs).isEqualTo(NO_LOGS);
         }

@@ -47,13 +47,8 @@ public class BodyFormatter extends AbstractFormatter<Row> {
     @Override
     public Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
-        rowsSerialized.put(RESPONSE_BODY_LOGGER_HEADER, format(rows));
+        rowsSerialized.put(RESPONSE_BODY_LOGGER_HEADER, encodeBase64(getJSON(rows)));
         return rowsSerialized;
-    }
-
-    @Override
-    public String format(List<Row> rows) throws JsonProcessingException {
-        return getJSON(rows);
     }
 
     @Override

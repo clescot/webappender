@@ -22,8 +22,8 @@ abstract class AbstractFormatter<R> implements Formatter {
     public abstract String getJSON(List<Row> rows);
 
 
-    public String format(List<Row> rows) throws JsonProcessingException {
-        return new String(Base64.encodeBase64(getJSON(rows).getBytes(), IS_NOT_CHUNKED), Charset.forName(UTF_8));
+    public String encodeBase64(String rowsInJSON) throws JsonProcessingException {
+        return new String(Base64.encodeBase64(rowsInJSON.getBytes(), IS_NOT_CHUNKED), Charset.forName(UTF_8));
     }
 
 

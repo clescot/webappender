@@ -65,7 +65,7 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
     public Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException {
         HashMap<String, String> headers = Maps.newHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
-        String rowsAsJSON = format(rows);
+        String rowsAsJSON = encodeBase64(rows);
         List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);
         for (int i = 0; i < chunks.size(); i++) {
             String chunk = chunks.get(i);

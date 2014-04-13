@@ -36,7 +36,7 @@ public class ChromeLoggerFormatterTest {
             ArrayList<Row> iLoggingEvents = Lists.newArrayList();
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             //when
-            String formattedLogs = chromeLoggerFormatter.format(iLoggingEvents);
+            String formattedLogs = chromeLoggerFormatter.encodeBase64(iLoggingEvents);
             //then
             assertThat(formattedLogs).isEqualTo(NO_EVENTS_IN_BASE64);
         }

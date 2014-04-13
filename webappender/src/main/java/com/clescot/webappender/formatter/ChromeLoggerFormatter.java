@@ -89,7 +89,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
     @Override
     public Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException {
         Map<String,String> rowsSerialized = Maps.newHashMap();
-        rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, format(rows));
+        rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, encodeBase64(getJSON(rows)));
         return rowsSerialized;
     }
 
