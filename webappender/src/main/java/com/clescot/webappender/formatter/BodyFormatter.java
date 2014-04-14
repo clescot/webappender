@@ -15,19 +15,21 @@ public class BodyFormatter extends AbstractFormatter<Row> {
 
     @Override
     public String getJSON(List<Row> rows) {
-        List<Row> formattedRows = getFormatterRows(rows);
         StringBuilder result = new StringBuilder();
-        try {
-            result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
-            for (Row row : formattedRows) {
-                String rowInJSON = objectMapper.writeValueAsString(row);
-                result.append("console.dir(");
-                result.append(rowInJSON);
-                result.append(");");
+        if(rows !=null && !rows.isEmpty()) {
+            List<Row> formattedRows = getFormatterRows(rows);
+            try {
+                result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
+                for (Row row : formattedRows) {
+                    String rowInJSON = objectMapper.writeValueAsString(row);
+                    result.append("console.dir(");
+                    result.append(rowInJSON);
+                    result.append(");");
+                }
+                result.append(SCRIPT_END);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
-            result.append(SCRIPT_END);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
         return result.toString();
     }
