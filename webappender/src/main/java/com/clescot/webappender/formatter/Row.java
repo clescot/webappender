@@ -37,7 +37,9 @@ public class Row {
 
 
     public Row(ILoggingEvent event) {
-
+        if(event==null){
+            throw new IllegalArgumentException("event cannot be null");
+        }
         this.template = event.getMessage();
         this.args = Lists.newArrayList();
         if (event.getArgumentArray() != null) {

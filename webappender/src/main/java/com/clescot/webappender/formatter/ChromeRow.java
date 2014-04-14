@@ -15,6 +15,9 @@ class ChromeRow {
     private String logType;//log, warn, error, info, group, groupEnd, groupCollapsed, and table
 
     ChromeRow(Row event) {
+        if(event==null){
+            throw new IllegalArgumentException("event cannot be null");
+        }
         HashMap<String,String> internal = Maps.newHashMap();
         internal.put("___class_name", event.getName());
         internal.put("message", event.getMessage());
