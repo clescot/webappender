@@ -1,8 +1,11 @@
 package com.clescot.webappender.formatter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +25,9 @@ public class BodyFormatter extends AbstractFormatter<Row> {
                 result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
                 for (Row row : formattedRows) {
                     String rowInJSON = objectMapper.writeValueAsString(row);
-                    result.append("console.dir(");
+                    result.append("console.");
+                    result.append(Level.getConsoleLevel(row));
+                    result.append("(");
                     result.append(rowInJSON);
                     result.append(");");
                 }
@@ -32,6 +37,44 @@ public class BodyFormatter extends AbstractFormatter<Row> {
             }
         }
         return result.toString();
+    }
+
+    protected enum Level{
+        OFF("debug", ch.qos.logback.classic.Level.OFF),
+        DEBUG("debug", ch.qos.logback.classic.Level.DEBUG),
+        INFO("info",ch.qos.logback.classic.Level.INFO),
+        WARN("warn",ch.qos.logback.classic.Level.WARN),
+        ERROR("error",ch.qos.logback.classic.Level.ERROR),
+        ALL("error", ch.qos.logback.classic.Level.ALL);
+
+        private final String consoleLevel;
+        private final ch.qos.logback.classic.Level logbackLevel;
+
+
+        Level(String consoleLevel, ch.qos.logback.classic.Level logbackLevel) {
+            this.consoleLevel = consoleLevel;
+            this.logbackLevel = logbackLevel;
+        }
+
+        private static String getConsoleLevel(final Row row){
+            final ch.qos.logback.classic.Level rowLevel = row.getLevel();
+            List<Level> levels = Arrays.asList(Level.values());
+            Level level = Iterables.find(levels, new Predicate<Level>() {
+                @Override
+                public boolean apply(Level input) {
+                    return input.getLogbackLevel().equals(rowLevel);
+                }
+            });
+            return level.getConsoleLevel();
+        }
+
+        public String getConsoleLevel() {
+            return consoleLevel;
+        }
+
+        public ch.qos.logback.classic.Level getLogbackLevel() {
+            return logbackLevel;
+        }
     }
 
     @Override

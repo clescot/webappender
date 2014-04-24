@@ -115,10 +115,10 @@ public class LogCollector {
 
 
 
-    public Object serializeLogs(HttpBridge httpBridge) {
+    public String serializeLogs(HttpBridge httpBridge) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
-        Object result = null;
+        String result = null;
 
         Optional<? extends Formatter> optional = Formatters.findFormatter(httpBridge.getHeadersAsMap());
         if (optional.isPresent()) {
@@ -129,7 +129,7 @@ public class LogCollector {
                     for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                         httpBridge.addHeader(entry.getKey(), entry.getValue());
                     }
-                    result = serializedRows;
+                    result = "serialization into headers done";
                 }else{
                     result= formatter.getJSON(logs);
                 }
@@ -137,6 +137,8 @@ public class LogCollector {
             } catch (JsonProcessingException e) {
                 LOGGER.warn("webAppender serialization error", e);
             }
+        }else{
+            result = "";//when no serialization is done, we return an empty string
         }
         return result;
     }

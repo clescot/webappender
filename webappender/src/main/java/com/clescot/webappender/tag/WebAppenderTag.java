@@ -30,7 +30,7 @@ public class WebAppenderTag extends TagSupport {
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
             HttpBridge httpBridge = new JEEHttpBridge(request, response);
 
-            String json = (String) collector.serializeLogs(httpBridge);
+            String json = collector.serializeLogs(httpBridge);
             JspWriter out = pageContext.getOut();
 
             try {
