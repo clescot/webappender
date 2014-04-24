@@ -73,6 +73,23 @@ Logs are transmitted to your browser, when requests contains a special header  :
 Unfortunately, Chrome logger does not transmit any custom header.
 To fix it, you can install another extension like [`Modify Headers`](https://chrome.google.com/webstore/detail/modify-headers-for-google/innpjfdalfhpcoinfnehdnbkglpmogdi).
 
+### Visualize your logback logs into any browser
+
+If you cannot install any firefox or chrome plugin, or if you haven't any of these browsers, you can use a **body formatter**.
+
+You have to transmit to the server a special header  : `X-BodyLogger`, via an extension like *modify headers* (chrome or firefox), or any other one compatible with your browser.
+
+Advantages of this method :
+- there are no small size limitations (2Gb seems to be the limit)
+  a chunked response may remove this limitation, but who will have a 2Gb of logs for one request ?
+- it works on any browser
+
+Drawbacks of this methods :
+- it modifies your body response
+- there are no pretty output for these logs
+- you cannot filter on the browser-side your logs
+
+
 ### Tune log output
 
 Webappender permits to tune the log output, via some specific request headers.
