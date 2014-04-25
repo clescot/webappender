@@ -54,7 +54,7 @@ public class BodyFormatterTest {
             String json = bodyFormatter.getJSON(rows);
 
             //then
-            assertThat(json).isEqualTo("<script type=\"text/javascript\">console.dir({\"message\":null,\"template\":null,\"args\":[],\"level\":null,\"timestamp\":0,\"relativeTime\":null,\"threadName\":null,\"classOfCaller\":null,\"methodOfCaller\":null,\"mdc\":null,\"throwableProxy\":null,\"contextName\":null,\"callerData\":null,\"marker\":null,\"time\":null,\"name\":null,\"pathName\":null,\"lineNumber\":null});</script>");
+            assertThat(json).isEqualTo("<script type=\"text/javascript\"></script>");
         }
     }
 }

@@ -24,12 +24,14 @@ public class BodyFormatter extends AbstractFormatter<Row> {
             try {
                 result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
                 for (Row row : formattedRows) {
-                    String rowInJSON = objectMapper.writeValueAsString(row);
-                    result.append("console.");
-                    result.append(Level.getConsoleLevel(row));
-                    result.append("(");
-                    result.append(rowInJSON);
-                    result.append(");");
+                    if(row.getLevel().isGreaterOrEqual(ch.qos.logback.classic.Level.DEBUG)) {
+                        String rowInJSON = objectMapper.writeValueAsString(row);
+                        result.append("console.");
+                        result.append(Level.getConsoleLevel(row));
+                        result.append("(");
+                        result.append(rowInJSON);
+                        result.append(");");
+                    }
                 }
                 result.append(SCRIPT_END);
             } catch (JsonProcessingException e) {
@@ -40,7 +42,7 @@ public class BodyFormatter extends AbstractFormatter<Row> {
     }
 
     protected enum Level{
-        OFF("debug", ch.qos.logback.classic.Level.OFF),
+        OFF("", ch.qos.logback.classic.Level.OFF),
         DEBUG("debug", ch.qos.logback.classic.Level.DEBUG),
         INFO("info",ch.qos.logback.classic.Level.INFO),
         WARN("warn",ch.qos.logback.classic.Level.WARN),
@@ -64,7 +66,7 @@ public class BodyFormatter extends AbstractFormatter<Row> {
                 public boolean apply(Level input) {
                     return input.getLogbackLevel().equals(rowLevel);
                 }
-            });
+            },Level.OFF);
             return level.getConsoleLevel();
         }
 

@@ -2,6 +2,7 @@ package com.clescot.webappender.formatter;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class Row {
         }
 
         this.message = event.getFormattedMessage();
-        this.level = event.getLevel();
+        this.level = Objects.firstNonNull(event.getLevel(),Level.ALL);
         this.timestamp = event.getTimeStamp();
         this.name = event.getLoggerName();
     }
