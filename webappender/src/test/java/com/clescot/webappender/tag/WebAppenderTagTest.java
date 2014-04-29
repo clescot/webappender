@@ -17,7 +17,6 @@ import org.springframework.mock.web.MockPageContext;
 import org.springframework.mock.web.MockServletContext;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -27,20 +26,17 @@ public class WebAppenderTagTest {
     public static class TestDoStartTag {
 
         private static Logger LOGGER = LoggerFactory.getLogger(TestDoStartTag.class);
-        private MockServletContext mockHttpServletContext = new MockServletContext();
+        private MockServletContext mockHttpServletContext;
         private MockHttpServletRequest mockHttpServletRequest;
         private MockHttpServletResponse mockHttpServletResponse;
         private MockPageContext mockPageContext;
         private WebAppenderTag tag = new WebAppenderTag();
         private LogCollector logCollector;
         private List<Row> rows = Lists.newArrayList();
-        public static final Pattern lineNumberPattern = Pattern.compile("\"lineNumber\":\"\\d*\"");
-        public static final Pattern timestampPattern = Pattern.compile("\"timestamp\":\\d*");
-        public static final Pattern relativeTimePattern = Pattern.compile("\"relativeTime\":\"\\d*\"");
-        public static final Pattern timePattern = Pattern.compile("\"time\":\"\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}\"");
 
         @Before
         public void setUp() {
+            mockHttpServletContext = new MockServletContext();
             mockHttpServletRequest= new MockHttpServletRequest();
             mockHttpServletResponse = new MockHttpServletResponse();
             mockPageContext= new MockPageContext(mockHttpServletContext, mockHttpServletRequest, mockHttpServletResponse);
@@ -75,11 +71,7 @@ public class WebAppenderTagTest {
             tag.doStartTag();
             //then
             String responseAsString = mockHttpServletResponse.getContentAsString();
-            responseAsString = lineNumberPattern.matcher(responseAsString).replaceFirst("\"lineNumber\":\"1\"");
-            responseAsString = timestampPattern.matcher(responseAsString).replaceFirst("\"timestamp\":1");
-            responseAsString = relativeTimePattern.matcher(responseAsString).replaceFirst("\"relativeTime\":\"1\"");
-            responseAsString = timePattern.matcher(responseAsString).replaceFirst("\"time\":\"1\"");
-            assertThat(responseAsString).isEqualTo("<script type=\"text/javascript\">console.debug({\"message\":\"test\",\"template\":\"test\",\"args\":[],\"level\":{\"levelInt\":10000,\"levelStr\":\"DEBUG\"},\"timestamp\":1,\"relativeTime\":\"1\",\"threadName\":\"main\",\"classOfCaller\":\"com.clescot.webappender.tag.WebAppenderTagTest$TestDoStartTag\",\"methodOfCaller\":\"test_one_logs\",\"mdc\":\"\",\"throwableProxy\":\"\",\"contextName\":\"default\",\"callerData\":\"Caller+0\\t at com.clescot.webappender.tag.WebAppenderTagTest$TestDoStartTag.test_one_logs(WebAppenderTagTest.java:72)\\nCaller+1\\t at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\\nCaller+2\\t at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\\nCaller+3\\t at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\nCaller+4\\t at java.lang.reflect.Method.invoke(Method.java:601)\\n\",\"marker\":\"\",\"time\":\"1\",\"name\":\"com.clescot.webappender.tag.WebAppenderTagTest$TestDoStartTag\",\"pathName\":\"WebAppenderTagTest.java\",\"lineNumber\":\"1\"});</script>\n");
+            assertThat(responseAsString).startsWith("<script type=\"text/javascript\">console.debug({\"message\":\"test\",\"template\":\"test\",\"args\":[],\"level\":{\"levelInt\":10000,\"levelStr\":\"DEBUG\"}");
 
         }
 
