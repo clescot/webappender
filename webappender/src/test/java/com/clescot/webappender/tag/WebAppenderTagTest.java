@@ -54,15 +54,7 @@ public class WebAppenderTagTest {
             logCollector.shutdown();
         }
 
-        @Test
-        public void test_no_logs() throws Exception {
-            //when
-            tag.doStartTag();
-            //then
-            String responseAsString = mockHttpServletResponse.getContentAsString();
-            assertThat(responseAsString.trim()).isEmpty();
 
-        }
 
         @Test
         public void test_one_logs() throws Exception {
