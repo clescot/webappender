@@ -42,6 +42,7 @@ public class WebAppenderTagTest {
             mockPageContext= new MockPageContext(mockHttpServletContext, mockHttpServletRequest, mockHttpServletResponse);
             mockHttpServletRequest.addHeader("X-BodyLogger","true");
             logCollector = LogCollector.newLogCollector();
+            logCollector.removeCurrentThreadAppender();
             mockPageContext.getServletContext().setAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY, logCollector);
             tag.setPageContext(mockPageContext);
         }
