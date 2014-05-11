@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.clescot</groupId>
     <artifactId>webappender-parent</artifactId>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:git@github.com:clescot/webappender.git</connection>
         <developerConnection>scm:git:git@github.com:clescot/webappender.git</developerConnection>
         <url>https://github.com/clescot/webappender</url>
-      <tag>webappender-parent-1.3</tag>
+      <tag>HEAD</tag>
   </scm>
     <distributionManagement>
         <repository>
