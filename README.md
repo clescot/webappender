@@ -146,7 +146,7 @@ one filter configuration:
 two filters configuration :
 `X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL,X-wa-level-filter=LEVEL:DEBUG;MATCH:ACCEPT;MISMATCH:DENY`
 
-##### Customize logs with an EvaluatorFilter and aJaninoEventEvaluator
+##### Customize logs with an EvaluatorFilter and a JaninoEventEvaluator
 Logback permits to add some [EvaluatorFilter](http://logback.qos.ch/manual/filters.html#evalutatorFilter).
 webappender support an EvaluatorFilter bounded with a [JaninoEventEvaluator] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator).
 To use it, add this custom header :
@@ -154,6 +154,16 @@ To use it, add this custom header :
 
 For example, you can add this custom header with this related expresion to display only message containing the "3" character :
 `X-wa-janino-filter=MATCH:ACCEPT;MISMATCH:DENY;expression:return formattedMessage.contains("3")`
+
+You also need to add the janino dependency in your pom.xml file :
+
+```xml
+	<dependency>
+	  <groupId>org.codehaus.janino</groupId>
+	    <artifactId>janino</artifactId>
+	    <version>2.6.1</version>
+	</dependency>
+	```
 
 More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
 
