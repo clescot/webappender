@@ -7,9 +7,7 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.filter.Filters;
-import com.clescot.webappender.formatter.Formatter;
-import com.clescot.webappender.formatter.Formatters;
-import com.clescot.webappender.formatter.Row;
+import com.clescot.webappender.formatter.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -31,7 +29,6 @@ public class LogCollector {
     private boolean globalUseConverters = true;
 
     private static Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
-
 
 
     private LogCollector() {
@@ -105,7 +102,7 @@ public class LogCollector {
         //by default, useCollectors is true. init parameter can override it, and request too
         //request is stronger than init-param, than default configuration
         boolean useConvertersHeader = true;
-        if (headers!=null&&!headers.isEmpty()) {
+        if (headers != null && !headers.isEmpty()) {
             useConvertersHeader = Boolean.parseBoolean(headers.get(0));
         }
         if (!useConvertersHeader || (!globalUseConverters)) {
@@ -114,30 +111,40 @@ public class LogCollector {
     }
 
 
-
     public String serializeLogs(HttpBridge httpBridge) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
         String result = null;
-
+        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit"));
+        int limit = 0;
+        if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
+            limit = Integer.parseInt(optionalLimit.get().get(0));
+        }
         Optional<? extends Formatter> optional = Formatters.findFormatter(httpBridge.getHeadersAsMap());
         if (optional.isPresent()) {
             try {
                 Formatter formatter = optional.get();
-                if(Formatter.Location.HEADER.equals(formatter.getLocation())){
-                    Map<String, String> serializedRows = formatter.serializeRows(logs);
+                if (formatter instanceof HeaderFormatter) {
+                    Map<String, String> serializedRows = ((HeaderFormatter)formatter).serializeRows(logs);
+                    int size = 0;
                     for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
-                        httpBridge.addHeader(entry.getKey(), entry.getValue());
+                        String value = entry.getValue();
+                        size += value.length();
+                        if (size <= limit || limit == 0) {
+                            httpBridge.addHeader(entry.getKey(), value);
+                        } else {
+                            break;
+                        }
                     }
                     result = "serialization into headers done";
-                }else{
-                    result= formatter.getJSON(logs);
+                } else {
+                    result = ((BodyFormatter)formatter).getJSON(logs);
                 }
 
             } catch (JsonProcessingException e) {
                 LOGGER.warn("webAppender serialization error", e);
             }
-        }else{
+        } else {
             result = "";//when no serialization is done, we return an empty string
         }
         return result;

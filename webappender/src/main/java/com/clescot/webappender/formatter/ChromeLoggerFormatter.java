@@ -7,7 +7,7 @@ import org.codehaus.jettison.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
-public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
+public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> implements HeaderFormatter{
 
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
     public static final String REQUEST_HEADER_IDENTIFIER = "X-ChromeLogger";
@@ -92,13 +92,6 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> {
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, encodeBase64(getJSON(rows)));
         return rowsSerialized;
     }
-
-    @Override
-    public Location getLocation() {
-        return Location.HEADER;
-    }
-
-
 
 
 }

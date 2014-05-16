@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Formatters {
 
-    private final static List<? extends Formatter> FORMATTERS = Arrays.asList(new FireLoggerFormatter(), new ChromeLoggerFormatter(),new BodyFormatter());
+    private final static List<? extends Formatter> FORMATTERS = Arrays.asList(new FireLoggerFormatter(), new ChromeLoggerFormatter(),new ConsoleFormatter());
 
     public static Optional<? extends Formatter> findFormatter(final Map<String, List<String>> headers) {
         return Iterables.tryFind(FORMATTERS, new Predicate<Formatter>() {

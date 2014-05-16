@@ -12,7 +12,7 @@ import java.util.*;
  * @see <a href="https://github.com/binaryage/firelogger/wiki">fireLogger wiki</a>
  * @see <a href="http://firelogger-php-tests.binaryage.com/basic.php">fireLogger test page</a>
  */
-public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
+public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implements HeaderFormatter{
     private static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
     private static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
     private static final String ERRORS = "errors";
@@ -46,11 +46,6 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> {
     @Override
     protected String getRequestHeaderIdentifier() {
         return REQUEST_HEADER_IDENTIFIER;
-    }
-
-    @Override
-    public Location getLocation() {
-        return Location.HEADER;
     }
 
     @Override

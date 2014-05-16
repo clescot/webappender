@@ -50,7 +50,6 @@ abstract class AbstractFormatter<R> implements Formatter {
 
     protected abstract String getRequestHeaderIdentifier();
 
-    public abstract Location getLocation();
 
     protected abstract R newFormatterRow(Row row);
 

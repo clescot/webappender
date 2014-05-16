@@ -201,7 +201,7 @@ Launch your firefox browser, hit the F12 touch to activate firebug, and click on
  ![a demo webapp with the firelogger tab open](webappender.png)
 
 
-### Test the bodyFormatter in your browser
+### Test the consoleFormatter in your browser
 
 Go to [the webapp demo url](http://127.0.0.1:8080/webappender-war-example/test), and inspect the console tab (hit F12).
 
