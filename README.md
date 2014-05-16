@@ -163,7 +163,8 @@ You also need to add the janino dependency in your pom.xml file :
 	    <artifactId>janino</artifactId>
 	    <version>2.6.1</version>
 	</dependency>
-	```
+	
+```
 
 More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
 
