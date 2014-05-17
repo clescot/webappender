@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import java.util.Map;
 
-public interface HeaderFormatter {
+public abstract class HeaderFormatter<R> extends AbstractFormatter<R,Map<String, String>>{
 
-    Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException;
+    public abstract Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException;
 }
