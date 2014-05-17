@@ -126,15 +126,9 @@ public class LogCollector {
                 Formatter formatter = optional.get();
                 if (formatter instanceof HeaderFormatter) {
                     Map<String, String> serializedRows = ((HeaderFormatter)formatter).serializeRows(logs);
-                    int size = 0;
                     for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                         String value = entry.getValue();
-                        size += value.length();
-                        if (size <= limit || limit == 0) {
                             httpBridge.addHeader(entry.getKey(), value);
-                        } else {
-                            break;
-                        }
                     }
                     result = "serialization into headers done";
                 } else {
