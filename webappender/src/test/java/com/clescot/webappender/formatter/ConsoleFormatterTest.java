@@ -30,7 +30,7 @@ public class ConsoleFormatterTest {
             ConsoleFormatter consoleFormatter = new ConsoleFormatter();
 
             //when
-            String json = consoleFormatter.getJSON(Lists.<Row>newArrayList());
+            String json = consoleFormatter.serializeRows(Lists.<Row>newArrayList());
 
             //then
             assertThat(json).isEmpty();
@@ -42,7 +42,7 @@ public class ConsoleFormatterTest {
             ConsoleFormatter consoleFormatter = new ConsoleFormatter();
 
             //when
-            String json = consoleFormatter.getJSON(null);
+            String json = consoleFormatter.serializeRows(null);
 
             //then
             assertThat(json).isEmpty();
@@ -57,7 +57,7 @@ public class ConsoleFormatterTest {
             Row row = new Row(event);
             rows.add(row);
             //when
-            String json = consoleFormatter.getJSON(rows);
+            String json = consoleFormatter.serializeRows(rows);
 
             //then
             assertThat(json).isEqualTo("<script type=\"text/javascript\"></script>");
@@ -73,7 +73,7 @@ public class ConsoleFormatterTest {
             Row row = new Row(event);
             rows.add(row);
             //when
-            String json = consoleFormatter.getJSON(rows);
+            String json = consoleFormatter.serializeRows(rows);
 
             Matcher matcher = timestampPattern.matcher(json);
             String replacedString = matcher.replaceFirst("\"timestamp\":1398600625252");
