@@ -7,7 +7,7 @@ import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsoleFormatter extends AbstractFormatter<Row,String>  {
+public class ConsoleFormatter extends BodyFormatter<Row>  {
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
     public static final String RESPONSE_BODY_LOGGER_HEADER = "Bodylogger-";
