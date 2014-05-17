@@ -12,7 +12,7 @@ import java.util.*;
  * @see <a href="https://github.com/binaryage/firelogger/wiki">fireLogger wiki</a>
  * @see <a href="http://firelogger-php-tests.binaryage.com/basic.php">fireLogger test page</a>
  */
-public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implements HeaderFormatter{
+public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow,Map<String, String>> {
     private static final int FIRE_LOGGER_CHUNK_LENGTH = 76;
     private static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
     private static final String ERRORS = "errors";
@@ -23,7 +23,6 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implem
     public static final String FIRELOGGER_RESPONSE_HEADER_PREFIX = "Firelogger-";
 
 
-    @Override
     public String getJSON(List<Row> rows) {
         Map<String, Object> globalStructure = Maps.newHashMap();
 

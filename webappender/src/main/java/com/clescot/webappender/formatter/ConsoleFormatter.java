@@ -7,7 +7,7 @@ import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsoleFormatter extends AbstractFormatter<Row> implements BodyFormatter {
+public class ConsoleFormatter extends AbstractFormatter<Row,String>  {
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
     public static final String RESPONSE_BODY_LOGGER_HEADER = "Bodylogger-";
@@ -15,7 +15,7 @@ public class ConsoleFormatter extends AbstractFormatter<Row> implements BodyForm
     private static final String SCRIPT_END = "</script>";
 
     @Override
-    public String getJSON(List<Row> rows) {
+    public String serializeRows(List<Row> rows) {
         StringBuilder result = new StringBuilder();
         if(rows !=null && !rows.isEmpty()) {
             List<Row> formattedRows = getFormatterRows(rows);

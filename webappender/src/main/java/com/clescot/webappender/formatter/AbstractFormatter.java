@@ -12,14 +12,14 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-abstract class AbstractFormatter<R> implements Formatter {
+abstract class AbstractFormatter<R,T> implements Formatter<T> {
 
     private static final boolean IS_NOT_CHUNKED = false;
      private static final String UTF_8 = "UTF-8";
      final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public abstract String getJSON(List<Row> rows);
+
 
 
     public String encodeBase64(String rowsInJSON) throws JsonProcessingException {

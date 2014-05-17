@@ -7,7 +7,7 @@ import org.codehaus.jettison.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
-public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> implements HeaderFormatter{
+public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow,Map<String, String>> {
 
     public final static String RESPONSE_CHROME_LOGGER_HEADER = "X-ChromeLogger-Data";
     public static final String REQUEST_HEADER_IDENTIFIER = "X-ChromeLogger";
