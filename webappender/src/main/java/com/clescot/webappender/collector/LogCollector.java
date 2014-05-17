@@ -138,7 +138,7 @@ public class LogCollector {
                     }
                     result = "serialization into headers done";
                 } else {
-                    result = ((BodyFormatter)formatter).getJSON(logs);
+                    result = ((BodyFormatter)formatter).serializeRows(logs);
                 }
 
             } catch (JsonProcessingException e) {
