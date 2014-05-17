@@ -8,7 +8,7 @@
     <uri>https://github.com/clescot/webappender-tag</uri>
     <tag>
         <name>webappender</name>
-        <tag-class>com.clescot.webappender.tag.WebAppenderTag</tag-class>
+        <tag-class>com.clescot.webappender.jee.WebAppenderTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Tag which serialize logs in JSON format and output them with console.dir.

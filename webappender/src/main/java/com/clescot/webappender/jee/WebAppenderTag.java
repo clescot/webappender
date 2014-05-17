@@ -1,9 +1,7 @@
-package com.clescot.webappender.tag;
+package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
-import com.clescot.webappender.jee.JEEHttpBridge;
-import com.clescot.webappender.jee.WebAppenderFilter;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,6 +3,7 @@ package com.clescot.webappender.tag;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.Row;
 import com.clescot.webappender.jee.WebAppenderFilter;
+import com.clescot.webappender.jee.WebAppenderTag;
 import com.google.common.collect.Lists;
 import org.junit.After;
 import org.junit.Before;
