@@ -12,12 +12,11 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-abstract class AbstractFormatter<R,T> implements Formatter<T> {
+abstract class AbstractFormatter<R> implements Formatter {
 
     private static final boolean IS_NOT_CHUNKED = false;
      private static final String UTF_8 = "UTF-8";
      final ObjectMapper objectMapper = new ObjectMapper();
-
 
 
 
@@ -38,7 +37,6 @@ abstract class AbstractFormatter<R,T> implements Formatter<T> {
     }
 
 
-    @Override
     public boolean isActive(Map<String, List<String>> headers) {
         return Iterables.tryFind(headers.keySet(), new Predicate<String>() {
             @Override

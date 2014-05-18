@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.io.IOException;
 
 public class WebAppenderTag extends TagSupport {
 
@@ -30,14 +28,8 @@ public class WebAppenderTag extends TagSupport {
             HttpBridge httpBridge = new JEEHttpBridge(request, response);
 
             LogCollector collector = optionalLogCollector.get();
-            String json = collector.serializeLogs(httpBridge, optionalFormatter.get());
-            JspWriter out = pageContext.getOut();
+            collector.serializeLogs(httpBridge, optionalFormatter.get());
 
-            try {
-                out.println(json);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
         }
 
         return SKIP_BODY;

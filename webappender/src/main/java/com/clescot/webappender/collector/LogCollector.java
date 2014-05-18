@@ -7,9 +7,7 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.filter.Filters;
-import com.clescot.webappender.formatter.BodyFormatter;
 import com.clescot.webappender.formatter.Formatter;
-import com.clescot.webappender.formatter.HeaderFormatter;
 import com.clescot.webappender.formatter.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Lists;
@@ -18,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +55,6 @@ public class LogCollector {
     }
 
 
-
     /**
      * called each time a new Thread is created.
      *
@@ -91,10 +89,11 @@ public class LogCollector {
 
     }
 
-    public void checkUseConverters(Map<String, List<String>> headers){
+    public void checkUseConverters(Map<String, List<String>> headers) {
         List<String> useConverters = headers.get(X_VERBOSE_LOGS);
         checkUseConverters(useConverters);
     }
+
     private void checkUseConverters(List<String> headers) {
 
         //by default, useCollectors is true. init parameter can override it, and request too
@@ -109,27 +108,24 @@ public class LogCollector {
     }
 
 
-    public String serializeLogs(HttpBridge httpBridge, Formatter formatter) {
+    public LinkedHashMap serializeLogs(HttpBridge httpBridge, Formatter formatter) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
-        String result = null;
-            try {
-                if (formatter instanceof HeaderFormatter) {
-                    Map<String, String> serializedRows = ((HeaderFormatter) formatter).formatRows(logs);
-                    for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
-                        String value = entry.getValue();
-                            httpBridge.serializeLogs(entry.getKey(), value);
-                    }
-                    result = "serialization into headers done";
-                } else {
-                    result = ((BodyFormatter) formatter).formatRows(logs);
-                }
-
-            } catch (JsonProcessingException e) {
-                LOGGER.warn("webAppender serialization error", e);
+        LinkedHashMap<String, String> serializedRows = null;
+        try {
+            serializedRows = formatter.formatRows(logs);
+            httpBridge.start();
+            for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
+                String value = entry.getValue();
+                httpBridge.serializeLogs(entry.getKey(), value);
             }
+            httpBridge.finish();
 
-        return result;
+        } catch (JsonProcessingException e) {
+            LOGGER.warn("webAppender serialization error", e);
+        }
+
+        return serializedRows;
     }
 
 

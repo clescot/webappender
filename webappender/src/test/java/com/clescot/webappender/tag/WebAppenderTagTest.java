@@ -75,7 +75,7 @@ public class WebAppenderTagTest {
             tag.doStartTag();
             //then
             String responseAsString = mockHttpServletResponse.getContentAsString();
-            assertThat(responseAsString).startsWith("<script type=\"text/javascript\">console.");
+            assertThat(responseAsString).isEmpty();
 
         }
 

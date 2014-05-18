@@ -3,40 +3,43 @@ package com.clescot.webappender.formatter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ConsoleFormatter extends BodyFormatter<Row>  {
+public class ConsoleFormatter extends AbstractFormatter<Row>  implements BodyFormatter{
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
-    public static final String RESPONSE_BODY_LOGGER_HEADER = "Bodylogger-";
-    private static final String SCRIPT_TYPE_TEXT_JAVASCRIPT_START = "<script type=\"text/javascript\">";
-    private static final String SCRIPT_END = "</script>";
+
+
 
     @Override
-    public String formatRows(List<Row> rows) {
-        StringBuilder result = new StringBuilder();
+    public LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
+        LinkedHashMap<String, String> result = Maps.newLinkedHashMap();
         if(rows !=null && !rows.isEmpty()) {
             List<Row> formattedRows = getFormatterRows(rows);
             try {
-                result.append(SCRIPT_TYPE_TEXT_JAVASCRIPT_START);
+
                 for (Row row : formattedRows) {
                     if(row.getLevel().isGreaterOrEqual(ch.qos.logback.classic.Level.DEBUG)) {
+                        StringBuilder rowDecorated = new StringBuilder();
                         String rowInJSON = objectMapper.writeValueAsString(row);
-                        result.append("console.");
-                        result.append(Level.getConsoleLevel(row));
-                        result.append("(");
-                        result.append(rowInJSON);
-                        result.append(");");
+                        rowDecorated.append("console.");
+                        rowDecorated.append(Level.getConsoleLevel(row));
+                        rowDecorated.append("(");
+                        rowDecorated.append(rowInJSON);
+                        rowDecorated.append(");");
+                        result.put(rowDecorated.toString(),rowDecorated.toString());
                     }
                 }
-                result.append(SCRIPT_END);
+
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
-        return result.toString();
+        return result;
     }
 
     protected enum Level{
