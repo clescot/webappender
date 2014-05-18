@@ -56,8 +56,8 @@ public class FireLoggerFormatter extends HeaderFormatter<FireLoggerRow> {
 
 
     @Override
-    public Map<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
-        HashMap<String, String> headers = Maps.newHashMap();
+    public LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
+        LinkedHashMap<String, String> headers = Maps.newLinkedHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
         String rowsAsJSON = encodeBase64(getJSON(rows));
         List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);

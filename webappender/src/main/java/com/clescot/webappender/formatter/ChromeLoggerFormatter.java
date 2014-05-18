@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ChromeLoggerFormatter extends HeaderFormatter<ChromeRow> {
 
@@ -87,8 +87,8 @@ public class ChromeLoggerFormatter extends HeaderFormatter<ChromeRow> {
 
 
     @Override
-    public Map<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
-        Map<String,String> rowsSerialized = Maps.newHashMap();
+    public LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
+        LinkedHashMap<String,String> rowsSerialized = Maps.newLinkedHashMap();
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, encodeBase64(getJSON(rows)));
         return rowsSerialized;
     }
