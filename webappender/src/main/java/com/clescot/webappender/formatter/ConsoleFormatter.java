@@ -31,7 +31,7 @@ public class ConsoleFormatter extends AbstractFormatter<Row>  implements BodyFor
                         rowDecorated.append("(");
                         rowDecorated.append(rowInJSON);
                         rowDecorated.append(");");
-                        result.put(rowDecorated.toString(),rowDecorated.toString());
+                        result.put(rowDecorated.toString(),"");
                     }
                 }
 

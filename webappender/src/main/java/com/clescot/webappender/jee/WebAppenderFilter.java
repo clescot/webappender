@@ -1,6 +1,7 @@
 package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
+import com.clescot.webappender.HttpBridgeLimitDecorator;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.BodyFormatter;
 import com.clescot.webappender.formatter.Formatter;
@@ -47,7 +48,7 @@ public class WebAppenderFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        HttpBridge httpBridge = new JEEHttpBridge(httpServletRequest, httpServletResponse);
+        HttpBridge httpBridge = new HttpBridgeLimitDecorator(new JEEHttpBridge(httpServletRequest, httpServletResponse));
         Map<String, List<String>> headers = httpBridge.getHeadersAsMap();
 
         if (active) {
@@ -60,11 +61,6 @@ public class WebAppenderFilter implements Filter {
         if (active) {
             Optional<? extends Formatter> optional = formatters.findFormatter(httpBridge.getHeadersAsMap());
             if (optional.isPresent()&&  optional.get() instanceof HeaderFormatter) {
-                Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit"));
-                int limit = 0;
-                if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
-                    limit = Integer.parseInt(optionalLimit.get().get(0));
-                }
                 logCollector.serializeLogs(httpBridge, optional.get());
             }else  if (optional.isPresent()&&  optional.get() instanceof BodyFormatter) {
                 httpServletRequest.setAttribute(WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY,optional.get());

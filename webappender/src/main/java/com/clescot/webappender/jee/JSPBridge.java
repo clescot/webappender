@@ -48,7 +48,7 @@ public class JSPBridge extends JEEHttpBridge {
     }
 
     @Override
-    public void serializeLogs(String key, String value) {
-        json.append(key);
+    public boolean serializeLogs(String key, String value) {
+        json.append(key);return true;
     }
 }

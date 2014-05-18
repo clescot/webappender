@@ -7,6 +7,6 @@ public interface HttpBridge {
 
     void start();
     void finish();
-    void serializeLogs(String key, String value);
+    boolean serializeLogs(String key, String value);
     Map<String, List<String>> getHeadersAsMap();
 }

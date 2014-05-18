@@ -117,7 +117,10 @@ public class LogCollector {
             httpBridge.start();
             for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                 String value = entry.getValue();
-                httpBridge.serializeLogs(entry.getKey(), value);
+                boolean again = httpBridge.serializeLogs(entry.getKey(), value);
+                if(!again){
+                    break;
+                }
             }
             httpBridge.finish();
 

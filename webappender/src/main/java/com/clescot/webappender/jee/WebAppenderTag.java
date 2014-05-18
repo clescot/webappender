@@ -1,6 +1,7 @@
 package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
+import com.clescot.webappender.HttpBridgeLimitDecorator;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.Formatter;
 import com.google.common.base.Optional;
@@ -21,7 +22,7 @@ public class WebAppenderTag extends TagSupport {
         Optional<LogCollector> optionalLogCollector = Optional.fromNullable((LogCollector) pageContext.getServletContext().getAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY));
         Optional<Formatter> optionalFormatter = Optional.fromNullable((Formatter) pageContext.getRequest().getAttribute(WebAppenderFilter.WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY));
         if (optionalLogCollector.isPresent() && optionalFormatter.isPresent()) {
-            HttpBridge httpBridge = new JSPBridge(pageContext);
+            HttpBridge httpBridge = new HttpBridgeLimitDecorator(new JSPBridge(pageContext));
             LogCollector collector = optionalLogCollector.get();
             collector.serializeLogs(httpBridge, optionalFormatter.get());
 
