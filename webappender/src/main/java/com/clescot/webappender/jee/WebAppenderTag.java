@@ -7,8 +7,6 @@ import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -23,10 +21,7 @@ public class WebAppenderTag extends TagSupport {
         Optional<LogCollector> optionalLogCollector = Optional.fromNullable((LogCollector) pageContext.getServletContext().getAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY));
         Optional<Formatter> optionalFormatter = Optional.fromNullable((Formatter) pageContext.getRequest().getAttribute(WebAppenderFilter.WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY));
         if (optionalLogCollector.isPresent() && optionalFormatter.isPresent()) {
-            HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-            HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
-            HttpBridge httpBridge = new JEEHttpBridge(request, response);
-
+            HttpBridge httpBridge = new JSPBridge(pageContext);
             LogCollector collector = optionalLogCollector.get();
             collector.serializeLogs(httpBridge, optionalFormatter.get());
 

@@ -49,7 +49,6 @@ public class JSPBridge extends JEEHttpBridge {
 
     @Override
     public void serializeLogs(String key, String value) {
-        LogCollector collector = optionalLogCollector.get();
-        json.append(collector.serializeLogs(this, optionalFormatter.get()));
+        json.append(key);
     }
 }
