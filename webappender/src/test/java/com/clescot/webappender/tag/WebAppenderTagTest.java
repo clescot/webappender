@@ -76,7 +76,7 @@ public class WebAppenderTagTest {
             //then
             String responseAsString = mockHttpServletResponse.getContentAsString();
             assertThat(responseAsString).isNotEmpty();
-            assertThat(responseAsString).startsWith("<script type=\"text/javascript\">console.debug({\"message\":\"test\",\"template\":\"test\",\"args\":[],\"level\":{\"levelInt\":10000,\"levelStr\":\"DEBUG\"}");
+            assertThat(responseAsString).startsWith("<script type=\"text/javascript\">console.");
 
         }
 
