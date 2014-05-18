@@ -2,18 +2,14 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 public class JEEHttpBridge implements HttpBridge {
-    public static final String REQUEST_SCOPE_IDENTIFIER = "wa-logs";
     private HttpServletRequest httpServletRequest;
     private HttpServletResponse httpServletResponse;
-    private static Logger LOGGER = LoggerFactory.getLogger(JEEHttpBridge.class);
 
     public JEEHttpBridge(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
         this.httpServletRequest = httpServletRequest;
