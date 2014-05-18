@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,13 @@ public class LogCollector {
     private boolean globalUseConverters = true;
 
     private static Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
+    private Filters filtersBuilder;
+    private Formatters formatters;
 
-
-    private LogCollector() {
+    @Inject
+    public LogCollector(Filters filtersBuilder, Formatters formatters) {
+        this.filtersBuilder = filtersBuilder;
+        this.formatters = formatters;
         rootLogger = loggerContext.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         siftingAppender = new FilterableSiftingAppender();
         siftingAppender.setName(SIFTING_APPENDER_KEY);
@@ -50,14 +55,7 @@ public class LogCollector {
         rootLogger.detachAppender(siftingAppender);
     }
 
-    /**
-     * called one time, at init,  in the application lifeCycle.
-     *
-     * @return
-     */
-    public static LogCollector newLogCollector() {
-        return new LogCollector();
-    }
+
 
     /**
      * called each time a new Thread is created.
@@ -86,7 +84,7 @@ public class LogCollector {
 
     public void addFiltersToChildAppender(Map<String, List<String>> headers) {
 
-        Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
+        Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(headers);
         for (Filter<ILoggingEvent> filter : filters) {
             getOrCreateChildAppender().addFilter(filter);
         }
@@ -120,7 +118,7 @@ public class LogCollector {
         if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
             limit = Integer.parseInt(optionalLimit.get().get(0));
         }
-        Optional<? extends Formatter> optional = Formatters.findFormatter(httpBridge.getHeadersAsMap());
+        Optional<? extends Formatter> optional = formatters.findFormatter(httpBridge.getHeadersAsMap());
         if (optional.isPresent()) {
             try {
                 Formatter formatter = optional.get();

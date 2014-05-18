@@ -9,22 +9,26 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.util.Arrays;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class Filters {
 
-    private static final  List<FilterBuilder> FILTER_BUILDERS = Arrays.asList(new ThresholdFilterBuilder(), new LevelFilterBuilder(),new JaninoEventEvaluatorBuilder());
+    private List<FilterBuilder> filterBuilders;
 
-    public static Collection<? extends Filter<ILoggingEvent>> buildFilters(final Map<String, List<String>> headers){
+    @Inject
+    public Filters(List<FilterBuilder> filterBuilders) {
+        this.filterBuilders = filterBuilders;
+    }
+
+    public  Collection<? extends Filter<ILoggingEvent>> buildFilters(final Map<String, List<String>> headers){
         Optional<Map<String, List<String>>> optionalHeaders = Optional.fromNullable(headers);
         List<Filter<ILoggingEvent>> filters = Lists.newArrayList();
         if(optionalHeaders.isPresent()){
             final Map<String, List<String>> headersWithInsensitiveKey = Maps.newTreeMap(String.CASE_INSENSITIVE_ORDER);
             headersWithInsensitiveKey.putAll(optionalHeaders.get());
-
 
             Function<FilterBuilder, List<? extends Filter<ILoggingEvent>>> function = new Function<FilterBuilder, List<? extends Filter<ILoggingEvent>>>() {
                 @Override
@@ -35,7 +39,7 @@ public class Filters {
             };
 
 
-            filters= Lists.newArrayList(Iterables.concat(Collections2.transform(FILTER_BUILDERS, function)));
+            filters= Lists.newArrayList(Iterables.concat(Collections2.transform(filterBuilders, function)));
         }
 
         return filters;

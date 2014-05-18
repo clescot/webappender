@@ -2,6 +2,7 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
+import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebFilter(filterName="webAppender",urlPatterns = "/*",description = "output your logback logs in your favorite browser")
+@WebFilter(filterName = "webAppender", urlPatterns = "/*", description = "output your logback logs in your favorite browser")
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
     public static final String WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY = "webappender.logcollector";
@@ -28,12 +29,14 @@ public class WebAppenderFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         if (Boolean.parseBoolean(System.getProperty(SYSTEM_PROPERTY_KEY))) {
-            logCollector = setActive(true);
+            setActive(true);
+            Injector injector = (Injector) filterConfig.getServletContext().getAttribute(Injector.class.getName());
+            logCollector = injector.getInstance(LogCollector.class);
             String initParameter = filterConfig.getInitParameter(LogCollector.X_VERBOSE_LOGS);
             logCollector.setVerboseLogs(initParameter);
-            filterConfig.getServletContext().setAttribute(WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY,logCollector);
+            filterConfig.getServletContext().setAttribute(WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY, logCollector);
         }
-   }
+    }
 
 
     @Override
@@ -56,19 +59,16 @@ public class WebAppenderFilter implements Filter {
     }
 
 
-
-
-
-
-
     @Override
     public void destroy() {
-        logCollector.shutdown();
+        if (active) {
+            logCollector.shutdown();
+        }
     }
 
-    LogCollector setActive(boolean active) {
+    private void setActive(boolean active) {
         this.active = active;
-        return  LogCollector.newLogCollector();
+
     }
 
 }

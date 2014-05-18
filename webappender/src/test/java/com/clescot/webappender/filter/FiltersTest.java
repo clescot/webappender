@@ -7,6 +7,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.EvaluatorFilter;
 import ch.qos.logback.core.filter.Filter;
 import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -22,11 +26,22 @@ import static org.fest.assertions.Assertions.assertThat;
 @RunWith(Enclosed.class)
 public class FiltersTest {
 
-    public static class EmptyTest{
+    @Ignore
+    public static class AbstractTest{
+        protected Filters filtersBuilder;
+
+        @Before
+        public void setUp(){
+            Injector injector = Guice.createInjector(new FiltersModule());
+            filtersBuilder = injector.getInstance(Filters.class);
+        }
+    }
+
+    public static class EmptyTest extends AbstractTest{
     @Test
     public void testGetFilters_without_any_headers() throws Exception {
         //when
-        Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(
+        Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(
                 Maps.<String, List<String>>newHashMap());
 
         //then
@@ -34,7 +49,7 @@ public class FiltersTest {
     }
     }
 
-    public static class JaninoTest{
+    public static class JaninoTest extends AbstractTest{
         @Test
         public void testGetFilters_with_janinoEventEvaluator_header() throws Exception {
             //given
@@ -42,7 +57,7 @@ public class FiltersTest {
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER, Arrays.asList("expression:return message.contains(\"199\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -59,7 +74,7 @@ public class FiltersTest {
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), Arrays.asList("expression:return message.contains(\"199\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -70,7 +85,7 @@ public class FiltersTest {
         }
     }
 
-    public static class LevelFilterTest{
+    public static class LevelFilterTest extends AbstractTest{
         @Test
         public void testGetFilters_with_level_filter_header() throws Exception {
             //given
@@ -78,7 +93,7 @@ public class FiltersTest {
             headers.put(LevelFilterBuilder.X_LEVEL_FILTER, Arrays.asList("\"MATCH:ACCEPT;MISMATCH:NEUTRAL;LEVEL:INFO\""));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);
@@ -86,7 +101,7 @@ public class FiltersTest {
             assertThat(filter).isInstanceOf(LevelFilter.class);
         }
     }
-    public static class ThresHoldTest{
+    public static class ThresHoldTest extends AbstractTest{
         @Test
         public void testGetFilters_with_janinoEventEvaluator_header() throws Exception {
             //given
@@ -94,7 +109,7 @@ public class FiltersTest {
             headers.put(ThresholdFilterBuilder.X_THRESHOLD_FILTER, Arrays.asList("WARN"));
 
             //when
-            Collection<? extends Filter<ILoggingEvent>> filters = Filters.buildFilters(headers);
+            Collection<? extends Filter<ILoggingEvent>> filters = filtersBuilder.buildFilters(headers);
 
             //then
             assertThat(filters).hasSize(1);

@@ -1,10 +1,14 @@
 package com.clescot.webappender.tag;
 
 import com.clescot.webappender.collector.LogCollector;
+import com.clescot.webappender.filter.FiltersModule;
+import com.clescot.webappender.formatter.FormattersModule;
 import com.clescot.webappender.formatter.Row;
 import com.clescot.webappender.jee.WebAppenderFilter;
 import com.clescot.webappender.jee.WebAppenderTag;
 import com.google.common.collect.Lists;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +46,8 @@ public class WebAppenderTagTest {
             mockHttpServletResponse = new MockHttpServletResponse();
             mockPageContext= new MockPageContext(mockHttpServletContext, mockHttpServletRequest, mockHttpServletResponse);
             mockHttpServletRequest.addHeader("X-BodyLogger","true");
-            logCollector = LogCollector.newLogCollector();
+            Injector injector = Guice.createInjector(new FiltersModule(), new FormattersModule());
+            logCollector = injector.getInstance(LogCollector.class);
             logCollector.removeCurrentThreadAppender();
             logCollector.shutdown();
             mockPageContext.getServletContext().setAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY, logCollector);

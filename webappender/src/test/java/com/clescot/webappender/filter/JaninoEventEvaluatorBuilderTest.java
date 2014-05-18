@@ -1,11 +1,5 @@
 package com.clescot.webappender.filter;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.boolex.JaninoEventEvaluator;
@@ -19,16 +13,33 @@ import ch.qos.logback.core.spi.FilterReply;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
 public class JaninoEventEvaluatorBuilderTest {
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(JaninoEventEvaluatorBuilderTest.class);
 
     public static class Test_handleCustomValue {
+        private Filters filtersBuilder;
+
+        @Before
+        public void prepareTest(){
+            Injector myInjector = Guice.createInjector(new FiltersModule());
+            filtersBuilder = myInjector.getInstance(Filters.class);
+        }
+
         @Test
         public void test_empty_headers() throws Exception {
             JaninoEventEvaluatorBuilder evaluatorBuilder = new JaninoEventEvaluatorBuilder();
@@ -100,7 +111,7 @@ public class JaninoEventEvaluatorBuilderTest {
             ArrayList<String> values = Lists.newArrayList();
             values.add("MATCH:ACCEPT;MISMATCH:DENY;expression:return message.contains(\"billing\");");
             headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), values);
-            List<Filter<ILoggingEvent>> filters = Lists.newArrayList(Filters.buildFilters(headers));
+            List<Filter<ILoggingEvent>> filters = Lists.newArrayList(filtersBuilder.buildFilters(headers));
             ILoggingEvent event = new LoggingEvent("com.clescot.webappender.filter",LOGGER, Level.INFO,"message containing billing",null,null);
             final Filter<ILoggingEvent> filter = filters.get(0);
             FilterAttachableImpl filterAttachable = new FilterAttachableImpl();
@@ -124,7 +135,7 @@ public class JaninoEventEvaluatorBuilderTest {
                    ArrayList<String> values = Lists.newArrayList();
                    values.add("MATCH:ACCEPT;MISMATCH:DENY;expression:return message.contains(\"billing\");");
                    headers.put(JaninoEventEvaluatorBuilder.X_JANINO_FILTER.toLowerCase(), values);
-                   List<Filter<ILoggingEvent>> filters = Lists.newArrayList(Filters.buildFilters(headers));
+                   List<Filter<ILoggingEvent>> filters = Lists.newArrayList(filtersBuilder.buildFilters(headers));
                    ILoggingEvent event = new LoggingEvent("com.clescot.webappender.filter",LOGGER, Level.INFO,"message containing nothing",null,null);
                    final Filter<ILoggingEvent> filter = filters.get(0);
                    FilterAttachableImpl filterAttachable = new FilterAttachableImpl();
