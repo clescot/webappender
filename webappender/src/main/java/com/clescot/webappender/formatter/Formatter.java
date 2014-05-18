@@ -9,6 +9,6 @@ public interface Formatter<T> {
 
     boolean isActive(Map<String, List<String>> headers);
 
-    T serializeRows(List<Row> rows) throws JsonProcessingException;
+    T formatRows(List<Row> rows) throws JsonProcessingException;
 
 }

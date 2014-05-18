@@ -21,7 +21,7 @@ public class JEEHttpBridge implements HttpBridge {
     }
 
     @Override
-    public void addHeader(String key, String value) {
+    public void serializeLogs(String key, String value) {
         httpServletResponse.addHeader(key, value);
     }
 

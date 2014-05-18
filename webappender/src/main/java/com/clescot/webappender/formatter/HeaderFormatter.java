@@ -7,5 +7,5 @@ import java.util.Map;
 
 public abstract class HeaderFormatter<R> extends AbstractFormatter<R,Map<String, String>>{
 
-    public abstract Map<String, String> serializeRows(List<Row> rows) throws JsonProcessingException;
+    public abstract Map<String, String> formatRows(List<Row> rows) throws JsonProcessingException;
 }

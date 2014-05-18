@@ -115,14 +115,14 @@ public class LogCollector {
         String result = null;
             try {
                 if (formatter instanceof HeaderFormatter) {
-                    Map<String, String> serializedRows = ((HeaderFormatter) formatter).serializeRows(logs);
+                    Map<String, String> serializedRows = ((HeaderFormatter) formatter).formatRows(logs);
                     for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                         String value = entry.getValue();
-                            httpBridge.addHeader(entry.getKey(), value);
+                            httpBridge.serializeLogs(entry.getKey(), value);
                     }
                     result = "serialization into headers done";
                 } else {
-                    result = ((BodyFormatter) formatter).serializeRows(logs);
+                    result = ((BodyFormatter) formatter).formatRows(logs);
                 }
 
             } catch (JsonProcessingException e) {

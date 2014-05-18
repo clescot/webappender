@@ -15,7 +15,7 @@ public class ConsoleFormatter extends BodyFormatter<Row>  {
     private static final String SCRIPT_END = "</script>";
 
     @Override
-    public String serializeRows(List<Row> rows) {
+    public String formatRows(List<Row> rows) {
         StringBuilder result = new StringBuilder();
         if(rows !=null && !rows.isEmpty()) {
             List<Row> formattedRows = getFormatterRows(rows);
