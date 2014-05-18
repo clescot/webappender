@@ -2,9 +2,12 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
+import com.clescot.webappender.formatter.BodyFormatter;
+import com.clescot.webappender.formatter.Formatter;
+import com.clescot.webappender.formatter.Formatters;
+import com.clescot.webappender.formatter.HeaderFormatter;
+import com.google.common.base.Optional;
 import com.google.inject.Injector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -18,12 +21,12 @@ import java.util.Map;
 public class WebAppenderFilter implements Filter {
     public static final String SYSTEM_PROPERTY_KEY = "webappender";
     public static final String WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY = "webappender.logcollector";
+    public static final String WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY = "webappender.formatter";
 
-
-    private static Logger LOGGER = LoggerFactory.getLogger(WebAppenderFilter.class);
 
     private LogCollector logCollector;
     private boolean active;
+    private Formatters formatters;
 
 
     @Override
@@ -32,6 +35,7 @@ public class WebAppenderFilter implements Filter {
             setActive(true);
             Injector injector = (Injector) filterConfig.getServletContext().getAttribute(Injector.class.getName());
             logCollector = injector.getInstance(LogCollector.class);
+            formatters = injector.getInstance(Formatters.class);
             String initParameter = filterConfig.getInitParameter(LogCollector.X_VERBOSE_LOGS);
             logCollector.setVerboseLogs(initParameter);
             filterConfig.getServletContext().setAttribute(WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY, logCollector);
@@ -54,7 +58,17 @@ public class WebAppenderFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
 
         if (active) {
-            logCollector.serializeLogs(httpBridge);
+            Optional<? extends Formatter> optional = formatters.findFormatter(httpBridge.getHeadersAsMap());
+            if (optional.isPresent()&&  optional.get() instanceof HeaderFormatter) {
+                Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit"));
+                int limit = 0;
+                if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
+                    limit = Integer.parseInt(optionalLimit.get().get(0));
+                }
+                logCollector.serializeLogs(httpBridge, optional.get());
+            }else  if (optional.isPresent()&&  optional.get() instanceof BodyFormatter) {
+                httpServletRequest.setAttribute(WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY,optional.get());
+            }
         }
     }
 
