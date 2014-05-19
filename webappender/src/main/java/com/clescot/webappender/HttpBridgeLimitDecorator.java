@@ -33,8 +33,8 @@ public class HttpBridgeLimitDecorator implements HttpBridge {
 
     @Override
     public boolean serializeLogs(String key, String value) {
+        current +=value.length();
         if(limit==0 ||limit>current){
-            current +=value.length();
             httpBridge.serializeLogs(key,value);
             return true;
         }else{
