@@ -56,12 +56,13 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implem
 
 
     @Override
-    public LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
+    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) throws JsonProcessingException {
         LinkedHashMap<String, String> headers = Maps.newLinkedHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
         String rowsAsJSON = encodeBase64(getJSON(rows));
         List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);
         for (int i = 0; i < chunks.size(); i++) {
+
             String chunk = chunks.get(i);
             headers.put(prefix + i, chunk);
         }

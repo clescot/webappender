@@ -1,7 +1,6 @@
 package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
-import com.clescot.webappender.HttpBridgeLimitDecorator;
 import com.clescot.webappender.collector.LogCollector;
 import com.clescot.webappender.formatter.BodyFormatter;
 import com.clescot.webappender.formatter.Formatter;
@@ -48,7 +47,7 @@ public class WebAppenderFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        HttpBridge httpBridge = new HttpBridgeLimitDecorator(new JEEHttpBridge(httpServletRequest, httpServletResponse));
+        HttpBridge httpBridge = new JEEHttpBridge(httpServletRequest, httpServletResponse);
         Map<String, List<String>> headers = httpBridge.getHeadersAsMap();
 
         if (active) {

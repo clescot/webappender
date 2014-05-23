@@ -10,6 +10,7 @@ import com.clescot.webappender.filter.Filters;
 import com.clescot.webappender.formatter.Formatter;
 import com.clescot.webappender.formatter.Row;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,8 +113,13 @@ public class LogCollector {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
         LinkedHashMap<String, String> serializedRows = null;
+        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit"));
+        int limit = 0;
+        if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
+            limit = Integer.parseInt(optionalLimit.get().get(0));
+        }
         try {
-            serializedRows = formatter.formatRows(logs);
+            serializedRows = formatter.formatRows(logs,limit);
             httpBridge.start();
             for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                 String value = entry.getValue();

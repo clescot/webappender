@@ -16,22 +16,17 @@ public class ConsoleFormatter extends AbstractFormatter<Row>  implements BodyFor
 
 
     @Override
-    public LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException {
+    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) throws JsonProcessingException {
         LinkedHashMap<String, String> result = Maps.newLinkedHashMap();
         if(rows !=null && !rows.isEmpty()) {
             List<Row> formattedRows = getFormatterRows(rows);
             try {
-
+                int serializedContent =0;
                 for (Row row : formattedRows) {
-                    if(row.getLevel().isGreaterOrEqual(ch.qos.logback.classic.Level.DEBUG)) {
-                        StringBuilder rowDecorated = new StringBuilder();
-                        String rowInJSON = objectMapper.writeValueAsString(row);
-                        rowDecorated.append("console.");
-                        rowDecorated.append(Level.getConsoleLevel(row));
-                        rowDecorated.append("(");
-                        rowDecorated.append(rowInJSON);
-                        rowDecorated.append(");");
-                        result.put(rowDecorated.toString(),"");
+                    if(serializedContent<limit||limit<=0){
+                        String key = serializeRow(row);
+                        serializedContent+=key.length();
+                        result.put(key,"");
                     }
                 }
 
@@ -40,6 +35,19 @@ public class ConsoleFormatter extends AbstractFormatter<Row>  implements BodyFor
             }
         }
         return result;
+    }
+
+    private String serializeRow( Row row) throws JsonProcessingException {
+        StringBuilder rowDecorated = new StringBuilder();
+        if(row.getLevel().isGreaterOrEqual(ch.qos.logback.classic.Level.DEBUG)) {
+            String rowInJSON = objectMapper.writeValueAsString(row);
+            rowDecorated.append("console.");
+            rowDecorated.append(Level.getConsoleLevel(row));
+            rowDecorated.append("(");
+            rowDecorated.append(rowInJSON);
+            rowDecorated.append(");");
+        }
+        return rowDecorated.toString();
     }
 
     protected enum Level{

@@ -10,7 +10,7 @@ public interface Formatter {
 
     boolean isActive(Map<String, List<String>> headers);
 
-    public abstract LinkedHashMap<String, String> formatRows(List<Row> rows) throws JsonProcessingException;
+    public abstract LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) throws JsonProcessingException;
 
 
 }

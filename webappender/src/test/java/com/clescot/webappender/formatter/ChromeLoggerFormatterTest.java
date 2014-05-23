@@ -36,7 +36,7 @@ public class ChromeLoggerFormatterTest {
             ArrayList<Row> iLoggingEvents = Lists.newArrayList();
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
             //when
-            String formattedLogs = chromeLoggerFormatter.encodeBase64(chromeLoggerFormatter.getJSON(iLoggingEvents));
+            String formattedLogs = chromeLoggerFormatter.encodeBase64(chromeLoggerFormatter.getJSON(iLoggingEvents,0));
             //then
             assertThat(formattedLogs).isEqualTo(NO_EVENTS_IN_BASE64);
         }
@@ -59,7 +59,7 @@ public class ChromeLoggerFormatterTest {
         @Test
         public void test_get_json_nominal_case() throws Exception {
             ChromeLoggerFormatter chromeLoggerFormatter = new ChromeLoggerFormatter();
-            String json = chromeLoggerFormatter.getJSON(getILoggingEvents());
+            String json = chromeLoggerFormatter.getJSON(getILoggingEvents(),0);
             String expected ="{\"version\": \"1.0\",\"columns\": [\"log\", \"backtrace\", \"type\"],\"rows\": [[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\",\"message\":\"dummy message\",\"callerData\":\"\",\"classOfCaller\":\"\",\"contextName\":\"\",\"marker\":\"\",\"mdc\":\"\",\"methodOfCaller\":\"\",\"relativeTime\":\"\",\"template\":\"dummy message\",\"threadName\":\"\",\"throwableProxy\":\"\",\"time\":\"\"}],\":\",\"ERROR\"],[[{\"___class_name\": \"com.clescot.webappender.formatter.AbstractFormatterTest\",\"message\":\"dummy message\",\"callerData\":\"\",\"classOfCaller\":\"\",\"contextName\":\"\",\"marker\":\"\",\"mdc\":\"\",\"methodOfCaller\":\"\",\"relativeTime\":\"\",\"template\":\"dummy message\",\"threadName\":\"\",\"throwableProxy\":\"\",\"time\":\"\"}],\":\",\"ERROR\"]]}";
             JSONObject jsonObject = new JSONObject(json);
             MatcherAssert.assertThat(jsonObject, SameJSONAs.sameJSONObjectAs(new JSONObject(expected)).allowingExtraUnexpectedFields()

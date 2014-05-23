@@ -32,7 +32,7 @@ public class ConsoleFormatterTest {
             ConsoleFormatter consoleFormatter = new ConsoleFormatter();
 
             //when
-            LinkedHashMap<String, String> result= consoleFormatter.formatRows(Lists.<Row>newArrayList());
+            LinkedHashMap<String, String> result= consoleFormatter.formatRows(Lists.<Row>newArrayList(),0);
 
             //then
             assertThat(result).isEmpty();
@@ -44,7 +44,7 @@ public class ConsoleFormatterTest {
             ConsoleFormatter consoleFormatter = new ConsoleFormatter();
 
             //when
-            LinkedHashMap<String, String> result= consoleFormatter.formatRows(null);
+            LinkedHashMap<String, String> result= consoleFormatter.formatRows(null,0);
 
             //then
             assertThat(result).isEmpty();
@@ -59,7 +59,7 @@ public class ConsoleFormatterTest {
             Row row = new Row(event);
             rows.add(row);
             //when
-            LinkedHashMap<String, String> result = consoleFormatter.formatRows(rows);
+            LinkedHashMap<String, String> result = consoleFormatter.formatRows(rows,0);
 
             //then
             assertThat(result.isEmpty());
@@ -75,7 +75,7 @@ public class ConsoleFormatterTest {
             Row row = new Row(event);
             rows.add(row);
             //when
-            LinkedHashMap<String, String> result  = consoleFormatter.formatRows(rows);
+            LinkedHashMap<String, String> result  = consoleFormatter.formatRows(rows,0);
             String json = result.keySet().iterator().next();
             Matcher matcher = timestampPattern.matcher(json);
             String replacedString = matcher.replaceFirst("\"timestamp\":1398600625252");
