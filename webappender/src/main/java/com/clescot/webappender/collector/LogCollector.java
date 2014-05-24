@@ -69,7 +69,7 @@ public class LogCollector {
         return Lists.newArrayList(perThreadIdAppender.getRows());
     }
 
-    protected void removeCurrentThreadAppender() {
+    public void removeCurrentThreadAppender() {
         getAppenderTracker().endOfLife(Thread.currentThread().getId() + "");
         getAppenderTracker().removeStaleComponents(System.currentTimeMillis());
     }
