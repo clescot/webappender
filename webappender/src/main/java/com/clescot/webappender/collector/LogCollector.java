@@ -113,7 +113,7 @@ public class LogCollector {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
         LinkedHashMap<String, String> serializedRows = null;
-        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit"));
+        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit-headers-size"));
         int limit = 0;
         if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
             limit = Integer.parseInt(optionalLimit.get().get(0));
