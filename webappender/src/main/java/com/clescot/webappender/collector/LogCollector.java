@@ -69,7 +69,7 @@ public class LogCollector {
         return Lists.newArrayList(perThreadIdAppender.getRows());
     }
 
-    public void removeCurrentThreadAppender() {
+    protected void removeCurrentThreadAppender() {
         getAppenderTracker().endOfLife(Thread.currentThread().getId() + "");
         getAppenderTracker().removeStaleComponents(System.currentTimeMillis());
     }
@@ -124,16 +124,16 @@ public class LogCollector {
     private LinkedHashMap serializeLogs(HttpBridge httpBridge, Formatter formatter) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
-        LinkedHashMap<String, String> serializedRows = null;
+        LinkedHashMap<String, String> formattedRows = null;
         Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get(X_WA_LIMIT_HEADERS_SIZE));
         int limit = 0;
         if (optionalLimit.isPresent() && optionalLimit.get().get(0) != null) {
             limit = Integer.parseInt(optionalLimit.get().get(0));
         }
         try {
-            serializedRows = formatter.formatRows(logs, limit);
+            formattedRows = formatter.formatRows(logs, limit);
             httpBridge.start();
-            for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
+            for (Map.Entry<String, String> entry : formattedRows.entrySet()) {
                 String value = entry.getValue();
                 boolean again = httpBridge.serializeLogs(entry.getKey(), value);
                 if (!again) {
@@ -146,7 +146,7 @@ public class LogCollector {
             LOGGER.warn("webAppender serialization error", e);
         }
 
-        return serializedRows;
+        return formattedRows;
     }
 
 
