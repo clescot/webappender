@@ -24,6 +24,7 @@ import java.util.Map;
 public class LogCollector {
     public static final String SIFTING_APPENDER_KEY = "WEB_APPENDER_SIFT";
     public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
+    public static final String X_WA_LIMIT_HEADERS_SIZE = "x-wa-limit-headers-size";
 
 
     private static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -124,7 +125,7 @@ public class LogCollector {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
         LinkedHashMap<String, String> serializedRows = null;
-        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit-headers-size"));
+        Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get(X_WA_LIMIT_HEADERS_SIZE));
         int limit = 0;
         if (optionalLimit.isPresent() && optionalLimit.get().get(0) != null) {
             limit = Integer.parseInt(optionalLimit.get().get(0));
