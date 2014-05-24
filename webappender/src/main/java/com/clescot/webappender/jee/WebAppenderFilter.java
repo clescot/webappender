@@ -2,11 +2,6 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
-import com.clescot.webappender.formatter.BodyFormatter;
-import com.clescot.webappender.formatter.Formatter;
-import com.clescot.webappender.formatter.Formatters;
-import com.clescot.webappender.formatter.HeaderFormatter;
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 
 import javax.servlet.*;
@@ -26,7 +21,7 @@ public class WebAppenderFilter implements Filter {
 
     private LogCollector logCollector;
     private boolean active;
-    private Formatters formatters;
+
 
 
     @Override
@@ -35,7 +30,6 @@ public class WebAppenderFilter implements Filter {
             setActive(true);
             Injector injector = (Injector) filterConfig.getServletContext().getAttribute(Injector.class.getName());
             logCollector = injector.getInstance(LogCollector.class);
-            formatters = injector.getInstance(Formatters.class);
             String initParameter = filterConfig.getInitParameter(LogCollector.X_VERBOSE_LOGS);
             logCollector.setVerboseLogs(initParameter);
             filterConfig.getServletContext().setAttribute(WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY, logCollector);
@@ -58,12 +52,7 @@ public class WebAppenderFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
 
         if (active) {
-            Optional<? extends Formatter> optional = formatters.findFormatter(httpBridge.getHeadersAsMap());
-            if (optional.isPresent()&&  optional.get() instanceof HeaderFormatter) {
-                logCollector.serializeLogs(httpBridge, optional.get());
-            }else  if (optional.isPresent()&&  optional.get() instanceof BodyFormatter) {
-                httpServletRequest.setAttribute(WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY,optional.get());
-            }
+                logCollector.serializeLogs(httpBridge,true);
         }
     }
 

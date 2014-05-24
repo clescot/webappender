@@ -7,11 +7,11 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.filter.Filters;
-import com.clescot.webappender.formatter.Formatter;
-import com.clescot.webappender.formatter.Row;
+import com.clescot.webappender.formatter.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +33,12 @@ public class LogCollector {
 
     private static Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
     private Filters filtersBuilder;
+    private Formatters formatters;
 
     @Inject
-    public LogCollector(Filters filtersBuilder) {
+    public LogCollector(Filters filtersBuilder, Formatters formatters) {
         this.filtersBuilder = filtersBuilder;
+        this.formatters = formatters;
         rootLogger = loggerContext.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         siftingAppender = new FilterableSiftingAppender();
         siftingAppender.setName(SIFTING_APPENDER_KEY);
@@ -108,23 +110,32 @@ public class LogCollector {
         }
     }
 
+    public LinkedHashMap serializeLogs(HttpBridge httpBridge, boolean serializationIntoHeaders) {
+        LinkedHashMap linkedHashMap = Maps.newLinkedHashMap();
+        Optional<? extends Formatter> optional = formatters.findFormatter(httpBridge.getHeadersAsMap());
+        if (optional.isPresent() && optional.get() instanceof HeaderFormatter && serializationIntoHeaders
+                || (optional.isPresent() && optional.get() instanceof BodyFormatter && !serializationIntoHeaders)) {
+            linkedHashMap = serializeLogs(httpBridge, optional.get());
+        }
+        return linkedHashMap;
+    }
 
-    public LinkedHashMap serializeLogs(HttpBridge httpBridge, Formatter formatter) {
+    private LinkedHashMap serializeLogs(HttpBridge httpBridge, Formatter formatter) {
         List<Row> logs = getLogs();
         removeCurrentThreadAppender();
         LinkedHashMap<String, String> serializedRows = null;
         Optional<List<String>> optionalLimit = Optional.fromNullable(httpBridge.getHeadersAsMap().get("x-wa-limit-headers-size"));
         int limit = 0;
-        if(optionalLimit.isPresent()&&optionalLimit.get().get(0)!=null){
+        if (optionalLimit.isPresent() && optionalLimit.get().get(0) != null) {
             limit = Integer.parseInt(optionalLimit.get().get(0));
         }
         try {
-            serializedRows = formatter.formatRows(logs,limit);
+            serializedRows = formatter.formatRows(logs, limit);
             httpBridge.start();
             for (Map.Entry<String, String> entry : serializedRows.entrySet()) {
                 String value = entry.getValue();
                 boolean again = httpBridge.serializeLogs(entry.getKey(), value);
-                if(!again){
+                if (!again) {
                     break;
                 }
             }

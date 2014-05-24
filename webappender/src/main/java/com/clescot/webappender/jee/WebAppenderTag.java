@@ -2,7 +2,6 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
-import com.clescot.webappender.formatter.Formatter;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +18,10 @@ public class WebAppenderTag extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         Optional<LogCollector> optionalLogCollector = Optional.fromNullable((LogCollector) pageContext.getServletContext().getAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY));
-        Optional<Formatter> optionalFormatter = Optional.fromNullable((Formatter) pageContext.getRequest().getAttribute(WebAppenderFilter.WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY));
-        if (optionalLogCollector.isPresent() && optionalFormatter.isPresent()) {
-            HttpBridge httpBridge = new JSPBridge(pageContext);
+        HttpBridge httpBridge = new JSPBridge(pageContext);
+        if (optionalLogCollector.isPresent()) {
             LogCollector collector = optionalLogCollector.get();
-            collector.serializeLogs(httpBridge, optionalFormatter.get());
-
+            collector.serializeLogs(httpBridge, false);
         }
 
         return SKIP_BODY;

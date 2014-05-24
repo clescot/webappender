@@ -62,11 +62,9 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implem
         String rowsAsJSON = encodeBase64(getJSON(rows));
         List<String> chunks = Splitter.fixedLength(FIRE_LOGGER_CHUNK_LENGTH).splitToList(rowsAsJSON);
         for (int i = 0; i < chunks.size(); i++) {
-
             String chunk = chunks.get(i);
             headers.put(prefix + i, chunk);
         }
-
 
         return headers;
     }
