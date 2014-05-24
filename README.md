@@ -77,7 +77,26 @@ To fix it, you can install another extension like [`Modify Headers`](https://chr
 
 If you cannot install any firefox or chrome plugin, or if you haven't any of these browsers, you can use a **body formatter**.
 
-You have to transmit to the server a special header  : `X-BodyLogger`, via an extension like *modify headers* (chrome or firefox), or any other one compatible with your browser.
+You have to :
+
+- transmit to the server a special header  : `X-BodyLogger`, via an extension like *modify headers* (chrome or firefox), or any other one compatible with your browser.
+- install at the start of your JSP, the taglib declaration, and at the end of your JSP files, the webappender tag . 
+  If you use a templating library (like sitemesh for example), an unique insertion into a global decorator can do the job.
+ 
+ ```xml
+ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <%@ taglib prefix="debug" uri="https://github.com/clescot/webappender-tag"%>
+ 
+ <html>
+ <head>
+     <title>hello from test.jsp page</title>
+ </head>
+ <body>
+ test.jsp
+ </body>
+ </html>
+ <debug:webappender/>
+ ```
 
 Advantages of this method :
 - there are no small size limitations (2Gb seems to be the limit)
