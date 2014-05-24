@@ -83,6 +83,7 @@ You have to :
 - install at the start of your JSP, the taglib declaration, and at the end of your JSP files, the webappender tag . 
   If you use a templating library (like sitemesh for example), an unique insertion into a global decorator can do the job.
  
+
  ```xml
  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
  <%@ taglib prefix="debug" uri="https://github.com/clescot/webappender-tag"%>
@@ -164,6 +165,13 @@ one filter configuration:
 
 two filters configuration :
 `X-wa-level-filter=LEVEL:WARN;MATCH:ACCEPT;MISMATCH:NEUTRAL,X-wa-level-filter=LEVEL:DEBUG;MATCH:ACCEPT;MISMATCH:DENY`
+
+##### Reduce logs with a headers size limit
+
+you can add the header 'x-wa-limit-headers-size', with a numeric value, to limit the size of the serialized logs.
+It will limit the size of the content serialized, before  the base64 encoding phase (i.e, the size specified can be 33% lower than the real size serialized).
+This header only works, on ChromeLogger. 
+It means, that if you encounter a too large serialization, which cause an error on the server, and you cannot raise up the limit explained further in this document, you have to put a value lower than your server limit. 
 
 ##### Customize logs with an EvaluatorFilter and a JaninoEventEvaluator
 Logback permits to add some [EvaluatorFilter](http://logback.qos.ch/manual/filters.html#evalutatorFilter).
