@@ -17,7 +17,7 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implem
     private static final int FIRELOGGER_UNIQUE_IDENTIFIER_LENGTH = 8;
     private static final String ERRORS = "errors";
     private static final String LOGS = "logs";
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public static final String REQUEST_HEADER_IDENTIFIER = "X-FireLogger";
     public static final String FIRELOGGER_RESPONSE_HEADER_PREFIX = "Firelogger-";
@@ -56,7 +56,7 @@ public class FireLoggerFormatter extends AbstractFormatter<FireLoggerRow> implem
 
 
     @Override
-    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) throws JsonProcessingException {
+    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) {
         LinkedHashMap<String, String> headers = Maps.newLinkedHashMap();
         String prefix = FIRELOGGER_RESPONSE_HEADER_PREFIX + getUniqueIdentifier() + '-';
         String rowsAsJSON = encodeBase64(getJSON(rows));

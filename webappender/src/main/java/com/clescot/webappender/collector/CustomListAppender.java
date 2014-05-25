@@ -10,20 +10,20 @@ import java.util.List;
 
  public class CustomListAppender extends ListAppender<ILoggingEvent> {
 
-    private LineOfCallerConverter lineOfCallerConverter = new LineOfCallerConverter();
-    private FileOfCallerConverter fileOfCallerConverter = new FileOfCallerConverter();
-    private DateConverter dateConverter = new DateConverter();
-    private RelativeTimeConverter relativeTimeConverter = new RelativeTimeConverter();
-    private ThreadConverter threadConverter = new ThreadConverter();
-    private ClassOfCallerConverter classOfCallerConverter = new ClassOfCallerConverter();
-    private MethodOfCallerConverter methodOfCallerConverter = new MethodOfCallerConverter();
-    private MDCConverter mdcConverter = new MDCConverter();
-    private ThrowableProxyConverter throwableProxyConverter = new ThrowableProxyConverter();
-    private ContextNameConverter contextNameConverter = new ContextNameConverter();
-    private CallerDataConverter callerDataConverter = new CallerDataConverter();
-    private MarkerConverter markerConverter = new MarkerConverter();
+    private final LineOfCallerConverter lineOfCallerConverter = new LineOfCallerConverter();
+    private final FileOfCallerConverter fileOfCallerConverter = new FileOfCallerConverter();
+    private final DateConverter dateConverter = new DateConverter();
+    private final RelativeTimeConverter relativeTimeConverter = new RelativeTimeConverter();
+    private final ThreadConverter threadConverter = new ThreadConverter();
+    private final ClassOfCallerConverter classOfCallerConverter = new ClassOfCallerConverter();
+    private final MethodOfCallerConverter methodOfCallerConverter = new MethodOfCallerConverter();
+    private final MDCConverter mdcConverter = new MDCConverter();
+    private final ThrowableProxyConverter throwableProxyConverter = new ThrowableProxyConverter();
+    private final ContextNameConverter contextNameConverter = new ContextNameConverter();
+    private final CallerDataConverter callerDataConverter = new CallerDataConverter();
+    private final MarkerConverter markerConverter = new MarkerConverter();
 
-    private List<Row> rows = Lists.newArrayList();
+    private final List<Row> rows = Lists.newArrayList();
 
     private boolean useConverters = true;
 

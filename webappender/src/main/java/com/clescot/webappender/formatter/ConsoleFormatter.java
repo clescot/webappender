@@ -11,12 +11,12 @@ import java.util.List;
 
 public class ConsoleFormatter extends AbstractFormatter<Row>  implements BodyFormatter{
 
-    public static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
+    private static final String REQUEST_HEADER_IDENTIFIER = "X-BodyLogger";
 
 
 
     @Override
-    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) throws JsonProcessingException {
+    public LinkedHashMap<String, String> formatRows(List<Row> rows,int limit) {
         LinkedHashMap<String, String> result = Maps.newLinkedHashMap();
         if(rows !=null && !rows.isEmpty()) {
             List<Row> formattedRows = getFormatterRows(rows);

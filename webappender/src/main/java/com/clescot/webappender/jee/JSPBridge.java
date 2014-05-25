@@ -1,8 +1,5 @@
 package com.clescot.webappender.jee;
 
-import com.clescot.webappender.collector.LogCollector;
-import com.clescot.webappender.formatter.Formatter;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,19 +11,15 @@ import java.io.IOException;
 
 public class JSPBridge extends JEEHttpBridge {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(WebAppenderTag.class);
-    private PageContext pageContext;
-    private Optional<LogCollector> optionalLogCollector;
-    private Optional<Formatter> optionalFormatter;
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebAppenderTag.class);
+    private final PageContext pageContext;
     private static final String SCRIPT_TYPE_TEXT_JAVASCRIPT_START = "<script type=\"text/javascript\">";
     private static final String SCRIPT_END = "</script>";
-    private StringBuilder json;
+    private final StringBuilder json;
 
     public JSPBridge(PageContext pageContext) {
         super((HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse());
         this.pageContext = pageContext;
-        optionalLogCollector = Optional.fromNullable((LogCollector) pageContext.getServletContext().getAttribute(WebAppenderFilter.WEBAPPENDER_LOGCOLLECTOR_SERVLET_CONTEXT_KEY));
-        optionalFormatter = Optional.fromNullable((Formatter) pageContext.getRequest().getAttribute(WebAppenderFilter.WEBAPPENDER_FORMATTER_REQUEST_ATTRIBUTE_KEY));
         json = new StringBuilder();
     }
 
@@ -48,7 +41,7 @@ public class JSPBridge extends JEEHttpBridge {
     }
 
     @Override
-    public boolean serializeLogs(String key, String value) {
-        json.append(key);return true;
+    public void serializeLogs(String key, String value) {
+        json.append(key);
     }
 }

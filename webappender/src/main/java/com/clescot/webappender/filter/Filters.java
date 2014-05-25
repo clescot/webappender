@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Filters {
 
-    private List<FilterBuilder> filterBuilders;
+    private final List<FilterBuilder> filterBuilders;
 
     @Inject
     public Filters(List<FilterBuilder> filterBuilders) {

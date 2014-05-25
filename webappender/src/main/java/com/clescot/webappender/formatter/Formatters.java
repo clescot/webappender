@@ -11,7 +11,7 @@ import java.util.Map;
 public class Formatters {
 
 
-    private List<? extends Formatter> formatters;
+    private final List<? extends Formatter> formatters;
 
     @Inject
     public Formatters(List<? extends Formatter> formatters) {

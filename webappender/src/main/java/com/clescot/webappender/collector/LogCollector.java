@@ -24,17 +24,17 @@ import java.util.Map;
 public class LogCollector {
     public static final String SIFTING_APPENDER_KEY = "WEB_APPENDER_SIFT";
     public static final String X_VERBOSE_LOGS = "X-wa-verbose-logs";
-    public static final String X_WA_LIMIT_HEADERS_SIZE = "x-wa-limit-headers-size";
+    private static final String X_WA_LIMIT_HEADERS_SIZE = "x-wa-limit-headers-size";
 
 
-    private static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-    private SiftingAppender siftingAppender;
-    private ch.qos.logback.classic.Logger rootLogger;
+    private static final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    private final SiftingAppender siftingAppender;
+    private final ch.qos.logback.classic.Logger rootLogger;
     private boolean globalUseConverters = true;
 
-    private static Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
-    private Filters filtersBuilder;
-    private Formatters formatters;
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogCollector.class);
+    private final Filters filtersBuilder;
+    private final Formatters formatters;
 
     @Inject
     public LogCollector(Filters filtersBuilder, Formatters formatters) {

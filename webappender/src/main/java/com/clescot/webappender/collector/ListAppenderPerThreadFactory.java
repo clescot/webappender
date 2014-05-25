@@ -9,7 +9,7 @@ import ch.qos.logback.core.sift.AppenderFactory;
 
  class ListAppenderPerThreadFactory implements AppenderFactory<ILoggingEvent> {
 
-    private LoggerContext loggerContext;
+    private final LoggerContext loggerContext;
 
     public ListAppenderPerThreadFactory(LoggerContext loggerContext) {
         this.loggerContext = loggerContext;

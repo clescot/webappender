@@ -98,7 +98,7 @@ public class ChromeLoggerFormatter extends AbstractFormatter<ChromeRow> implemen
 
 
     @Override
-    public LinkedHashMap<String, String> formatRows(List<Row> rows, int limit) throws JsonProcessingException {
+    public LinkedHashMap<String, String> formatRows(List<Row> rows, int limit) {
         LinkedHashMap<String,String> rowsSerialized = Maps.newLinkedHashMap();
         rowsSerialized.put(RESPONSE_CHROME_LOGGER_HEADER, encodeBase64(getJSON(rows,limit)));
         return rowsSerialized;

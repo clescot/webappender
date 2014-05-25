@@ -126,8 +126,8 @@ import java.util.List;
         INFO("info", ch.qos.logback.classic.Level.INFO);
 //        CRITICAL("critical", ???? not mapped);
 
-        private String fireLoggerLevel;
-        private ch.qos.logback.classic.Level logbackLevel;
+        private final String fireLoggerLevel;
+        private final ch.qos.logback.classic.Level logbackLevel;
 
         Level(String fireLoggerLevel, ch.qos.logback.classic.Level logbackLevel) {
             this.fireLoggerLevel = fireLoggerLevel;

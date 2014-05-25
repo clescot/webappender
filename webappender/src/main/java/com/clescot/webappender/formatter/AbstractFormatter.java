@@ -1,6 +1,5 @@
 package com.clescot.webappender.formatter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -21,7 +20,7 @@ abstract class AbstractFormatter<R> implements Formatter {
 
 
 
-    public String encodeBase64(String rowsInJSON) throws JsonProcessingException {
+    public String encodeBase64(String rowsInJSON) {
         return new String(Base64.encodeBase64(rowsInJSON.getBytes(), IS_NOT_CHUNKED), Charset.forName(UTF_8));
     }
 

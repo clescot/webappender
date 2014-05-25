@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 public class JEEHttpBridge implements HttpBridge {
-    private HttpServletRequest httpServletRequest;
-    private HttpServletResponse httpServletResponse;
+    private final HttpServletRequest httpServletRequest;
+    private final HttpServletResponse httpServletResponse;
 
     public JEEHttpBridge(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
         this.httpServletRequest = httpServletRequest;
@@ -27,9 +27,8 @@ public class JEEHttpBridge implements HttpBridge {
     }
 
     @Override
-    public boolean serializeLogs(String key, String value) {
+    public void serializeLogs(String key, String value) {
         httpServletResponse.addHeader(key, value);
-        return true;
     }
 
     public Map<String, List<String>> getHeadersAsMap() {

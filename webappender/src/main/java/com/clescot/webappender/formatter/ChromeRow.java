@@ -10,7 +10,7 @@ import java.util.Map;
 
 class ChromeRow {
 
-    private List<Map<String,String>> logData = Lists.newArrayList();// an array of all arguments
+    private final List<Map<String,String>> logData = Lists.newArrayList();// an array of all arguments
     private String backtraceData;//he filename and line number where this call originated from
     private String logType;//log, warn, error, info, group, groupEnd, groupCollapsed, and table
 
@@ -50,8 +50,8 @@ class ChromeRow {
         GROUP_COLLAPSED("groupCollapsed", Level.DEBUG),
         TABLE("table", Level.DEBUG);
 
-        private String chromeLoggerLevel;
-        private Level logbackLevel;
+        private final String chromeLoggerLevel;
+        private final Level logbackLevel;
 
         LogType(String chromeLoggerLevel, Level logbackLevel) {
             this.chromeLoggerLevel = chromeLoggerLevel;
