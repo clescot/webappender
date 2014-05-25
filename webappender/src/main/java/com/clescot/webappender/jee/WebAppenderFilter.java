@@ -2,6 +2,9 @@ package com.clescot.webappender.jee;
 
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.collector.LogCollector;
+import com.clescot.webappender.filter.FiltersModule;
+import com.clescot.webappender.formatter.FormattersModule;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import javax.servlet.*;
@@ -28,7 +31,7 @@ public class WebAppenderFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         if (Boolean.parseBoolean(System.getProperty(SYSTEM_PROPERTY_KEY))) {
             setActive(true);
-            Injector injector = (Injector) filterConfig.getServletContext().getAttribute(Injector.class.getName());
+            Injector injector = Guice.createInjector(new WebappenderServletModule(), new FiltersModule(), new FormattersModule());
             logCollector = injector.getInstance(LogCollector.class);
             String initParameter = filterConfig.getInitParameter(LogCollector.X_VERBOSE_LOGS);
             logCollector.setVerboseLogs(initParameter);

@@ -8,7 +8,6 @@ import ch.qos.logback.core.sift.AppenderTracker;
 import com.clescot.webappender.HttpBridge;
 import com.clescot.webappender.filter.Filters;
 import com.clescot.webappender.formatter.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -130,21 +129,15 @@ public class LogCollector {
         if (optionalLimit.isPresent() && optionalLimit.get().get(0) != null) {
             limit = Integer.parseInt(optionalLimit.get().get(0));
         }
-        try {
             formattedRows = formatter.formatRows(logs, limit);
             httpBridge.start();
             for (Map.Entry<String, String> entry : formattedRows.entrySet()) {
                 String value = entry.getValue();
-                boolean again = httpBridge.serializeLogs(entry.getKey(), value);
-                if (!again) {
-                    break;
-                }
+                httpBridge.serializeLogs(entry.getKey(), value);
             }
             httpBridge.finish();
 
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("webAppender serialization error", e);
-        }
+
 
         return formattedRows;
     }
