@@ -170,6 +170,7 @@ two filters configuration :
 
 you can add the header 'x-wa-limit-headers-size', with a numeric value, to limit the size of the serialized logs.
 It will limit the size of the content serialized, before  the base64 encoding phase (i.e, the size specified can be 33% lower than the real size serialized).
+a value lesser than 1 has no effect.
 This header only works, on ChromeLogger. 
 It means, that if you encounter a too large serialization, which cause an error on the server, and you cannot raise up the limit explained further in this document, you have to put a value lower than your server limit. 
 
@@ -193,7 +194,7 @@ You also need to add the janino dependency in your pom.xml file :
 	
 ```
 
-More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator)).
+More informations on custom expressions in the [JaninoEventEvaluator logback documentation] (http://logback.qos.ch/manual/filters.html#JaninoEventEvaluator).
 
 ## Test quickly the demo webapp
 
