@@ -1,5 +1,9 @@
 # Webappender
 
+## Status
+
+### This project is **archived**, i.e **no longer maintained**.
+
 ## Goal
 
 webappender allow you to visualize the remote [logback](http://logback.qos.ch) logs, mapped only to your HTTP request, directly in your browser.
